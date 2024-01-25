@@ -1,0 +1,13 @@
+package ru.patseev.monitoringservice.audit_service.enums;
+
+/**
+ * The ActionEnum enum represents different user actions for auditing purposes.
+ */
+public enum ActionEnum {
+	REGISTRATION,
+	LOG_IN,
+	GET_CURRENT_METER_DATA,
+	SEND_METER_DATA,
+	GET_METER_DATA_FOR_SPECIFIED_MONTH,
+	GET_ALL_METER_DATA
+}
