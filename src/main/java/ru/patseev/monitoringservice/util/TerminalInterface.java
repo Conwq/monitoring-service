@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.util;
+package ru.patseev.monitoringservice.util;
 
 public class TerminalInterface {
 	public static final String MAIN_MENU_INTERFACE = """
@@ -6,10 +6,10 @@ public class TerminalInterface {
 			1. Регистрация.
 			2. Вход.
 			3. Выход.
-			
 			""";
 
 	public static final String AUTH_USER_INTERFACE = """
+   
 			1. Получить актуальные показания счетчика.
 			2. Подать показания. (только один раз в месяц) (они считаются актуальными)
 			3. Просмотр показаний за конкретный месяц.
@@ -17,6 +17,7 @@ public class TerminalInterface {
 			5. Выйти.
 			""";
 	public static final String ADMIN_INTERFACE = """
+   
 			1. Просмотр истории подачи показаний пользователей.
 			2. Просмотр действий пользователей.
 			3. Выйти.

@@ -10,11 +10,21 @@ import ru.patseev.monitoringservice.user_service.dto.UserDto;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+/**
+ * The SubmitMeterDataOperation class represents an operation for submitting meter data.
+ * It prompts the user to input meter readings for heating, cold water, and hot water, then sends the data to the controller.
+ */
 @RequiredArgsConstructor
-public class EnterAndSubmitMeterDataOperation implements Operation {
+public class SubmitMeterDataOperation implements Operation {
 	private final Scanner scanner;
 	private final DataMeterController dataMeterController;
 
+	/**
+	 * Executes to submit meter data operation.
+	 * Prompts the user to input meter readings for heating, cold water, and hot water, then sends the data to the controller.
+	 *
+	 * @param userDto The UserDto representing the authenticated user.
+	 */
 	@Override
 	public void execute(UserDto userDto) {
 		try {
@@ -31,10 +41,15 @@ public class EnterAndSubmitMeterDataOperation implements Operation {
 
 			System.out.println();
 
-			DataMeterDto dataMeterDto = new DataMeterDto(LocalDate.now(), heatingData, coldWaterData, hotWaterData);
+			DataMeterDto dataMeterDto = createDataMeterDto(heatingData, coldWaterData, hotWaterData);
 			dataMeterController.sendMeterData(userDto, dataMeterDto);
 		} catch (MeterDataFeedConflictException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	private DataMeterDto createDataMeterDto(Long heatingData, Long coldWaterData, Long hotWaterData) {
+		LocalDate currentDate = LocalDate.now();
+		return new DataMeterDto(currentDate, heatingData, coldWaterData, hotWaterData);
 	}
 }
