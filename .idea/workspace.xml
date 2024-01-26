@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2eaf382e-e9b9-41d9-8610-1693fcbf71a1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/audit_service/service/impl/AuditServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/audit_service/service/impl/AuditServiceImplTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="need" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2bPZdqor3orXs5m73Q2gE8IEEHi" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "aspect.path.notification.shown": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "last_opened_file_path": "D:/Soft/Project/monitoring-service/src/main/java/ru/patseev/monitoringservice/user_service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="ru.patseev.monitoringservice.audit_service.dto" />
+      <recent name="ru.patseev.monitoringservice.in.session.operation.impl" />
+      <recent name="ru.patseev.monitoringservice.in.operation.impl" />
+      <recent name="ru.patseev.monitoringservice.data_meter_service.exception" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Soft\Project\monitoring-service\src\main\java\ru\patseev\monitoringservice\user_service" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="ru.patseev.monitoringservice.audit_service.service.impl" />
+      <recent name="ru.patseev.monitoringservice.audit_service.controller" />
+      <recent name="ru.patseev.monitoringservice.user_service.controller" />
+      <recent name="ru.patseev.monitoringservice.user_service.service.impl" />
+      <recent name="ru.patseev.monitoringservice.user_service.repository.impl" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.patseev.monitoringservice" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.AuditServiceImplTest">
+    <configuration name="MonitoringApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.MonitoringApplication" />
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuditControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.audit_service.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.audit_service.controller" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.audit_service.controller.AuditControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuditServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.audit_service.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.audit_service.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.audit_service.service.impl.AuditServiceImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.user_service.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.user_service.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.user_service.service.impl.UserServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceTest.mustLogInSuccessfully" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.user_service.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.user_service.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.user_service.service.impl.UserServiceTest" />
+      <option name="METHOD_NAME" value="mustLogInSuccessfully" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.UserServiceTest.mustLogInSuccessfully" />
+        <item itemvalue="JUnit.UserServiceTest" />
+        <item itemvalue="JUnit.AuditServiceImplTest" />
+        <item itemvalue="JUnit.AuditControllerTest" />
+        <item itemvalue="Application.MonitoringApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\User\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2eaf382e-e9b9-41d9-8610-1693fcbf71a1" name="Changes" comment="" />
+      <created>1706118768310</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1706118768310</updated>
+      <workItem from="1706118770081" duration="11927000" />
+      <workItem from="1706168375386" duration="4283000" />
+      <workItem from="1706202559640" duration="13179000" />
+      <workItem from="1706257231693" duration="19204000" />
+      <workItem from="1706306225147" duration="1836000" />
+      <workItem from="1706308123459" duration="250000" />
+      <workItem from="1706308457233" duration="857000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
