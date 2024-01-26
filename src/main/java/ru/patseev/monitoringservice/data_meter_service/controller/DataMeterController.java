@@ -10,6 +10,7 @@ import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The DataMeterController class serves as a controller for managing data meter operations.
@@ -61,9 +62,21 @@ public class DataMeterController {
 	 * @param userDto The user for whom all data meter readings are requested.
 	 * @return A list of data meter readings as DataMeterDto objects.
 	 */
-	public List<DataMeterDto> getAllMeterData(UserDto userDto) {
+	public List<DataMeterDto> getMeterDataForUserByUsername(UserDto userDto) {
 		List<DataMeterDto> allMeterDataByUsername = dataMeterService.getAllMeterDataByUsername(userDto);
-		auditService.saveUserAction(ActionEnum.GET_ALL_METER_DATA, userDto);
+		auditService.saveUserAction(ActionEnum.GET_METER_DATA_FOR_USER, userDto);
 		return allMeterDataByUsername;
+	}
+
+	/**
+	 * Retrieves data from all meter users and logs the corresponding user action.
+	 *
+	 * @param userDto The user DTO.
+	 * @return A map containing username as the key and DataMeterDto as the value.
+	 */
+	public Map<String, List<DataMeterDto>> getDataFromAllMeterUsers(UserDto userDto) {
+		Map<String, List<DataMeterDto>> usersMeterData = dataMeterService.getDataFromAllMeterUsers();
+		auditService.saveUserAction(ActionEnum.GET_ALL_METER_DATA, userDto);
+		return usersMeterData;
 	}
 }

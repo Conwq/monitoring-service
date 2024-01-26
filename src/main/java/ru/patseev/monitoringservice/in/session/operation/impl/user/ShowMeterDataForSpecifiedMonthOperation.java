@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.session.operation.impl;
+package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
@@ -31,7 +31,7 @@ public class ShowMeterDataForSpecifiedMonthOperation implements Operation {
 
 				DataMeterDto response = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
 
-				System.out.printf(TerminalInterface.readingDataOutputText,
+				System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
 						response.date().format(format),
 						response.heatingData(),
 						response.coldWaterData(),

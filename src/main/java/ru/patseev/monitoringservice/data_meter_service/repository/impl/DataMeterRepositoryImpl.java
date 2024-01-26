@@ -6,6 +6,7 @@ import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -30,5 +31,10 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public List<DataMeter> getAllMeterData(String username) {
 		return dataMetersDatabase.getMeterData(username);
+	}
+
+	@Override
+	public Map<String, List<DataMeter>> getDataFromAllMeterUsers() {
+		return dataMetersDatabase.getAllMeterData();
 	}
 }

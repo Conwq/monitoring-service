@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.session.operation.impl;
+package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
@@ -20,12 +20,11 @@ public class ShowCurrentMeterDataOperation implements Operation {
 			DataMeterDto currentDataMeter = dataMeterController.getCurrentMeterData(userDto);
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 
-			System.out.printf(TerminalInterface.readingDataOutputText,
+			System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
 					currentDataMeter.date().format(format),
 					currentDataMeter.heatingData(),
 					currentDataMeter.coldWaterData(),
-					currentDataMeter.hotWaterData()
-			);
+					currentDataMeter.hotWaterData());
 		} catch (DataMeterNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

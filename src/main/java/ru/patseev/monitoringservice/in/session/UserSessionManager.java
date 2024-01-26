@@ -17,27 +17,27 @@ public class UserSessionManager {
 	public final OperationManager operationManager;
 
 	public void openSessionForUser(UserDto userDto) {
-		displayOperationsMenu(userDto);
+		operationMenuSelection(userDto);
 	}
 
-	private void displayOperationsMenu(UserDto userDto) {
+	private void operationMenuSelection(UserDto userDto) {
+		String terminalInterface =
+				userDto.role() == Role.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;
+		boolean exit = false;
+
 		do {
-			System.out.print(TerminalInterface.authUserInterface);
-
-			if (userDto.role() == Role.ADMIN) {
-				System.out.println("5. Просмотр показаний пользователя. (По username) (отобразить все username, после чего предоставить возможность админу выбрать любой из предоставленных)");
-			}
-
+			System.out.println(terminalInterface);
 			if (scanner.hasNextInt()) {
 				int selectionOfOperation = scanner.nextInt();
-				Operation operation = operationManager.getOperation(selectionOfOperation);
+				Operation operation = operationManager.getOperation(selectionOfOperation, userDto.role());
 				operation.execute(userDto);
 				if (operation instanceof ExitOperation) {
-					return;
+					exit = true;
 				}
 			} else {
+				System.out.println("Выберите номер операции.");
 				scanner.nextLine();
 			}
-		} while (true);
+		} while (!exit);
 	}
 }

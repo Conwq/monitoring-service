@@ -1,5 +1,6 @@
 package ru.patseev.monitoringservice.context;
 
+import ru.patseev.monitoringservice.audit_service.controller.AuditController;
 import ru.patseev.monitoringservice.audit_service.db.AuditDatabase;
 import ru.patseev.monitoringservice.audit_service.repository.AuditRepository;
 import ru.patseev.monitoringservice.audit_service.repository.impl.AuditRepositoryImpl;
@@ -28,31 +29,25 @@ import java.util.Scanner;
 
 public class MonitoringApplicationContext {
 	private static MonitoringApplicationContext context;
-
 	private final Scanner scanner = new Scanner(System.in);
-
 	private final UserDatabase userDatabase = new UserDatabase();
 	private final DataMeterDatabase dataMeterDatabase = new DataMeterDatabase();
-
 	private final AuditDatabase auditDatabase = new AuditDatabase();
 	private final AuditRepository auditRepository = new AuditRepositoryImpl(auditDatabase);
 	private final AuditService auditService = new AuditServiceImpl(auditRepository);
-
+	private final AuditController auditController = new AuditController(auditService);
 	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(dataMeterDatabase);
 	private final DataMeterService dataMeterService = new DataMeterServiceImpl(dataMeterRepository);
 	private final DataMeterController dataMeterController = new DataMeterController(dataMeterService, auditService);
-
-	private final OperationManager operationManager = new OperationManager(scanner, dataMeterController);
-	private final UserSessionManager clientSessionManager = new UserSessionManager(scanner, dataMeterController, operationManager);
-
-
+	private final OperationManager operationManager = new OperationManager(scanner, dataMeterController, auditController);
+	private final UserSessionManager clientSessionManager =
+			new UserSessionManager(scanner, dataMeterController, operationManager);
 	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);
 	private final UserService userService = new UserServiceImpl(userRepository);
 	private final UserController userController = new UserController(userService, auditService);
-
 	private final OperationHandler registrationOperation = new RegistrationOperationHandler(scanner, userController);
-	private final OperationHandler signInOperationHandler = new SignInOperationHandler(scanner, userController, clientSessionManager);
-
+	private final OperationHandler signInOperationHandler =
+			new SignInOperationHandler(scanner, userController, clientSessionManager);
 	private final Application application = new Application(scanner, registrationOperation, signInOperationHandler);
 
 	private MonitoringApplicationContext() {

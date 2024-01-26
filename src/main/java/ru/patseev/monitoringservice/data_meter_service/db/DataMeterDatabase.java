@@ -3,6 +3,8 @@ package ru.patseev.monitoringservice.data_meter_service.db;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The DataMeterDatabase class represents a database for storing data meter readings.
@@ -72,5 +74,14 @@ public class DataMeterDatabase {
 			return new ArrayList<>();
 		}
 		return usersMeterData;
+	}
+
+	/**
+	 * Retrieves all meter data.
+	 *
+	 * @return A map containing username as the key and a list of DataMeter as the value.
+	 */
+	public Map<String, List<DataMeter>> getAllMeterData() {
+		return dataMeters;
 	}
 }

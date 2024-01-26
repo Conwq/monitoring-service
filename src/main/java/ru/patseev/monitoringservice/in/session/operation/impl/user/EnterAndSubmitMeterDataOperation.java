@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.session.operation.impl;
+package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;

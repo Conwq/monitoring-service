@@ -39,6 +39,10 @@ public class AuditDatabase {
 	 * @return A list of UserAction objects representing the actions performed by the user.
 	 */
 	public List<UserAction> getUserActions(String username) {
+		if (!actions.containsKey(username)) {
+			return null;
+		}
+
 		List<UserAction> userActions = actions.get(username);
 		if (userActions == null) {
 			userActions = new ArrayList<>();

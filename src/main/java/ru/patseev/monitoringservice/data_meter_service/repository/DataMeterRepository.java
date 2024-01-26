@@ -3,6 +3,7 @@ package ru.patseev.monitoringservice.data_meter_service.repository;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -42,5 +43,12 @@ public interface DataMeterRepository {
 	 * @return A list of data meter readings as DataMeter objects.
 	 */
 	List<DataMeter> getAllMeterData(String username);
-}
 
+	/**
+	 * Retrieves data from all meter users.
+	 *
+	 * @return A map containing username as the key and DataMeter as the value.
+	 */
+	Map<String, List<DataMeter>> getDataFromAllMeterUsers();
+
+}

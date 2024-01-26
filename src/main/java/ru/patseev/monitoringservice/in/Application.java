@@ -14,17 +14,16 @@ public class Application {
 	public void renderInterface() {
 		boolean exit = false;
 
-		System.out.println("\nHello. Login or register.\n");
+		System.out.println("\nВойдите или зарегистрируйтесь.");
 		do {
-			System.out.println(TerminalInterface.mainMenuInterface);
-
+			System.out.println(TerminalInterface.MAIN_MENU_INTERFACE);
 			if (scanner.hasNextInt()) {
 				int selectionOfOperation = scanner.nextInt();
 				switch (selectionOfOperation) {
 					case 1 -> registrationOperationHandler.handleOperation();
 					case 2 -> signInOperationHandler.handleOperation();
 					case 3 -> exit = true;
-					default -> System.out.println("Invalid data.");
+					default -> System.out.println("Неверные данные.");
 				}
 			}
 			else {

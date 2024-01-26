@@ -16,4 +16,5 @@ public class DataMeter {
 	private Long heatingData;
 	private Long coldWaterData;
 	private Long hotWaterData;
+	private String username;
 }

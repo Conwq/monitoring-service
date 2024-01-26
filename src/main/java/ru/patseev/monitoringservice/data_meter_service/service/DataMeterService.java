@@ -6,6 +6,7 @@ import ru.patseev.monitoringservice.data_meter_service.exception.MeterDataFeedCo
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface defines methods for managing data meter readings.
@@ -44,4 +45,11 @@ public interface DataMeterService {
 	 * @return A list of data meter readings as a DataMeterDto objects.
 	 */
 	List<DataMeterDto> getAllMeterDataByUsername(UserDto userDto);
+
+	/**
+	 * Retrieves data from all meter users.
+	 *
+	 * @return A map containing username as the key and DataMeterDto as the value.
+	 */
+	Map<String, List<DataMeterDto>> getDataFromAllMeterUsers();
 }
