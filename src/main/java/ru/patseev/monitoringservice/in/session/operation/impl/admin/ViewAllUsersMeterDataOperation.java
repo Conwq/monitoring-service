@@ -4,25 +4,38 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
-import ru.patseev.monitoringservice.in.util.TerminalInterface;
+import ru.patseev.monitoringservice.util.TerminalInterface;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The ViewAllUsersMeterDataOperation class represents an operation for viewing meter data of all users.
+ * It retrieves and displays meter data for all users through the DataMeterController.
+ */
 @RequiredArgsConstructor
-public class ShowAllUsersMeterDataOperation implements Operation {
+public class ViewAllUsersMeterDataOperation implements Operation {
 	private final DataMeterController dataMeterController;
 
+	/**
+	 * Executes the view all users' meter data operation.
+	 * Retrieves and displays meter data for all users through the DataMeterController.
+	 *
+	 * @param userDto The UserDto representing the authenticated user.
+	 */
 	@Override
 	public void execute(UserDto userDto) {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
-		Map<String, List<DataMeterDto>> dataFromAllMeterUsers =
-				dataMeterController.getDataFromAllMeterUsers(userDto);
+		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = dataMeterController.getDataFromAllMeterUsers(userDto);
 
+		displayAllUsersMeterData(dataFromAllMeterUsers, format);
+	}
+
+	private void displayAllUsersMeterData(Map<String, List<DataMeterDto>> dataFromAllMeterUsers, DateTimeFormatter format) {
 		for (Map.Entry<String, List<DataMeterDto>> entry : dataFromAllMeterUsers.entrySet()) {
-			System.out.printf("****** %s ******", entry.getKey());
+			System.out.printf("\n****** %s ******", entry.getKey());
 
 			List<DataMeterDto> listDataMeter = entry.getValue();
 
@@ -35,6 +48,5 @@ public class ShowAllUsersMeterDataOperation implements Operation {
 			);
 			System.out.println("+------------+");
 		}
-
 	}
 }

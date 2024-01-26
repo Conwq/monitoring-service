@@ -32,7 +32,7 @@ public class AuditServiceImpl implements AuditService {
 				.findUserActionByUsername(username);
 
 		if (userAction == null) {
-			throw new UserNotFoundException("Пользователь не найден.");
+			throw new UserNotFoundException("\nПользователь не найден.");
 		}
 
 		return userAction

@@ -13,7 +13,7 @@ import ru.patseev.monitoringservice.data_meter_service.repository.impl.DataMeter
 import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.data_meter_service.service.impl.DataMeterServiceImpl;
 import ru.patseev.monitoringservice.in.Application;
-import ru.patseev.monitoringservice.in.OperationHandler;
+import ru.patseev.monitoringservice.in.AbstractOperationHandler;
 import ru.patseev.monitoringservice.in.handler.RegistrationOperationHandler;
 import ru.patseev.monitoringservice.in.handler.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
@@ -45,8 +45,8 @@ public class MonitoringApplicationContext {
 	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);
 	private final UserService userService = new UserServiceImpl(userRepository);
 	private final UserController userController = new UserController(userService, auditService);
-	private final OperationHandler registrationOperation = new RegistrationOperationHandler(scanner, userController);
-	private final OperationHandler signInOperationHandler =
+	private final AbstractOperationHandler registrationOperation = new RegistrationOperationHandler(scanner, userController);
+	private final AbstractOperationHandler signInOperationHandler =
 			new SignInOperationHandler(scanner, userController, clientSessionManager);
 	private final Application application = new Application(scanner, registrationOperation, signInOperationHandler);
 
