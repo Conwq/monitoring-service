@@ -7,6 +7,6 @@ public class ExitOperation implements Operation {
 
 	@Override
 	public void execute(UserDto userDto) {
-		System.out.println("Goodbye!\n");
+		System.out.println("До свидания!\n");
 	}
 }

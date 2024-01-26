@@ -23,6 +23,11 @@ public class UserSessionManager {
 	private void displayOperationsMenu(UserDto userDto) {
 		do {
 			System.out.print(TerminalInterface.authUserInterface);
+
+			if (userDto.role() == Role.ADMIN) {
+				System.out.println("5. Просмотр показаний пользователя. (По username) (отобразить все username, после чего предоставить возможность админу выбрать любой из предоставленных)");
+			}
+
 			if (scanner.hasNextInt()) {
 				int selectionOfOperation = scanner.nextInt();
 				Operation operation = operationManager.getOperation(selectionOfOperation);

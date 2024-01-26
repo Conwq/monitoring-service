@@ -20,7 +20,7 @@ public class ShowMeterDataForSpecifiedMonthOperation implements Operation {
 	public void execute(UserDto userDto) {
 		try {
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
-			System.out.println("Введите номер месяца:");
+			System.out.print("Введите номер месяца: ");
 			if (scanner.hasNextInt()) {
 				int month = scanner.nextInt();
 

@@ -5,6 +5,7 @@ import ru.patseev.monitoringservice.in.OperationHandler;
 import ru.patseev.monitoringservice.user_service.controller.UserController;
 import ru.patseev.monitoringservice.user_service.domain.Role;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.user_service.exception.UserAlreadyExistException;
 
 import java.util.Scanner;
 
@@ -15,18 +16,22 @@ public class RegistrationOperationHandler implements OperationHandler {
 
 	@Override
 	public void handleOperation() {
-		scanner.nextLine();
+		try {
+			scanner.nextLine();
 
-		System.out.println("Enter username:");
-		String username = scanner.nextLine();
+			System.out.print("Введите логин: ");
+			String username = scanner.nextLine();
 
-		System.out.println("Enter password:");
-		String password = scanner.nextLine();
+			System.out.print("Введите пароль: ");
+			String password = scanner.nextLine();
 
-		UserDto userDto = new UserDto(username, password, Role.USER);
+			UserDto userDto = new UserDto(username, password, Role.USER);
 
-		userController.saveUser(userDto);
+			userController.saveUser(userDto);
 
-		System.out.println("You have successfully registered.\n");
+			System.out.println("Успешная регистрация.\n");
+		} catch (UserAlreadyExistException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

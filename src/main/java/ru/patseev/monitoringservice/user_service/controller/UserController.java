@@ -28,16 +28,11 @@ public class UserController {
 	 * Authenticates a user using the UserService.
 	 *
 	 * @param userDto The data transfer object containing user authentication information.
-	 * @return Returns a boolean value with the authorization response.
+	 * @return A dto object that stores authenticated user data.
 	 */
 	public UserDto authUser(UserDto userDto) {
-		//TODO обработать ошибки
-		try {
-			UserDto userData = userService.authUser(userDto);
-			auditService.saveUserAction(ActionEnum.LOG_IN, userData);
-			return userData;
-		} catch (Exception e) {
-			return null;
-		}
+		UserDto userData = userService.authUser(userDto);
+		auditService.saveUserAction(ActionEnum.LOG_IN, userData);
+		return userData;
 	}
 }

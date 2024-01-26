@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
 
 		if (optionalUser.isPresent()) {
-			throw new UserAlreadyExistException("User already exist.");
+			throw new UserAlreadyExistException("Такой пользователь уже существует.");
 		}
 
 		User user = User.builder()
@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())
-				.orElseThrow(() -> new UserNotFoundException("User not found"));
+				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
 
 		if (!user.getPassword().equals(userDto.password())) {
-			throw new UserNotFoundException("User not found");
+			throw new UserNotFoundException("Пользователь не найден.");
 		}
 
 		return new UserDto(

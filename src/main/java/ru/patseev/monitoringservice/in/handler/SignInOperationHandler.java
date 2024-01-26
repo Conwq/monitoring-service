@@ -5,6 +5,7 @@ import ru.patseev.monitoringservice.in.session.UserSessionManager;
 import ru.patseev.monitoringservice.in.OperationHandler;
 import ru.patseev.monitoringservice.user_service.controller.UserController;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
 
 import java.util.Scanner;
 
@@ -16,19 +17,25 @@ public class SignInOperationHandler implements OperationHandler {
 
 	@Override
 	public void handleOperation() {
-		scanner.nextLine();
+		try {
+			scanner.nextLine();
 
-		System.out.println("Enter username:");
-		String username = scanner.nextLine();
+			System.out.print("Введите логин: ");
+			String username = scanner.nextLine();
 
-		System.out.println("Enter password:");
-		String password = scanner.nextLine();
+			System.out.print("Введите пароль: ");
+			String password = scanner.nextLine();
 
-		UserDto request = new UserDto(username, password, null);
-		UserDto authUserData = userController.authUser(request);
+			System.out.println();
 
-		if (authUserData != null) {
-			sessionManager.openSessionForUser(authUserData);
+			UserDto request = new UserDto(username, password, null);
+			UserDto authUserData = userController.authUser(request);
+
+			if (authUserData != null) {
+				sessionManager.openSessionForUser(authUserData);
+			}
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }
