@@ -6,15 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2eaf382e-e9b9-41d9-8610-1693fcbf71a1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/controller/DataMeterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/controller/DataMeterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/DataMeterNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/DataMeterNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/MeterDataFeedConflictException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/MeterDataFeedConflictException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/DataMeterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/DataMeterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/impl/DataMeterServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/impl/DataMeterServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/user_service/repository/impl/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/user_service/repository/impl/UserRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/user_service/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/user_service/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +193,7 @@
       <workItem from="1706306225147" duration="1836000" />
       <workItem from="1706308123459" duration="250000" />
       <workItem from="1706308457233" duration="1532000" />
-      <workItem from="1706335074121" duration="7528000" />
+      <workItem from="1706335074121" duration="8200000" />
     </task>
     <servers />
   </component>
