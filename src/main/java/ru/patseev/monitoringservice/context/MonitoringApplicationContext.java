@@ -27,6 +27,11 @@ import ru.patseev.monitoringservice.user_service.service.impl.UserServiceImpl;
 
 import java.util.Scanner;
 
+/**
+ * The MonitoringApplicationContext class represents the application context for the monitoring service.
+ * It provides the necessary instances for various components like controllers, repositories, and services.
+ * This class follows the Singleton pattern to ensure a single instance throughout the application.
+ */
 public class MonitoringApplicationContext {
 	private static MonitoringApplicationContext context;
 	private final Scanner scanner = new Scanner(System.in);
@@ -53,6 +58,11 @@ public class MonitoringApplicationContext {
 	private MonitoringApplicationContext() {
 	}
 
+	/**
+	 * Retrieves the singleton instance of the MonitoringApplicationContext.
+	 *
+	 * @return The singleton instance of the MonitoringApplicationContext.
+	 */
 	public static MonitoringApplicationContext getContext() {
 		if (context == null) {
 			context = new MonitoringApplicationContext();
@@ -60,6 +70,9 @@ public class MonitoringApplicationContext {
 		return context;
 	}
 
+	/**
+	 * Runs the monitoring service application, starting with rendering the user interface.
+	 */
 	public void runApplication() {
 		application.renderInterface();
 	}

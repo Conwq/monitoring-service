@@ -75,6 +75,9 @@ public class DataMeterServiceImpl implements DataMeterService {
 				));
 	}
 
+	/*
+	 * Maps an entity to a dto.
+	 */
 	private DataMeterDto toDto(DataMeter dataMeter) {
 		return new DataMeterDto(
 				dataMeter.getDate(),
@@ -84,6 +87,9 @@ public class DataMeterServiceImpl implements DataMeterService {
 		);
 	}
 
+	/*
+	 * Maps a dto to an entity.
+	 */
 	private DataMeter toEntity(DataMeterDto dto, String username) {
 		return DataMeter.builder()
 				.date(dto.date())

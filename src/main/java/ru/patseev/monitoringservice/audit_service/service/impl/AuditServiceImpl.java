@@ -41,6 +41,9 @@ public class AuditServiceImpl implements AuditService {
 				.toList();
 	}
 
+	/*
+	 * Maps an entity to a dto.
+	 */
 	private UserActionDto toDto(UserAction userAction) {
 		return new UserActionDto(userAction.getActionAt(), userAction.getAction());
 	}

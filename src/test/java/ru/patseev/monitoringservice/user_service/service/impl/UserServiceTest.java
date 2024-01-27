@@ -36,7 +36,8 @@ class UserServiceTest {
 
 	@Test
 	void mustSaveUser() {
-		Mockito.when(userRepository.findUserByUsername(userDto.username())).thenReturn(Optional.empty());
+		Mockito.when(userRepository.findUserByUsername(userDto.username()))
+				.thenReturn(Optional.empty());
 
 		userService.saveUser(userDto);
 
@@ -45,10 +46,12 @@ class UserServiceTest {
 
 	@Test
 	void mustThrowExceptionWhenSaving() {
-		Mockito.when(userRepository.findUserByUsername(userDto.username())).thenReturn(Optional.of(user));
+		Mockito.when(userRepository.findUserByUsername(userDto.username()))
+				.thenReturn(Optional.of(user));
 
 		Assertions.assertThrows(UserAlreadyExistException.class,
-				() -> userService.saveUser(userDto));
+				() -> userService.saveUser(userDto)
+		);
 	}
 
 	@Test
@@ -69,7 +72,8 @@ class UserServiceTest {
 				.thenReturn(Optional.of(user));
 
 		Assertions.assertThrows(UserNotFoundException.class,
-				() -> userService.authUser(userDto));
+				() -> userService.authUser(userDto)
+		);
 	}
 
 	@Test
@@ -78,6 +82,7 @@ class UserServiceTest {
 				.thenReturn(Optional.empty());
 
 		Assertions.assertThrows(UserNotFoundException.class,
-				() -> userService.authUser(userDto));
+				() -> userService.authUser(userDto)
+		);
 	}
 }

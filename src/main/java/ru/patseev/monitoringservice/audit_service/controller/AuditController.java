@@ -13,7 +13,11 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class AuditController {
+	/**
+	 * The AuditService used by the controller for handling audit-related operations.
+	 */
 	private final AuditService auditService;
+
 
 	/**
 	 * Retrieves a list of user actions based on the provided username.

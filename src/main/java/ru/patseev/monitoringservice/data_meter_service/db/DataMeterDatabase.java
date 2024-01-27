@@ -3,8 +3,6 @@ package ru.patseev.monitoringservice.data_meter_service.db;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The DataMeterDatabase class represents a database for storing data meter readings.
