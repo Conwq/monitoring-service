@@ -10,10 +10,16 @@ import ru.patseev.monitoringservice.user_service.service.UserService;
 
 import java.util.Optional;
 
+/**
+ * The UserServiceImpl class is an implementation of the UserService interface.
+ */
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void saveUser(UserDto userDto) {
 		Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
@@ -31,6 +37,9 @@ public class UserServiceImpl implements UserService {
 		userRepository.saveUser(user);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())

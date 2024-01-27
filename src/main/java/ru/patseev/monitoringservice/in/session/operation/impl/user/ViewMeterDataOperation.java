@@ -25,7 +25,7 @@ public class ViewMeterDataOperation implements Operation {
 	public void execute(UserDto userDto) {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 		dataMeterController
-				.getMeterDataForUserByUsername(userDto)
+				.getMeterDataForUser(userDto)
 				.forEach(dto -> System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
 						dto.date().format(format),
 						dto.heatingData(),

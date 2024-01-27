@@ -1,8 +1,6 @@
 package ru.patseev.monitoringservice.data_meter_service.service;
 
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
-import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.data_meter_service.exception.MeterDataFeedConflictException;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public interface DataMeterService {
 	 * @param userDto The user for whom the current data meter reading is requested.
 	 * @return The current data meter reading as a DataMeterDto object.
 	 */
-	DataMeterDto getCurrentDataMeter(UserDto userDto) throws DataMeterNotFoundException;
+	DataMeterDto getCurrentDataMeter(UserDto userDto);
 
 	/**
 	 * Saves the data meter reading for the specified user.
@@ -27,7 +25,7 @@ public interface DataMeterService {
 	 * @param userDto      The user for whom the data meter reading is saved.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-	void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto) throws MeterDataFeedConflictException;
+	void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto);
 
 	/**
 	 * Retrieves the data meter reading for the specified user and month.
@@ -36,7 +34,7 @@ public interface DataMeterService {
 	 * @param month   The month for which the data meter reading is requested.
 	 * @return The data meter reading for the specified month as a DataMeterDto object.
 	 */
-	DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month) throws DataMeterNotFoundException;
+	DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month);
 
 	/**
 	 * Retrieves all data meter readings for the specified user.
@@ -44,7 +42,7 @@ public interface DataMeterService {
 	 * @param userDto The user for whom all data meter readings are requested.
 	 * @return A list of data meter readings as a DataMeterDto objects.
 	 */
-	List<DataMeterDto> getAllMeterDataByUsername(UserDto userDto);
+	List<DataMeterDto> getAllMeterData(UserDto userDto);
 
 	/**
 	 * Retrieves data from all meter users.

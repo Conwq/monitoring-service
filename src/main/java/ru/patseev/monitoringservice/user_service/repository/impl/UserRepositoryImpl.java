@@ -7,15 +7,25 @@ import ru.patseev.monitoringservice.user_service.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * The UserRepositoryImpl class is an implementation of the UserRepository interface.
+ * It provides methods for interacting with user data storage.
+ */
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 	private final UserDatabase userDatabase;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void saveUser(User user) {
 		userDatabase.saveUser(user);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Optional<User> findUserByUsername(String username) {
 		return userDatabase.findUserByUsername(username);

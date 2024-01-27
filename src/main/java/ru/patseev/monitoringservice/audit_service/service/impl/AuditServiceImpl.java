@@ -12,10 +12,16 @@ import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The AuditServiceImpl class is an implementation of the AuditService interface.
+ */
 @RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 	private final AuditRepository auditRepository;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void saveUserAction(ActionEnum action, UserDto userDto) {
 		UserAction userAction = UserAction.builder()
@@ -26,6 +32,9 @@ public class AuditServiceImpl implements AuditService {
 		auditRepository.save(userDto.username(), userAction);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<UserActionDto> getUserAction(String username) {
 		List<UserAction> userAction = auditRepository

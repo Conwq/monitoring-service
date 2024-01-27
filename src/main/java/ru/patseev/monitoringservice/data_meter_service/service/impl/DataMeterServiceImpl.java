@@ -14,19 +14,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The DataMeterServiceImpl class is an implementation of the DataMeterService interface.
+ */
 @RequiredArgsConstructor
 public class DataMeterServiceImpl implements DataMeterService {
 	private final DataMeterRepository dataMeterRepository;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public DataMeterDto getCurrentDataMeter(UserDto userDto) throws DataMeterNotFoundException {
+	public DataMeterDto getCurrentDataMeter(UserDto userDto) {
 		return dataMeterRepository.findLastDataMeter(userDto.username())
 				.map(this::toDto)
 				.orElseThrow(() -> new DataMeterNotFoundException("Данные счетчика не найдены."));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto) throws MeterDataFeedConflictException {
+	public void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto) {
 		int month = dataMeterDto.date().getMonth().getValue();
 
 		if (dataMeterRepository.getMeterDataForSpecifiedMonth(userDto.username(), month).isPresent()) {
@@ -37,16 +46,22 @@ public class DataMeterServiceImpl implements DataMeterService {
 		dataMeterRepository.saveDataMeter(userDto.username(), dataMeter);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month) throws DataMeterNotFoundException {
+	public DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
 		return dataMeterRepository
 				.getMeterDataForSpecifiedMonth(userDto.username(), month)
 				.map(this::toDto)
 				.orElseThrow(() -> new DataMeterNotFoundException("Данные счетчика не найдены."));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public List<DataMeterDto> getAllMeterDataByUsername(UserDto userDto) {
+	public List<DataMeterDto> getAllMeterData(UserDto userDto) {
 		List<DataMeter> allMeterData = dataMeterRepository.getAllMeterData(userDto.username());
 
 		if (allMeterData.isEmpty()) {
@@ -58,6 +73,9 @@ public class DataMeterServiceImpl implements DataMeterService {
 				.toList();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<String, List<DataMeterDto>> getDataFromAllMeterUsers() {
 		Map<String, List<DataMeter>> allMeterData = dataMeterRepository.getDataFromAllMeterUsers();

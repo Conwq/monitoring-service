@@ -3,7 +3,7 @@ package ru.patseev.monitoringservice.data_meter_service.exception;
 /**
  * The DataMeterNotFoundException is an exception thrown when the requested meter data is not found.
  */
-public class DataMeterNotFoundException extends Exception {
+public class DataMeterNotFoundException extends RuntimeException {
 
 	public DataMeterNotFoundException(String message) {
 		super(message);
