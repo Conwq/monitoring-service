@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
+import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.util.TerminalInterface;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ViewAllUsersMeterDataOperation implements Operation {
 	private final DataMeterController dataMeterController;
+	private final PrinterMeterData printerMeterData;
 
 	/**
 	 * Executes the view all users' meter data operation.
@@ -27,30 +27,21 @@ public class ViewAllUsersMeterDataOperation implements Operation {
 	 */
 	@Override
 	public void execute(UserDto userDto) {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = dataMeterController.getDataFromAllMeterUsers(userDto);
-
-		displayAllUsersMeterData(dataFromAllMeterUsers, format);
+		displayAllUsersMeterData(dataFromAllMeterUsers);
 	}
 
 	/**
 	 * Displays all meter data for each user in a formatted manner.
 	 *
 	 * @param dataFromAllMeterUsers A map containing usernames as keys and corresponding lists of DataMeterDto as values.
-	 * @param format                The DateTimeFormatter used for formatting the date in the output.
 	 */
-	private void displayAllUsersMeterData(Map<String, List<DataMeterDto>> dataFromAllMeterUsers, DateTimeFormatter format) {
+	private void displayAllUsersMeterData(Map<String, List<DataMeterDto>> dataFromAllMeterUsers) {
 		for (Map.Entry<String, List<DataMeterDto>> entry : dataFromAllMeterUsers.entrySet()) {
 			System.out.printf("\n****** %s ******", entry.getKey());
 
 			List<DataMeterDto> listDataMeter = entry.getValue();
-
-			listDataMeter.forEach(dataMeterDto ->
-					System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
-							dataMeterDto.date().format(format),
-							dataMeterDto.meterTypeName(),
-							dataMeterDto.value())
-			);
+			listDataMeter.forEach(printerMeterData::printData);
 			System.out.println("+------------+");
 		}
 	}

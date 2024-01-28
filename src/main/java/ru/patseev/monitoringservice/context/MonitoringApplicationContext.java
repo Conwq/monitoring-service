@@ -12,12 +12,13 @@ import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepos
 import ru.patseev.monitoringservice.data_meter_service.repository.impl.DataMeterRepositoryImpl;
 import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.data_meter_service.service.impl.DataMeterServiceImpl;
-import ru.patseev.monitoringservice.in.Application;
 import ru.patseev.monitoringservice.in.AbstractOperationHandler;
+import ru.patseev.monitoringservice.in.Application;
 import ru.patseev.monitoringservice.in.handler.RegistrationOperationHandler;
 import ru.patseev.monitoringservice.in.handler.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
+import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.controller.UserController;
 import ru.patseev.monitoringservice.user_service.db.UserDatabase;
 import ru.patseev.monitoringservice.user_service.repository.UserRepository;
@@ -35,6 +36,7 @@ import java.util.Scanner;
 public class MonitoringApplicationContext {
 	private static MonitoringApplicationContext context;
 	private final Scanner scanner = new Scanner(System.in);
+	private final PrinterMeterData printerMeterData = new PrinterMeterData();
 	private final UserDatabase userDatabase = new UserDatabase();
 	private final DataMeterDatabase dataMeterDatabase = new DataMeterDatabase();
 	private final AuditDatabase auditDatabase = new AuditDatabase();
@@ -44,7 +46,8 @@ public class MonitoringApplicationContext {
 	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(dataMeterDatabase);
 	private final DataMeterService dataMeterService = new DataMeterServiceImpl(dataMeterRepository);
 	private final DataMeterController dataMeterController = new DataMeterController(dataMeterService, auditService);
-	private final OperationManager operationManager = new OperationManager(scanner, dataMeterController, auditController);
+	private final OperationManager operationManager =
+			new OperationManager(scanner, dataMeterController, auditController, printerMeterData);
 	private final UserSessionManager clientSessionManager =
 			new UserSessionManager(scanner, dataMeterController, operationManager);
 	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);

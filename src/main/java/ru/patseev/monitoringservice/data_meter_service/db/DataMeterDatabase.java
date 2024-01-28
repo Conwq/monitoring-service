@@ -9,14 +9,29 @@ import java.util.*;
  * The DataMeterDatabase class represents a database for storing data meter readings.
  */
 public class DataMeterDatabase {
+	/**
+	 * The unique identifier for meter types.
+	 */
 	private static int meterTypeId = 0;
+
+	/**
+	 * A map storing data meter readings for each user.
+	 * The key is the username, and the value is a list of data meter readings.
+	 */
 	private final Map<String, List<DataMeter>> usersDataMeter;
+
+	/**
+	 * A list containing all available meter types.
+	 */
 	private final List<MeterType> meterTypes = new ArrayList<>(){{
 		add(new MeterType(++meterTypeId, "Отопление"));
 		add(new MeterType(++meterTypeId, "Холодная вода"));
 		add(new MeterType(++meterTypeId, "Горячая вода"));
 	}};
 
+	/**
+	 * Constructs a new DataMeterDatabase instance.
+	 */
 	public DataMeterDatabase() {
 		this.usersDataMeter = new HashMap<>();
 	}

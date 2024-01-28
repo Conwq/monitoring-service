@@ -5,10 +5,8 @@ import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterContr
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
+import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.util.TerminalInterface;
-
-import java.time.format.DateTimeFormatter;
 
 /**
  * The ViewCurrentMeterDataOperation class represents an operation for viewing the current meter data.
@@ -17,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class ViewCurrentMeterDataOperation implements Operation {
 	private final DataMeterController dataMeterController;
+	private final PrinterMeterData printerMeterData;
 
 	/**
 	 * Executes the view current meter data operation.
@@ -28,18 +27,9 @@ public class ViewCurrentMeterDataOperation implements Operation {
 	public void execute(UserDto userDto) {
 		try {
 			DataMeterDto currentDataMeter = dataMeterController.getCurrentMeterData(userDto);
-			printData(currentDataMeter);
+			printerMeterData.printData(currentDataMeter);
 		} catch (DataMeterNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	private void printData(DataMeterDto dataMeterDto) {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
-		System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
-				dataMeterDto.date().format(format),
-				dataMeterDto.meterTypeName(),
-				dataMeterDto.value()
-		);
 	}
 }

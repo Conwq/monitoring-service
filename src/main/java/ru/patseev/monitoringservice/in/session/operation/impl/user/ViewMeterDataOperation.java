@@ -3,10 +3,8 @@ package ru.patseev.monitoringservice.in.session.operation.impl.user;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
+import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.util.TerminalInterface;
-
-import java.time.format.DateTimeFormatter;
 
 /**
  * The ViewMeterDataOperation class represents an operation for viewing meter data for a specific user.
@@ -15,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class ViewMeterDataOperation implements Operation {
 	private final DataMeterController dataMeterController;
+	private final PrinterMeterData printerMeterData;
 
 	/**
 	 * Executes the view meter data operation, retrieving and displaying meter data for the authenticated user.
@@ -23,14 +22,8 @@ public class ViewMeterDataOperation implements Operation {
 	 */
 	@Override
 	public void execute(UserDto userDto) {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 		dataMeterController
 				.getMeterDataForUser(userDto)
-				.forEach(dataMeterDto ->
-						System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
-								dataMeterDto.date().format(format),
-								dataMeterDto.meterTypeName(),
-								dataMeterDto.value())
-				);
+				.forEach(printerMeterData::printData);
 	}
 }

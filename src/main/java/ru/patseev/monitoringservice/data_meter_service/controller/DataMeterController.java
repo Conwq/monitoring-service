@@ -16,7 +16,14 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 public class DataMeterController {
+	/**
+	 * The service responsible for data meter-related business logic.
+	 */
 	private final DataMeterService dataMeterService;
+
+	/**
+	 * The service responsible for auditing user actions.
+	 */
 	private final AuditService auditService;
 
 	/**

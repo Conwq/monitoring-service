@@ -123,7 +123,8 @@ public class MeterDataOperation implements Operation {
 	 * @return true if data exists, false otherwise.
 	 */
 	private boolean checkingDataExistence(UserDto userDto, int meterTypeId) {
-		boolean dataExist = dataMeterController.getMeterDataForUser(userDto)
+		boolean dataExist = dataMeterController
+				.getMeterDataForUser(userDto)
 				.stream()
 				.filter(dto -> Objects.equals(dto.meterTypeId(), meterTypeId))
 				.anyMatch(dto -> dto.date().getMonth() == LocalDate.now().getMonth());

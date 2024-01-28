@@ -5,10 +5,9 @@ import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterContr
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
+import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.util.TerminalInterface;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
@@ -19,6 +18,7 @@ import java.util.Scanner;
 public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
 	private final Scanner scanner;
 	private final DataMeterController dataMeterController;
+	private final PrinterMeterData printerMeterData;
 
 	/**
 	 * Executes the view meter data for a specified month operation.
@@ -36,22 +36,13 @@ public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
 					System.out.println("Такого месяца не существует\n");
 					return;
 				}
-				DataMeterDto response = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
-				printData(response);
+				DataMeterDto dataMeterDto = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
+				printerMeterData.printData(dataMeterDto);
 			} else {
 				scanner.nextLine();
 			}
 		} catch (DataMeterNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	private void printData(DataMeterDto dataMeterDto) {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
-		System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
-				dataMeterDto.date().format(format),
-				dataMeterDto.meterTypeName(),
-				dataMeterDto.value()
-		);
 	}
 }
