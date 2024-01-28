@@ -20,24 +20,12 @@ public class DataMeter {
 	 * The date for which the metered data is recorded.
 	 */
 	private LocalDate date;
-
 	/**
-	 * The metered data for heating.
+	 * The metered value for the specified date.
 	 */
-	private Long heatingData;
-
+	private Long value;
 	/**
-	 * The metered data for cold water.
+	 * The type of the meter associated with the recorded data.
 	 */
-	private Long coldWaterData;
-
-	/**
-	 * The metered data for hot water.
-	 */
-	private Long hotWaterData;
-
-	/**
-	 * The username associated with the metered data.
-	 */
-	private String username;
+	private MeterType meterType;
 }

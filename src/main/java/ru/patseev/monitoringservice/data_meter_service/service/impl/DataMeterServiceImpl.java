@@ -2,9 +2,10 @@ package ru.patseev.monitoringservice.data_meter_service.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
+import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
+import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.data_meter_service.exception.MeterDataFeedConflictException;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
@@ -36,13 +37,7 @@ public class DataMeterServiceImpl implements DataMeterService {
 	 */
 	@Override
 	public void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto) {
-		int month = dataMeterDto.date().getMonth().getValue();
-
-		if (dataMeterRepository.getMeterDataForSpecifiedMonth(userDto.username(), month).isPresent()) {
-			throw new MeterDataFeedConflictException("Данные уже поданы в текущем месяце.");
-		}
-
-		DataMeter dataMeter = toEntity(dataMeterDto, userDto.username());
+		DataMeter dataMeter = toEntity(dataMeterDto);
 		dataMeterRepository.saveDataMeter(userDto.username(), dataMeter);
 	}
 
@@ -93,28 +88,53 @@ public class DataMeterServiceImpl implements DataMeterService {
 				));
 	}
 
-	/*
-	 * Maps an entity to a dto.
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<MeterTypeDto> getAvailableMeterType() {
+		return dataMeterRepository.findAllMeterType()
+				.stream()
+				.map(this::toDto)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Converts a MeterType entity to a corresponding MeterTypeDto object.
+	 *
+	 * @param meterType The MeterType entity to be converted.
+	 * @return The MeterTypeDto object.
+	 */
+	private MeterTypeDto toDto(MeterType meterType) {
+		return new MeterTypeDto(meterType.getMeterTypeId(), meterType.getTypeName());
+	}
+
+	/**
+	 * Converts a DataMeter entity to a corresponding DataMeterDto object.
+	 *
+	 * @param dataMeter The DataMeter entity to be converted.
+	 * @return The DataMeterDto object.
 	 */
 	private DataMeterDto toDto(DataMeter dataMeter) {
 		return new DataMeterDto(
 				dataMeter.getDate(),
-				dataMeter.getHeatingData(),
-				dataMeter.getColdWaterData(),
-				dataMeter.getHotWaterData()
+				dataMeter.getValue(),
+				dataMeter.getMeterType().getMeterTypeId(),
+				dataMeter.getMeterType().getTypeName()
 		);
 	}
 
-	/*
-	 * Maps a dto to an entity.
+	/**
+	 * Converts a DataMeterDto object to a corresponding DataMeter entity.
+	 *
+	 * @param dto The DataMeterDto to be converted.
+	 * @return The DataMeter entity.
 	 */
-	private DataMeter toEntity(DataMeterDto dto, String username) {
+	private DataMeter toEntity(DataMeterDto dto) {
 		return DataMeter.builder()
 				.date(dto.date())
-				.heatingData(dto.heatingData())
-				.coldWaterData(dto.coldWaterData())
-				.hotWaterData(dto.hotWaterData())
-				.username(username)
+				.value(dto.value())
+				.meterType(new MeterType(dto.meterTypeId(), dto.meterTypeName()))
 				.build();
 	}
 }

@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.data_meter_service.service;
 
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
+import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
@@ -50,4 +51,11 @@ public interface DataMeterService {
 	 * @return A map containing username as the key and DataMeterDto as the value.
 	 */
 	Map<String, List<DataMeterDto>> getDataFromAllMeterUsers();
+
+	/**
+	 * Retrieves a list of available meter types.
+	 *
+	 * @return A list of MeterTypeDto representing available meter types.
+	 */
+	List<MeterTypeDto> getAvailableMeterType();
 }

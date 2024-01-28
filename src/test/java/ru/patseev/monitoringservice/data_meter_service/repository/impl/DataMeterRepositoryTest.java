@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.data_meter_service.db.DataMeterDatabase;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
+import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ class DataMeterRepositoryTest {
 	private static DataMeterDatabase dataMeterDatabase;
 	private static DataMeterRepository dataMeterRepository;
 	private DataMeter dataMeter;
+	private MeterType meterType;
 
 	@BeforeAll
 	static void setUp() {
@@ -28,7 +30,8 @@ class DataMeterRepositoryTest {
 
 	@BeforeEach
 	void createDat() {
-		dataMeter = new DataMeter(LocalDate.now(), 1L, 1L, 1L, TEST_USERNAME);
+		meterType = new MeterType(1, "Hot water.");
+		dataMeter = new DataMeter(LocalDate.now(), 1L, meterType);
 	}
 
 	@Test

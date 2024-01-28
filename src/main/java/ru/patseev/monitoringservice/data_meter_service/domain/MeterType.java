@@ -1,0 +1,23 @@
+package ru.patseev.monitoringservice.data_meter_service.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Represents a type of meter with a unique identifier and a name.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MeterType {
+	/**
+	 * The unique identifier for the meter type.
+	 */
+	private Integer meterTypeId;
+
+	/**
+	 * The name of the meter type.
+	 */
+	private String typeName;
+}

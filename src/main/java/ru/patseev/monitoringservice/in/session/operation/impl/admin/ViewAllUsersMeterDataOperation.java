@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
-import ru.patseev.monitoringservice.util.TerminalInterface;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.util.TerminalInterface;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,6 +33,12 @@ public class ViewAllUsersMeterDataOperation implements Operation {
 		displayAllUsersMeterData(dataFromAllMeterUsers, format);
 	}
 
+	/**
+	 * Displays all meter data for each user in a formatted manner.
+	 *
+	 * @param dataFromAllMeterUsers A map containing usernames as keys and corresponding lists of DataMeterDto as values.
+	 * @param format                The DateTimeFormatter used for formatting the date in the output.
+	 */
 	private void displayAllUsersMeterData(Map<String, List<DataMeterDto>> dataFromAllMeterUsers, DateTimeFormatter format) {
 		for (Map.Entry<String, List<DataMeterDto>> entry : dataFromAllMeterUsers.entrySet()) {
 			System.out.printf("\n****** %s ******", entry.getKey());
@@ -42,9 +48,8 @@ public class ViewAllUsersMeterDataOperation implements Operation {
 			listDataMeter.forEach(dataMeterDto ->
 					System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
 							dataMeterDto.date().format(format),
-							dataMeterDto.heatingData(),
-							dataMeterDto.coldWaterData(),
-							dataMeterDto.hotWaterData())
+							dataMeterDto.meterTypeName(),
+							dataMeterDto.value())
 			);
 			System.out.println("+------------+");
 		}

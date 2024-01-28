@@ -1,10 +1,9 @@
 package ru.patseev.monitoringservice.data_meter_service.repository;
 
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
+import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Interface defines methods for interacting with the data meter storage.
@@ -51,4 +50,10 @@ public interface DataMeterRepository {
 	 */
 	Map<String, List<DataMeter>> getDataFromAllMeterUsers();
 
+	/**
+	 * Retrieves a list of all meter types.
+	 *
+	 * @return A list of MeterType representing all available meter types.
+	 */
+	List<MeterType> findAllMeterType();
 }

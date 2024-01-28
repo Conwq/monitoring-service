@@ -38,9 +38,8 @@ public class ViewCurrentMeterDataOperation implements Operation {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 		System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
 				dataMeterDto.date().format(format),
-				dataMeterDto.heatingData(),
-				dataMeterDto.coldWaterData(),
-				dataMeterDto.hotWaterData()
+				dataMeterDto.meterTypeName(),
+				dataMeterDto.value()
 		);
 	}
 }

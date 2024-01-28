@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.data_meter_service.db;
 
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
+import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 
 import java.util.*;
 
@@ -8,11 +9,16 @@ import java.util.*;
  * The DataMeterDatabase class represents a database for storing data meter readings.
  */
 public class DataMeterDatabase {
-
-	private final Map<String, List<DataMeter>> dataMeters;
+	private static int meterTypeId = 0;
+	private final Map<String, List<DataMeter>> usersDataMeter;
+	private final List<MeterType> meterTypes = new ArrayList<>(){{
+		add(new MeterType(++meterTypeId, "Отопление"));
+		add(new MeterType(++meterTypeId, "Холодная вода"));
+		add(new MeterType(++meterTypeId, "Горячая вода"));
+	}};
 
 	public DataMeterDatabase() {
-		this.dataMeters = new HashMap<>();
+		this.usersDataMeter = new HashMap<>();
 	}
 
 	/**
@@ -22,7 +28,7 @@ public class DataMeterDatabase {
 	 * @return An optional containing the last data meter reading as a DataMeter object, or empty if not found.
 	 */
 	public Optional<DataMeter> getLastMeterData(String username) {
-		List<DataMeter> usersDataMeters = dataMeters.get(username);
+		List<DataMeter> usersDataMeters = usersDataMeter.get(username);
 		if (usersDataMeters == null) {
 			return Optional.empty();
 		}
@@ -36,10 +42,10 @@ public class DataMeterDatabase {
 	 * @param dataMeter The data meter reading to be added.
 	 */
 	public void putData(String username, DataMeter dataMeter) {
-		if (!dataMeters.containsKey(username)) {
-			dataMeters.put(username, new ArrayList<>());
+		if (!usersDataMeter.containsKey(username)) {
+			usersDataMeter.put(username, new ArrayList<>());
 		}
-		dataMeters.get(username).add(dataMeter);
+		usersDataMeter.get(username).add(dataMeter);
 	}
 
 	/**
@@ -50,7 +56,7 @@ public class DataMeterDatabase {
 	 * @return An optional containing the data meter reading for the specified month as a DataMeter object, or empty if not found.
 	 */
 	public Optional<DataMeter> getMetersDataByMonth(String username, int month) {
-		List<DataMeter> usersDataMeters = dataMeters.get(username);
+		List<DataMeter> usersDataMeters = usersDataMeter.get(username);
 		if (usersDataMeters == null) {
 			usersDataMeters = new ArrayList<>();
 		}
@@ -67,7 +73,7 @@ public class DataMeterDatabase {
 	 * @return A list of data meter readings as DataMeter objects.
 	 */
 	public List<DataMeter> getMeterData(String username) {
-		List<DataMeter> usersMeterData = dataMeters.get(username);
+		List<DataMeter> usersMeterData = usersDataMeter.get(username);
 		if (usersMeterData == null) {
 			return new ArrayList<>();
 		}
@@ -80,6 +86,15 @@ public class DataMeterDatabase {
 	 * @return A map containing username as the key and a list of DataMeter as the value.
 	 */
 	public Map<String, List<DataMeter>> getAllMeterData() {
-		return dataMeters;
+		return usersDataMeter;
+	}
+
+	/**
+	 * Retrieves a list of all available meter types.
+	 *
+	 * @return A list of MeterType representing all available meter types.
+	 */
+	public List<MeterType> getAllMeterType() {
+		return meterTypes;
 	}
 }

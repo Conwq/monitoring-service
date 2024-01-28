@@ -3,8 +3,8 @@ package ru.patseev.monitoringservice.in.session.operation.impl.user;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
-import ru.patseev.monitoringservice.util.TerminalInterface;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.util.TerminalInterface;
 
 import java.time.format.DateTimeFormatter;
 
@@ -26,11 +26,11 @@ public class ViewMeterDataOperation implements Operation {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
 		dataMeterController
 				.getMeterDataForUser(userDto)
-				.forEach(dto -> System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
-						dto.date().format(format),
-						dto.heatingData(),
-						dto.coldWaterData(),
-						dto.hotWaterData()
-				));
+				.forEach(dataMeterDto ->
+						System.out.printf(TerminalInterface.METER_DATA_OUTPUT_TEXT,
+								dataMeterDto.date().format(format),
+								dataMeterDto.meterTypeName(),
+								dataMeterDto.value())
+				);
 	}
 }

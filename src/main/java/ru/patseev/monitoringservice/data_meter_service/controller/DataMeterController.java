@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
+import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
@@ -36,7 +37,7 @@ public class DataMeterController {
 	 * @param userDto      The user for whom the data meter reading is saved.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-	public void sendMeterData(UserDto userDto, DataMeterDto dataMeterDto) {
+	public void saveMeterData(UserDto userDto, DataMeterDto dataMeterDto) {
 		dataMeterService.saveDataMeter(userDto, dataMeterDto);
 		auditService.saveUserAction(ActionEnum.SEND_METER_DATA, userDto);
 	}
@@ -76,5 +77,17 @@ public class DataMeterController {
 		Map<String, List<DataMeterDto>> usersMeterData = dataMeterService.getDataFromAllMeterUsers();
 		auditService.saveUserAction(ActionEnum.GET_ALL_METER_DATA, userDto);
 		return usersMeterData;
+	}
+
+	/**
+	 * Retrieves a list of available meter types.
+	 *
+	 * @param userDto The data transfer object containing user authentication information.
+	 * @return A list of MeterTypeDto representing available meter types.
+	 */
+	public List<MeterTypeDto> getAvailableMeterType(UserDto userDto) {
+		List<MeterTypeDto> availableMeterType = dataMeterService.getAvailableMeterType();
+		auditService.saveUserAction(ActionEnum.GET_ACTUAL_METER_TYPE, userDto);
+		return availableMeterType;
 	}
 }

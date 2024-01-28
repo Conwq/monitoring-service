@@ -32,7 +32,14 @@ public class UserDatabase {
 				.role(Role.ADMIN)
 				.build();
 
+		User user = User.builder()
+				.username("1")
+				.password("1")
+				.role(Role.USER)
+				.build();
+
 		usersData.put(++ID, admin);
+		usersData.put(++ID, user);
 	}
 
 	/**

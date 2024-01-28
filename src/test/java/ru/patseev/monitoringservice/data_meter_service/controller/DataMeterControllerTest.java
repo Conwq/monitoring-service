@@ -36,7 +36,7 @@ class DataMeterControllerTest {
 	@BeforeEach
 	void createData() {
 		userDto = new UserDto("test", "test", Role.USER);
-		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1L, 1L);
+		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
 		dataMeterDtoList = new ArrayList<>() {{
 			add(dataMeterDto);
 			add(dataMeterDto);
@@ -58,7 +58,7 @@ class DataMeterControllerTest {
 
 	@Test
 	void mustSendMeterData() {
-		dataMeterController.sendMeterData(userDto, dataMeterDto);
+		dataMeterController.saveMeterData(userDto, dataMeterDto);
 
 		Mockito.verify(dataMeterService, Mockito.times(1))
 				.saveDataMeter(userDto, dataMeterDto);

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
+import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
@@ -25,6 +26,7 @@ class DataMeterServiceTest {
 	private UserDto userDto;
 	private DataMeter dataMeter;
 	private DataMeterDto dataMeterDto;
+	private MeterType meterType;
 
 	@BeforeAll
 	static void setUp() {
@@ -35,8 +37,9 @@ class DataMeterServiceTest {
 	@BeforeEach
 	void createData() {
 		userDto = new UserDto("test", "test", Role.USER);
-		dataMeter = new DataMeter(LocalDate.now(), 1L, 1L, 1L, userDto.username());
-		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1L, 1L);
+		meterType = new MeterType(1, "Hot water.");
+		dataMeter = new DataMeter(LocalDate.now(), 1L, meterType);
+		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
 	}
 
 	@Test

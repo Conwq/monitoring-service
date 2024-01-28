@@ -3,13 +3,12 @@ package ru.patseev.monitoringservice.data_meter_service.dto;
 import java.time.LocalDate;
 
 /**
- * The DataMeterDto record represents a dto for metered data.
- * It includes information such as date, heating data, cold water data, and hot water data.
+ * The DataMeterDto record represents data meter readings in a transferable format.
  *
- * @param date          The date for which the metered data is recorded.
- * @param heatingData   The metered data for heating.
- * @param coldWaterData The metered data for cold water.
- * @param hotWaterData  The metered data for hot water.
+ * @param date           The date for which the metered data is recorded.
+ * @param value          The value of the metered data.
+ * @param meterTypeId    The ID of the meter type associated with the data.
+ * @param meterTypeName  The name of the meter type associated with the data.
  */
-public record DataMeterDto(LocalDate date, Long heatingData, Long coldWaterData, Long hotWaterData) {
+public record DataMeterDto(LocalDate date, Long value, Integer meterTypeId, String meterTypeName) {
 }
