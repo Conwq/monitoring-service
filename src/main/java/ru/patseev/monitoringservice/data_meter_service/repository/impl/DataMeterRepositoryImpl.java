@@ -35,7 +35,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 */
 	@Override
 	public void saveDataMeter(String username, DataMeter dataMeter) {
-		dataMetersDatabase.putData(username, dataMeter);
+		dataMetersDatabase.putMeterData(username, dataMeter);
 	}
 
 	/**
@@ -68,5 +68,13 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public List<MeterType> findAllMeterType() {
 		return dataMetersDatabase.getAllMeterType();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveMeterType(MeterType meterType) {
+		dataMetersDatabase.putMeterType(meterType);
 	}
 }

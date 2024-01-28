@@ -104,6 +104,25 @@ public class DataMeterServiceImpl implements DataMeterService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveMeterType(MeterTypeDto meterTypeDto) {
+		MeterType meterType = toEntity(meterTypeDto);
+		dataMeterRepository.saveMeterType(meterType);
+	}
+
+	/**
+	 * Converts a MeterTypeDto object to a corresponding MeterType entity.
+	 *
+	 * @param meterTypeDto The MeterTypeDto object to be converted.
+	 * @return The MeterType entity.
+	 */
+	private MeterType toEntity(MeterTypeDto meterTypeDto) {
+		return new MeterType(meterTypeDto.meterTypeId(), meterTypeDto.typeName());
+	}
+
+	/**
 	 * Converts a MeterType entity to a corresponding MeterTypeDto object.
 	 *
 	 * @param meterType The MeterType entity to be converted.

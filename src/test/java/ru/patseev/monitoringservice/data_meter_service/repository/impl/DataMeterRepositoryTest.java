@@ -49,7 +49,7 @@ class DataMeterRepositoryTest {
 		dataMeterRepository.saveDataMeter(TEST_USERNAME, dataMeter);
 
 		verify(dataMeterDatabase, times(1))
-				.putData(TEST_USERNAME, dataMeter);
+				.putMeterData(TEST_USERNAME, dataMeter);
 	}
 
 	@Test

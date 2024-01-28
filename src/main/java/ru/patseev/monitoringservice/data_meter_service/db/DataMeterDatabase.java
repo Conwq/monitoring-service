@@ -57,7 +57,7 @@ public class DataMeterDatabase {
 	 * @param username  The username for which the data meter reading is added.
 	 * @param dataMeter The data meter reading to be added.
 	 */
-	public void putData(String username, DataMeter dataMeter) {
+	public void putMeterData(String username, DataMeter dataMeter) {
 		if (!usersDataMeter.containsKey(username)) {
 			usersDataMeter.put(username, new ArrayList<>());
 		}
@@ -112,5 +112,15 @@ public class DataMeterDatabase {
 	 */
 	public List<MeterType> getAllMeterType() {
 		return meterTypes;
+	}
+
+	/**
+	 * Adds a new type meter.
+	 *
+	 * @param meterType  New type of meter.
+	 */
+	public void putMeterType(MeterType meterType) {
+		meterType.setMeterTypeId(++meterTypeId);
+		meterTypes.add(meterType);
 	}
 }

@@ -56,4 +56,11 @@ public interface DataMeterRepository {
 	 * @return A list of MeterType representing all available meter types.
 	 */
 	List<MeterType> findAllMeterType();
+
+	/**
+	 * Save a new type meter.
+	 *
+	 * @param meterType  New type of meter.
+	 */
+	void saveMeterType(MeterType meterType);
 }

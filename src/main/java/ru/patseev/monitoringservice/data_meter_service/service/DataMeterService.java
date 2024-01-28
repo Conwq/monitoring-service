@@ -58,4 +58,11 @@ public interface DataMeterService {
 	 * @return A list of MeterTypeDto representing available meter types.
 	 */
 	List<MeterTypeDto> getAvailableMeterType();
+
+	/**
+	 * Save a new type meter.
+	 *
+	 * @param meterTypeDto  An object containing the data of the new meter.
+	 */
+	void saveMeterType(MeterTypeDto meterTypeDto);
 }

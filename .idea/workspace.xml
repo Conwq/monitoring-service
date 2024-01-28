@@ -6,15 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="2eaf382e-e9b9-41d9-8610-1693fcbf71a1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/context/MonitoringApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/context/MonitoringApplicationContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/AbstractOperationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/handler/AbstractOperationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/audit_service/enums/ActionEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/audit_service/enums/ActionEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/controller/DataMeterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/controller/DataMeterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/dto/MeterTypeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/dto/MeterTypeDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/DataMeterRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/DataMeterRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/DataMeterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/DataMeterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/impl/DataMeterServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/impl/DataMeterServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/display/TerminalInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/display/TerminalInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/handler/RegistrationOperationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/handler/operation/RegistrationOperationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/handler/SignInOperationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/handler/operation/SignInOperationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/UserSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/UserSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/ViewActionsHistoryOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/ViewActionsHistoryOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/util/PrinterMeterData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/util/PrinterMeterData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/util/TerminalInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/display/TerminalInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/OperationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/OperationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +197,7 @@
       <workItem from="1706306225147" duration="1836000" />
       <workItem from="1706308123459" duration="250000" />
       <workItem from="1706308457233" duration="1532000" />
-      <workItem from="1706335074121" duration="24767000" />
+      <workItem from="1706335074121" duration="26320000" />
     </task>
     <servers />
   </component>

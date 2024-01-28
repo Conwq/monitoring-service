@@ -98,4 +98,15 @@ public class DataMeterController {
 		auditService.saveUserAction(ActionEnum.GET_ACTUAL_METER_TYPE, userDto);
 		return availableMeterType;
 	}
+
+	/**
+	 * Save a new type meter.
+	 *
+	 * @param userDto      The data transfer object containing user authentication information.
+	 * @param meterTypeDto An object containing the data of the new meter.
+	 */
+	public void addNewMeterType(UserDto userDto, MeterTypeDto meterTypeDto) {
+		dataMeterService.saveMeterType(meterTypeDto);
+		auditService.saveUserAction(ActionEnum.ADD_NEW_METER_TYPE, userDto);
+	}
 }

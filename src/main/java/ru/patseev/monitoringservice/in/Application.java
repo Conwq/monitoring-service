@@ -34,7 +34,7 @@ public class Application {
 	public void renderInterface() {
 		boolean exit = false;
 
-		System.out.println("\nВойдите или зарегистрируйтесь.");
+		System.out.print("\nВойдите или зарегистрируйтесь.");
 		do {
 			System.out.println(TerminalInterface.MAIN_MENU_INTERFACE);
 			if (scanner.hasNextInt()) {

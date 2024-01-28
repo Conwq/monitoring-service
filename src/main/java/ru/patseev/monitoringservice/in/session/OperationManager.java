@@ -6,6 +6,7 @@ import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterContr
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.InvalidOperation;
+import ru.patseev.monitoringservice.in.session.operation.impl.admin.AddNewMeterTypeOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.admin.ViewAllUsersMeterDataOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.admin.ViewActionsHistoryOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.user.MeterDataOperation;
@@ -47,17 +48,18 @@ public class OperationManager {
 							DataMeterController dataMeterController,
 							AuditController auditController,
 							PrinterMeterData printerMeterData) {
-		// Инициализирует операции админа
+		// Инициализирует операции пользователя
 		userOperations.put(1, new ViewCurrentMeterDataOperation(dataMeterController, printerMeterData));
 		userOperations.put(2, new MeterDataOperation(scanner, dataMeterController));
 		userOperations.put(3, new ViewMeterDataForSpecifiedMonthOperation(scanner, dataMeterController, printerMeterData));
 		userOperations.put(4, new ViewMeterDataOperation(dataMeterController, printerMeterData));
 		userOperations.put(5, new ExitOperation());
 
-		// Инициализирует операции пользователя
+		// Инициализирует операции админа
 		adminOperation.put(1, new ViewAllUsersMeterDataOperation(dataMeterController, printerMeterData));
 		adminOperation.put(2, new ViewActionsHistoryOperation(scanner, auditController));
-		adminOperation.put(3, new ExitOperation());
+		adminOperation.put(3, new AddNewMeterTypeOperation(scanner, dataMeterController));
+		adminOperation.put(4, new ExitOperation());
 	}
 
 	/**
