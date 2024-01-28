@@ -12,10 +12,10 @@ import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepos
 import ru.patseev.monitoringservice.data_meter_service.repository.impl.DataMeterRepositoryImpl;
 import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
 import ru.patseev.monitoringservice.data_meter_service.service.impl.DataMeterServiceImpl;
-import ru.patseev.monitoringservice.in.AbstractOperationHandler;
+import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.in.Application;
-import ru.patseev.monitoringservice.in.handler.RegistrationOperationHandler;
-import ru.patseev.monitoringservice.in.handler.SignInOperationHandler;
+import ru.patseev.monitoringservice.in.handler.operation.RegistrationOperationHandler;
+import ru.patseev.monitoringservice.in.handler.operation.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;

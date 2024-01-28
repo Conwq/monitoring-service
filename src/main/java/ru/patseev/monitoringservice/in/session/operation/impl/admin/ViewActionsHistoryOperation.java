@@ -5,7 +5,7 @@ import ru.patseev.monitoringservice.audit_service.controller.AuditController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.util.TerminalInterface;
+import ru.patseev.monitoringservice.display.TerminalInterface;
 
 import java.util.Scanner;
 

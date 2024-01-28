@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in;
+package ru.patseev.monitoringservice.in.handler;
 
 /**
  * The AbstractOperationHandler class is an abstract base class representing a generic operation handler.

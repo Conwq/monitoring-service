@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.util;
+package ru.patseev.monitoringservice.display;
 
 /**
  * The TerminalInterface class provides static constants for the textual user interfaces

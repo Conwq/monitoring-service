@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
-import ru.patseev.monitoringservice.util.TerminalInterface;
+import ru.patseev.monitoringservice.display.TerminalInterface;
 import ru.patseev.monitoringservice.user_service.domain.Role;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 

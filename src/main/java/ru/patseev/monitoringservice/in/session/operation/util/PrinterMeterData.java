@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.util;
 
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
-import ru.patseev.monitoringservice.util.TerminalInterface;
+import ru.patseev.monitoringservice.display.TerminalInterface;
 
 import java.time.format.DateTimeFormatter;
 
