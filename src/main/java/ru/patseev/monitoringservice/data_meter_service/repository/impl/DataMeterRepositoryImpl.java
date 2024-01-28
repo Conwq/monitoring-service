@@ -16,6 +16,10 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 public class DataMeterRepositoryImpl implements DataMeterRepository {
+
+	/**
+	 * The database storing data meter readings.
+	 */
 	private final DataMeterDatabase dataMetersDatabase;
 
 	/**

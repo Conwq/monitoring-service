@@ -5,6 +5,11 @@ package ru.patseev.monitoringservice.data_meter_service.exception;
  */
 public class DataMeterNotFoundException extends RuntimeException {
 
+	/**
+	 * Constructs a new DataMeterNotFoundException with the specified detail message.
+	 *
+	 * @param message the detail message.
+	 */
 	public DataMeterNotFoundException(String message) {
 		super(message);
 	}

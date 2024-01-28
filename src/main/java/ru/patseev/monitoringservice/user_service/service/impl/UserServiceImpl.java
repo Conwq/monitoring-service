@@ -15,6 +15,10 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+	/**
+	 * The user repository used for interacting with user data storage.
+	 */
 	private final UserRepository userRepository;
 
 	/**

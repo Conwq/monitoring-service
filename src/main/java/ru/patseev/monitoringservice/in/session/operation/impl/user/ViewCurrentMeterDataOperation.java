@@ -14,7 +14,15 @@ import ru.patseev.monitoringservice.user_service.dto.UserDto;
  */
 @RequiredArgsConstructor
 public class ViewCurrentMeterDataOperation implements Operation {
+
+	/**
+	 * The controller responsible for managing data meter operations.
+	 */
 	private final DataMeterController dataMeterController;
+
+	/**
+	 * The printer responsible for displaying meter data.
+	 */
 	private final PrinterMeterData printerMeterData;
 
 	/**

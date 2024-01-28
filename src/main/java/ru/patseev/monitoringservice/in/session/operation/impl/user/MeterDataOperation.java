@@ -20,12 +20,14 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class MeterDataOperation implements Operation {
+
 	/**
-	 * The service responsible for data meter-related business logic.
+	 * A Scanner used for user input.
 	 */
 	private final Scanner scanner;
+
 	/**
-	 * The service responsible for auditing user actions.
+	 * The controller responsible for managing data meter operations.
 	 */
 	private final DataMeterController dataMeterController;
 

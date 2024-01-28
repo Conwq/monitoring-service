@@ -16,14 +16,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataMeter {
+
 	/**
 	 * The date for which the metered data is recorded.
 	 */
 	private LocalDate date;
+
 	/**
 	 * The metered value for the specified date.
 	 */
 	private Long value;
+
 	/**
 	 * The type of the meter associated with the recorded data.
 	 */

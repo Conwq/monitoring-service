@@ -17,8 +17,20 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class SignInOperationHandler extends AbstractOperationHandler {
+
+	/**
+	 * A Scanner used for user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * The controller responsible for user-related operations.
+	 */
 	private final UserController userController;
+
+	/**
+	 * The manager for user sessions.
+	 */
 	private final UserSessionManager sessionManager;
 
 	/**

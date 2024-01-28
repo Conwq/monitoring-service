@@ -5,6 +5,11 @@ package ru.patseev.monitoringservice.data_meter_service.exception;
  */
 public class MeterDataFeedConflictException extends RuntimeException {
 
+	/**
+	 * Constructs a new MeterDataFeedConflictException with the specified detail message.
+	 *
+	 * @param message the detail message.
+	 */
 	public MeterDataFeedConflictException(String message) {
 		super(message);
 	}

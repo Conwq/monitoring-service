@@ -15,8 +15,21 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class UserSessionManager {
+
+	/**
+	 * A Scanner used for user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * The controller responsible for managing data meter operations.
+	 */
 	public final DataMeterController dataMeterController;
+
+
+	/**
+	 * The OperationManager responsible for managing operations based on user roles.
+	 */
 	public final OperationManager operationManager;
 
 	/**
@@ -28,6 +41,11 @@ public class UserSessionManager {
 		operationMenuSelection(userDto);
 	}
 
+	/**
+	 * Handles the selection of operations in the user interface based on the user's role.
+	 *
+	 * @param userDto The UserDto representing the authenticated user.
+	 */
 	private void operationMenuSelection(UserDto userDto) {
 		String terminalInterface =
 				userDto.role() == Role.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;

@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 public class DataMeterServiceImpl implements DataMeterService {
+
+	/**
+	 * The repository responsible for data meter operations.
+	 */
 	private final DataMeterRepository dataMeterRepository;
 
 	/**

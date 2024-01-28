@@ -11,7 +11,15 @@ import ru.patseev.monitoringservice.user_service.service.UserService;
  */
 @RequiredArgsConstructor
 public class UserController {
+
+	/**
+	 * The service responsible for user-related business logic.
+	 */
 	private final UserService userService;
+
+	/**
+	 * The service responsible for auditing user actions.
+	 */
 	private final AuditService auditService;
 
 	/**

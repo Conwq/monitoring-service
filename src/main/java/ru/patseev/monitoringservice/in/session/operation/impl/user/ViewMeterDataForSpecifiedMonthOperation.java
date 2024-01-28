@@ -16,8 +16,20 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
+
+	/**
+	 * A Scanner used for user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * The controller responsible for managing data meter operations.
+	 */
 	private final DataMeterController dataMeterController;
+
+	/**
+	 * The printer responsible for displaying meter data.
+	 */
 	private final PrinterMeterData printerMeterData;
 
 	/**

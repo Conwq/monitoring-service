@@ -16,7 +16,15 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 public class ViewAllUsersMeterDataOperation implements Operation {
+
+	/**
+	 * The controller responsible for managing data meter operations.
+	 */
 	private final DataMeterController dataMeterController;
+
+	/**
+	 * The printer responsible for displaying meter data.
+	 */
 	private final PrinterMeterData printerMeterData;
 
 	/**

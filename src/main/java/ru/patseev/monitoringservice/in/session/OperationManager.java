@@ -24,9 +24,25 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class OperationManager {
+
+	/**
+	 * List of operations available to a user with the USER role.
+	 */
 	private final Map<Integer, Operation> userOperations = new HashMap<>();
+
+	/**
+	 * List of operations available to a user with the ADMIN role.
+	 */
 	private final Map<Integer, Operation> adminOperation = new HashMap<>();
 
+	/**
+	 * Constructor to initialize operations for users and admins.
+	 *
+	 * @param scanner            The scanner for user input.
+	 * @param dataMeterController The controller for data meter operations.
+	 * @param auditController     The controller for auditing actions.
+	 * @param printerMeterData    The printer for displaying meter data.
+	 */
 	public OperationManager(Scanner scanner,
 							DataMeterController dataMeterController,
 							AuditController auditController,

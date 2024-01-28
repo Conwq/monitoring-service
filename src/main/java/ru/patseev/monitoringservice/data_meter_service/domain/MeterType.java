@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MeterType {
+
 	/**
 	 * The unique identifier for the meter type.
 	 */

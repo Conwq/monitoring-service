@@ -16,7 +16,15 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class ViewActionsHistoryOperation implements Operation {
+
+	/**
+	 * A Scanner used for user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * The controller responsible for auditing user actions.
+	 */
 	private final AuditController auditController;
 
 	/**

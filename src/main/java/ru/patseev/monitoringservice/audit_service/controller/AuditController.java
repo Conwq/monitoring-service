@@ -13,6 +13,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class AuditController {
+
 	/**
 	 * The AuditService used by the controller for handling audit-related operations.
 	 */

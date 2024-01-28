@@ -11,8 +11,20 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class Application {
+
+	/**
+	 * A Scanner used for user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * The handler for user registration operations.
+	 */
 	private final AbstractOperationHandler registrationOperationHandler;
+
+	/**
+	 * The handler for user sign-in operations.
+	 */
 	private final AbstractOperationHandler signInOperationHandler;
 
 	/**

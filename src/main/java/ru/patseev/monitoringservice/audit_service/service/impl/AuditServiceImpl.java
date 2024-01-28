@@ -17,6 +17,10 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
+
+	/**
+	 * The audit repository for interacting with the audit data storage.
+	 */
 	private final AuditRepository auditRepository;
 
 	/**
@@ -50,8 +54,11 @@ public class AuditServiceImpl implements AuditService {
 				.toList();
 	}
 
-	/*
-	 * Maps an entity to a dto.
+	/**
+	 * Converts a UserAction object to a UserActionDto.
+	 *
+	 * @param userAction The UserAction object to be converted.
+	 * @return A UserActionDto representing the converted data.
 	 */
 	private UserActionDto toDto(UserAction userAction) {
 		return new UserActionDto(userAction.getActionAt(), userAction.getAction());

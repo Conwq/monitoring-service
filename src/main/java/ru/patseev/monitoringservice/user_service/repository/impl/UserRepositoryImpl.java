@@ -13,6 +13,10 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
+
+	/**
+	 * The user database used for storing user-related information.
+	 */
 	private final UserDatabase userDatabase;
 
 	/**
