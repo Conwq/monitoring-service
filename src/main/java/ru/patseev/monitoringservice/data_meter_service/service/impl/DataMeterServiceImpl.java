@@ -49,11 +49,12 @@ public class DataMeterServiceImpl implements DataMeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
+	public List<DataMeterDto> getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
 		return dataMeterRepository
 				.getMeterDataForSpecifiedMonth(userDto.username(), month)
+				.stream()
 				.map(this::toDto)
-				.orElseThrow(() -> new DataMeterNotFoundException("Данные счетчика не найдены."));
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -86,10 +87,9 @@ public class DataMeterServiceImpl implements DataMeterService {
 		return allMeterData
 				.entrySet()
 				.stream()
-				.collect(Collectors.toMap(
-						Map.Entry::getKey,
-						entry -> entry.getValue().stream().map(this::toDto).collect(Collectors.toList())
-				));
+				.collect(Collectors.toMap(Map.Entry::getKey,
+						entry -> entry.getValue().stream().map(this::toDto).collect(Collectors.toList()))
+				);
 	}
 
 	/**

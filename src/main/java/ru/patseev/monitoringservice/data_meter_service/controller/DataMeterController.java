@@ -55,10 +55,10 @@ public class DataMeterController {
 	 *
 	 * @param userDto The user for whom the data meter reading is requested.
 	 * @param month   The month for which the data meter reading is requested.
-	 * @return The data meter reading for the specified month as a DataMeterDto object.
+	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-	public DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
-		DataMeterDto meterDataForSpecifiedMonth = dataMeterService.getMeterDataForSpecifiedMonth(userDto, month);
+	public List<DataMeterDto> getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
+		List<DataMeterDto> meterDataForSpecifiedMonth = dataMeterService.getMeterDataForSpecifiedMonth(userDto, month);
 		auditService.saveUserAction(ActionEnum.GET_METER_DATA_FOR_SPECIFIED_MONTH, userDto);
 		return meterDataForSpecifiedMonth;
 	}

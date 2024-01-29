@@ -33,9 +33,9 @@ public interface DataMeterService {
 	 *
 	 * @param userDto The user for whom the data meter reading is requested.
 	 * @param month   The month for which the data meter reading is requested.
-	 * @return The data meter reading for the specified month as a DataMeterDto object.
+	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-	DataMeterDto getMeterDataForSpecifiedMonth(UserDto userDto, int month);
+	List<DataMeterDto> getMeterDataForSpecifiedMonth(UserDto userDto, int month);
 
 	/**
 	 * Retrieves all data meter readings for the specified user.

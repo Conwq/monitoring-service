@@ -31,9 +31,9 @@ public interface DataMeterRepository {
 	 *
 	 * @param username The username for whom the data meter reading is requested.
 	 * @param month    The month for which the data meter reading is requested.
-	 * @return An optional containing the data meter reading for the specified month as a DataMeter object, or empty if not found.
+	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-	Optional<DataMeter> getMeterDataForSpecifiedMonth(String username, int month);
+	List<DataMeter> getMeterDataForSpecifiedMonth(String username, int month);
 
 	/**
 	 * Retrieves all data meter readings for the specified user.

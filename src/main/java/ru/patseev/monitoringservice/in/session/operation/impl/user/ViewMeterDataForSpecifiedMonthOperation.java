@@ -8,6 +8,7 @@ import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -48,8 +49,8 @@ public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
 					System.out.println("Такого месяца не существует\n");
 					return;
 				}
-				DataMeterDto dataMeterDto = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
-				printerMeterData.printData(dataMeterDto);
+				List<DataMeterDto> dataMeterDto = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
+				dataMeterDto.forEach(printerMeterData::printData);
 			} else {
 				scanner.nextLine();
 			}

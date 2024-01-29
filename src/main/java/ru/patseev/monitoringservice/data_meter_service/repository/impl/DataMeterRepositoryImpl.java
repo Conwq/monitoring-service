@@ -42,7 +42,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Optional<DataMeter> getMeterDataForSpecifiedMonth(String username, int month) {
+	public List<DataMeter> getMeterDataForSpecifiedMonth(String username, int month) {
 		return dataMetersDatabase.getMetersDataByMonth(username, month);
 	}
 

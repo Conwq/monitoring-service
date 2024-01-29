@@ -29,13 +29,13 @@ class DataMeterRepositoryTest {
 	}
 
 	@BeforeEach
-	void createDat() {
+	void createData() {
 		meterType = new MeterType(1, "Hot water.");
 		dataMeter = new DataMeter(LocalDate.now(), 1L, meterType);
 	}
 
 	@Test
-	void mustFindLastDataMeter() {
+	void findLastDataMeter_shouldReturnLastDataMeter() {
 		when(dataMeterDatabase.getLastMeterData(Mockito.anyString()))
 				.thenReturn(Optional.of(dataMeter));
 
@@ -45,7 +45,7 @@ class DataMeterRepositoryTest {
 	}
 
 	@Test
-	void mustSaveDataMeter() {
+	void saveDataMeter_shouldSaveData() {
 		dataMeterRepository.saveDataMeter(TEST_USERNAME, dataMeter);
 
 		verify(dataMeterDatabase, times(1))
@@ -53,18 +53,18 @@ class DataMeterRepositoryTest {
 	}
 
 	@Test
-	void mustGetMeterDataForSpecifiedMonth() {
+	void getMeterDataForSpecifiedMonth_shouldReturnData() {
 		when(dataMeterDatabase.getMetersDataByMonth(TEST_USERNAME, 1))
-				.thenReturn(Optional.of(dataMeter));
+				.thenReturn(List.of(dataMeter));
 
-		Optional<DataMeter> actual =
+		List<DataMeter> actual =
 				dataMeterRepository.getMeterDataForSpecifiedMonth(TEST_USERNAME, 1);
 
-		assertThat(actual).isEqualTo(Optional.of(dataMeter));
+		assertThat(actual).isEqualTo(List.of(dataMeter));
 	}
 
 	@Test
-	void mustGetAllMeterData() {
+	void getAllMeterData_shouldGetAllData() {
 		List<DataMeter> dataMeterList = List.of(dataMeter);
 		when(dataMeterDatabase.getMeterData(TEST_USERNAME))
 				.thenReturn(dataMeterList);
@@ -75,7 +75,7 @@ class DataMeterRepositoryTest {
 	}
 
 	@Test
-	void mustGetDataFromAllMeterUsers() {
+	void getDataFromAllMeterUsers_shouldGetDataFromAllMeterUsers() {
 		Map<String, List<DataMeter>> stringListMap = Map.of(
 				TEST_USERNAME, List.of(dataMeter)
 		);

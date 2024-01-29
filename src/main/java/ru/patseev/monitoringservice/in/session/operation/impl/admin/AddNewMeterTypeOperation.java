@@ -14,7 +14,15 @@ import java.util.Scanner;
  */
 @RequiredArgsConstructor
 public class AddNewMeterTypeOperation implements Operation {
+
+	/**
+	 * Scanner object for reading user input.
+	 */
 	private final Scanner scanner;
+
+	/**
+	 * Controller for handling data related to meters.
+	 */
 	private final DataMeterController dataMeterController;
 
 	/**

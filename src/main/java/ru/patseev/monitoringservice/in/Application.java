@@ -46,6 +46,7 @@ public class Application {
 					default -> System.out.println("Неверные данные.");
 				}
 			} else {
+				System.out.println("Неверные данные.");
 				scanner.nextLine();
 			}
 		} while (!exit);

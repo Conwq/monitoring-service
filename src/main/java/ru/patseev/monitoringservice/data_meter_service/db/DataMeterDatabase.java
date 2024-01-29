@@ -4,6 +4,7 @@ import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
 import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The DataMeterDatabase class represents a database for storing data meter readings.
@@ -69,9 +70,11 @@ public class DataMeterDatabase {
 	 *
 	 * @param username The username for which the data meter reading is requested.
 	 * @param month    The month for which the data meter reading is requested.
-	 * @return An optional containing the data meter reading for the specified month as a DataMeter object, or empty if not found.
+	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-	public Optional<DataMeter> getMetersDataByMonth(String username, int month) {
+	//todo Возвращать список, ибо показаний может быть несколько
+	//todo Обработать пустой списко(вывести сообщение)
+	public List<DataMeter> getMetersDataByMonth(String username, int month) {
 		List<DataMeter> usersDataMeters = usersDataMeter.get(username);
 		if (usersDataMeters == null) {
 			usersDataMeters = new ArrayList<>();
@@ -79,7 +82,7 @@ public class DataMeterDatabase {
 
 		return usersDataMeters.stream()
 				.filter(dataMeter -> dataMeter.getDate().getMonth().getValue() == month)
-				.findAny();
+				.collect(Collectors.toList());
 	}
 
 	/**
