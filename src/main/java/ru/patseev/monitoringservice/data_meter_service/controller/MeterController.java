@@ -5,22 +5,22 @@ import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
+import ru.patseev.monitoringservice.data_meter_service.service.MeterService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * The DataMeterController class serves as a controller for managing data meter operations.
+ * The MeterController class serves as a controller for managing data meter operations.
  */
 @RequiredArgsConstructor
-public class DataMeterController {
+public class MeterController {
 
 	/**
 	 * The service responsible for data meter-related business logic.
 	 */
-	private final DataMeterService dataMeterService;
+	private final MeterService meterService;
 
 	/**
 	 * The service responsible for auditing user actions.
@@ -34,7 +34,7 @@ public class DataMeterController {
 	 * @return The current data meter reading as a DataMeterDto object.
 	 */
 	public DataMeterDto getCurrentMeterData(UserDto userDto) {
-		DataMeterDto currentDataMeter = dataMeterService.getCurrentDataMeter(userDto);
+		DataMeterDto currentDataMeter = meterService.getCurrentDataMeter(userDto);
 		auditService.saveUserAction(ActionEnum.GET_CURRENT_METER_DATA, userDto);
 		return currentDataMeter;
 	}
@@ -46,7 +46,7 @@ public class DataMeterController {
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
 	public void saveMeterData(UserDto userDto, DataMeterDto dataMeterDto) {
-		dataMeterService.saveDataMeter(userDto, dataMeterDto);
+		meterService.saveDataMeter(userDto, dataMeterDto);
 		auditService.saveUserAction(ActionEnum.SEND_METER_DATA, userDto);
 	}
 
@@ -58,7 +58,7 @@ public class DataMeterController {
 	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
 	public List<DataMeterDto> getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
-		List<DataMeterDto> meterDataForSpecifiedMonth = dataMeterService.getMeterDataForSpecifiedMonth(userDto, month);
+		List<DataMeterDto> meterDataForSpecifiedMonth = meterService.getMeterDataForSpecifiedMonth(userDto, month);
 		auditService.saveUserAction(ActionEnum.GET_METER_DATA_FOR_SPECIFIED_MONTH, userDto);
 		return meterDataForSpecifiedMonth;
 	}
@@ -70,7 +70,7 @@ public class DataMeterController {
 	 * @return A list of data meter readings as DataMeterDto objects.
 	 */
 	public List<DataMeterDto> getMeterDataForUser(UserDto userDto) {
-		List<DataMeterDto> allMeterDataByUsername = dataMeterService.getAllMeterData(userDto);
+		List<DataMeterDto> allMeterDataByUsername = meterService.getAllMeterData(userDto);
 		auditService.saveUserAction(ActionEnum.GET_METER_DATA_FOR_USER, userDto);
 		return allMeterDataByUsername;
 	}
@@ -82,7 +82,7 @@ public class DataMeterController {
 	 * @return A map containing username as the key and DataMeterDto as the value.
 	 */
 	public Map<String, List<DataMeterDto>> getDataFromAllMeterUsers(UserDto userDto) {
-		Map<String, List<DataMeterDto>> usersMeterData = dataMeterService.getDataFromAllMeterUsers();
+		Map<String, List<DataMeterDto>> usersMeterData = meterService.getDataFromAllMeterUsers();
 		auditService.saveUserAction(ActionEnum.GET_ALL_METER_DATA, userDto);
 		return usersMeterData;
 	}
@@ -94,7 +94,7 @@ public class DataMeterController {
 	 * @return A list of MeterTypeDto representing available meter types.
 	 */
 	public List<MeterTypeDto> getAvailableMeterType(UserDto userDto) {
-		List<MeterTypeDto> availableMeterType = dataMeterService.getAvailableMeterType();
+		List<MeterTypeDto> availableMeterType = meterService.getAvailableMeterType();
 		auditService.saveUserAction(ActionEnum.GET_ACTUAL_METER_TYPE, userDto);
 		return availableMeterType;
 	}
@@ -106,7 +106,7 @@ public class DataMeterController {
 	 * @param meterTypeDto An object containing the data of the new meter.
 	 */
 	public void addNewMeterType(UserDto userDto, MeterTypeDto meterTypeDto) {
-		dataMeterService.saveMeterType(meterTypeDto);
+		meterService.saveMeterType(meterTypeDto);
 		auditService.saveUserAction(ActionEnum.ADD_NEW_METER_TYPE, userDto);
 	}
 }

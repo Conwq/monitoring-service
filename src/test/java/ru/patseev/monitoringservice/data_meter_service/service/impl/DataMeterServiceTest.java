@@ -11,7 +11,8 @@ import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
-import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
+import ru.patseev.monitoringservice.data_meter_service.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.data_meter_service.service.MeterService;
 import ru.patseev.monitoringservice.user_service.domain.Role;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
@@ -27,7 +28,8 @@ import static org.mockito.Mockito.*;
 class DataMeterServiceTest {
 
 	private static DataMeterRepository dataMeterRepository;
-	private static DataMeterService dataMeterService;
+	private static MeterTypeRepository meterTypeRepository;
+	private static MeterService dataMeterService;
 	private UserDto userDto;
 	private DataMeter dataMeter;
 	private DataMeterDto dataMeterDto;
@@ -37,7 +39,8 @@ class DataMeterServiceTest {
 	@BeforeAll
 	static void setUp() {
 		dataMeterRepository = Mockito.mock(DataMeterRepository.class);
-		dataMeterService = new DataMeterServiceImpl(dataMeterRepository);
+		meterTypeRepository = Mockito.mock(MeterTypeRepository.class);
+		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
 	}
 
 	@BeforeEach
@@ -130,7 +133,7 @@ class DataMeterServiceTest {
 
 	@Test
 	void getAvailableMeterType_shouldReturnAvailableMeterType() {
-		when(dataMeterRepository.findAllMeterType())
+		when(meterTypeRepository.findAllMeterType())
 				.thenReturn(List.of(meterType));
 
 		List<MeterTypeDto> actual = dataMeterService.getAvailableMeterType();
@@ -143,7 +146,7 @@ class DataMeterServiceTest {
 	void saveMeterType_shouldSaveMeterType() {
 		dataMeterService.saveMeterType(meterTypeDto);
 
-		verify(dataMeterRepository, times(1))
+		verify(meterTypeRepository, times(1))
 				.saveMeterType(meterType);
 	}
 }

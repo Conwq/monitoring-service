@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.admin;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
@@ -23,7 +23,7 @@ public class AddNewMeterTypeOperation implements Operation {
 	/**
 	 * Controller for handling data related to meters.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * Executes the operation to add a new meter type.
@@ -39,7 +39,7 @@ public class AddNewMeterTypeOperation implements Operation {
 
 		MeterTypeDto newMeterType = new MeterTypeDto(null, inputTypeName);
 
-		dataMeterController.addNewMeterType(userDto, newMeterType);
+		meterController.addNewMeterType(userDto, newMeterType);
 
 		System.out.println("Счетчик успешно добавлен!");
 	}

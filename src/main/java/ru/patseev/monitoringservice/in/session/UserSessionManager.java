@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.display.TerminalInterface;
@@ -24,7 +24,7 @@ public class UserSessionManager {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	public final DataMeterController dataMeterController;
+	public final MeterController dataMeterController;
 
 
 	/**

@@ -18,13 +18,11 @@ class DataMeterDatabaseTest {
 	private static final String TEST_NAME = "test";
 	private DataMeterDatabase dataMeterDatabase;
 	private DataMeter dataMeter;
-	private MeterType meterType;
 
 	@BeforeEach
 	void setUp() {
 		dataMeterDatabase = new DataMeterDatabase();
-		meterType = new MeterType(1, "Hot water");
-		dataMeter = new DataMeter(LocalDate.now(), 1L, meterType);
+		dataMeter = new DataMeter(LocalDate.now(), 1L, new MeterType(1, "Hot water"));
 	}
 
 	@Test
@@ -105,29 +103,5 @@ class DataMeterDatabaseTest {
 						Map.of(
 								TEST_NAME, List.of(dataMeter),
 								testUsername, List.of(dataMeter)));
-	}
-
-	@Test
-	void getAllMeterType_shouldReturnActualMeterType() {
-		List<MeterType> actual = dataMeterDatabase.getAllMeterType();
-
-		assertThat(actual)
-				.isNotNull();
-		assertThat(actual.size())
-				.isEqualTo(3);
-		assertThat(actual.get(1).getTypeName())
-				.isEqualTo("Холодная вода");
-	}
-
-	@Test
-	void putMeterType_shouldSaveNewMeterType() {
-		dataMeterDatabase.putMeterType(meterType);
-
-		List<MeterType> allMeterType = dataMeterDatabase.getAllMeterType();
-
-		assertThat(allMeterType)
-				.isNotNull();
-		assertThat(allMeterType.get(allMeterType.size() - 1))
-				.isEqualTo(meterType);
 	}
 }

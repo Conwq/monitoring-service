@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
@@ -16,7 +16,7 @@ public class ViewMeterDataOperation implements Operation {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * The printer responsible for displaying meter data.
@@ -30,7 +30,7 @@ public class ViewMeterDataOperation implements Operation {
 	 */
 	@Override
 	public void execute(UserDto userDto) {
-		dataMeterController
+		meterController
 				.getMeterDataForUser(userDto)
 				.forEach(printerMeterData::printData);
 	}

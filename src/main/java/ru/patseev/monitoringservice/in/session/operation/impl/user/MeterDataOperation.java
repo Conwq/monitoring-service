@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.MeterDataFeedConflictException;
@@ -29,7 +29,7 @@ public class MeterDataOperation implements Operation {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * Executes to submit meter data operation.
@@ -42,7 +42,7 @@ public class MeterDataOperation implements Operation {
 		try {
 			scanner.nextLine();
 			List<MeterTypeDto> availableMeterType =
-					dataMeterController.getAvailableMeterType(userDto);
+					meterController.getAvailableMeterType(userDto);
 			do {
 				printMeterTypes(availableMeterType);
 				int typeNumber = promptUserInputToSelectType();
@@ -125,7 +125,7 @@ public class MeterDataOperation implements Operation {
 	 * @return true if data exists, false otherwise.
 	 */
 	private boolean checkingDataExistence(UserDto userDto, int meterTypeId) {
-		boolean dataExist = dataMeterController
+		boolean dataExist = meterController
 				.getMeterDataForUser(userDto)
 				.stream()
 				.filter(dto -> Objects.equals(dto.meterTypeId(), meterTypeId))
@@ -162,7 +162,7 @@ public class MeterDataOperation implements Operation {
 	private void sendMeterData(MeterTypeDto meterTypeDto, UserDto userDto) {
 		Long value = promptUserForMeterValue();
 		DataMeterDto dataMeterDto = createDataMeterDto(meterTypeDto, value);
-		dataMeterController.saveMeterData(userDto, dataMeterDto);
+		meterController.saveMeterData(userDto, dataMeterDto);
 		System.out.println("Данные успешно поданы!");
 	}
 }

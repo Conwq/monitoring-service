@@ -7,7 +7,8 @@ import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
-import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
+import ru.patseev.monitoringservice.data_meter_service.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.data_meter_service.service.MeterService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.Collections;
@@ -16,15 +17,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * The DataMeterServiceImpl class is an implementation of the DataMeterService interface.
+ * The MeterServiceImpl class is an implementation of the DataMeterService interface.
  */
 @RequiredArgsConstructor
-public class DataMeterServiceImpl implements DataMeterService {
+public class MeterServiceImpl implements MeterService {
 
 	/**
 	 * The repository responsible for data meter operations.
 	 */
 	private final DataMeterRepository dataMeterRepository;
+
+	/**
+	 * The repository responsible for meter type operations.
+	 */
+	private final MeterTypeRepository meterTypeRepository;
 
 	/**
 	 * {@inheritDoc}
@@ -97,7 +103,7 @@ public class DataMeterServiceImpl implements DataMeterService {
 	 */
 	@Override
 	public List<MeterTypeDto> getAvailableMeterType() {
-		return dataMeterRepository.findAllMeterType()
+		return meterTypeRepository.findAllMeterType()
 				.stream()
 				.map(this::toDto)
 				.collect(Collectors.toList());
@@ -109,7 +115,7 @@ public class DataMeterServiceImpl implements DataMeterService {
 	@Override
 	public void saveMeterType(MeterTypeDto meterTypeDto) {
 		MeterType meterType = toEntity(meterTypeDto);
-		dataMeterRepository.saveMeterType(meterType);
+		meterTypeRepository.saveMeterType(meterType);
 	}
 
 	/**

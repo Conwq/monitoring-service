@@ -20,7 +20,6 @@ class DataMeterRepositoryTest {
 	private static DataMeterDatabase dataMeterDatabase;
 	private static DataMeterRepository dataMeterRepository;
 	private DataMeter dataMeter;
-	private MeterType meterType;
 
 	@BeforeAll
 	static void setUp() {
@@ -30,7 +29,7 @@ class DataMeterRepositoryTest {
 
 	@BeforeEach
 	void createData() {
-		meterType = new MeterType(1, "Hot water.");
+		MeterType meterType = new MeterType(1, "Hot water.");
 		dataMeter = new DataMeter(LocalDate.now(), 1L, meterType);
 	}
 

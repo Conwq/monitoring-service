@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
@@ -26,7 +26,7 @@ public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * The printer responsible for displaying meter data.
@@ -49,7 +49,7 @@ public class ViewMeterDataForSpecifiedMonthOperation implements Operation {
 					System.out.println("Такого месяца не существует\n");
 					return;
 				}
-				List<DataMeterDto> dataMeterDto = dataMeterController.getMeterDataForSpecifiedMonth(userDto, month);
+				List<DataMeterDto> dataMeterDto = meterController.getMeterDataForSpecifiedMonth(userDto, month);
 				dataMeterDto.forEach(printerMeterData::printData);
 			} else {
 				scanner.nextLine();

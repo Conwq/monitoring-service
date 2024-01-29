@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Interface defines methods for managing data meter readings.
  */
-public interface DataMeterService {
+public interface MeterService {
 
 	/**
 	 * Retrieves the current data meter reading for the specified user.

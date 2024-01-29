@@ -8,7 +8,7 @@ import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
 import ru.patseev.monitoringservice.data_meter_service.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
+import ru.patseev.monitoringservice.data_meter_service.service.MeterService;
 import ru.patseev.monitoringservice.user_service.domain.Role;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
@@ -23,9 +23,9 @@ import static org.mockito.Mockito.*;
 
 class DataMeterControllerTest {
 
-	private static DataMeterService dataMeterService;
+	private static MeterService dataMeterService;
 	private static AuditService auditService;
-	private static DataMeterController dataMeterController;
+	private static MeterController dataMeterController;
 	private UserDto userDto;
 	private DataMeterDto dataMeterDto;
 	private List<DataMeterDto> dataMeterDtoList;
@@ -33,9 +33,9 @@ class DataMeterControllerTest {
 
 	@BeforeAll
 	static void setUp() {
-		dataMeterService = Mockito.mock(DataMeterService.class);
+		dataMeterService = Mockito.mock(MeterService.class);
 		auditService = Mockito.mock(AuditService.class);
-		dataMeterController = new DataMeterController(dataMeterService, auditService);
+		dataMeterController = new MeterController(dataMeterService, auditService);
 	}
 
 	@BeforeEach

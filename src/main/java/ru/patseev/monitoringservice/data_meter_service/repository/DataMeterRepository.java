@@ -49,18 +49,4 @@ public interface DataMeterRepository {
 	 * @return A map containing username as the key and DataMeter as the value.
 	 */
 	Map<String, List<DataMeter>> getDataFromAllMeterUsers();
-
-	/**
-	 * Retrieves a list of all meter types.
-	 *
-	 * @return A list of MeterType representing all available meter types.
-	 */
-	List<MeterType> findAllMeterType();
-
-	/**
-	 * Save a new type meter.
-	 *
-	 * @param meterType  New type of meter.
-	 */
-	void saveMeterType(MeterType meterType);
 }

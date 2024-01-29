@@ -2,7 +2,7 @@ package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.InvalidOperation;
@@ -45,7 +45,7 @@ public class OperationManager {
 	 * @param printerMeterData    The printer for displaying meter data.
 	 */
 	public OperationManager(Scanner scanner,
-							DataMeterController dataMeterController,
+							MeterController dataMeterController,
 							AuditController auditController,
 							PrinterMeterData printerMeterData) {
 		// Инициализирует операции пользователя

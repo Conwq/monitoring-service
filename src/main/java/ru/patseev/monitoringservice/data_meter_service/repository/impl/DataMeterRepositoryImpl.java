@@ -3,7 +3,6 @@ package ru.patseev.monitoringservice.data_meter_service.repository.impl;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.data_meter_service.db.DataMeterDatabase;
 import ru.patseev.monitoringservice.data_meter_service.domain.DataMeter;
-import ru.patseev.monitoringservice.data_meter_service.domain.MeterType;
 import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
 
 import java.util.List;
@@ -60,21 +59,5 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public Map<String, List<DataMeter>> getDataFromAllMeterUsers() {
 		return dataMetersDatabase.getAllMeterData();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<MeterType> findAllMeterType() {
-		return dataMetersDatabase.getAllMeterType();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void saveMeterType(MeterType meterType) {
-		dataMetersDatabase.putMeterType(meterType);
 	}
 }
