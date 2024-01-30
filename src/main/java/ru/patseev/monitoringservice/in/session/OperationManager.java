@@ -2,7 +2,7 @@ package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
+import ru.patseev.monitoringservice.meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.InvalidOperation;

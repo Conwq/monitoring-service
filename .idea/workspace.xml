@@ -6,9 +6,38 @@
   <component name="ChangeListManager">
     <list default="true" id="2eaf382e-e9b9-41d9-8610-1693fcbf71a1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabaseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/context/MonitoringApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/context/MonitoringApplicationContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/controller/MeterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/controller/MeterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/db/DataMeterDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/db/MeterTypeDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/db/MeterTypeDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/domain/DataMeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/domain/DataMeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/domain/MeterType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/domain/MeterType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/dto/DataMeterDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/dto/DataMeterDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/dto/MeterTypeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/dto/MeterTypeDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/DataMeterNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/exception/DataMeterNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/exception/MeterDataFeedConflictException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/exception/MeterDataFeedConflictException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/DataMeterRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/repository/DataMeterRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/MeterTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/repository/MeterTypeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/repository/impl/DataMeterRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/MeterTypeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/repository/impl/MeterTypeRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/MeterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/service/MeterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/data_meter_service/service/impl/MeterServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/meter_service/service/impl/MeterServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/AuthenticationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/OperationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/OperationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/UserSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/UserSessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/AddNewMeterTypeOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/AddNewMeterTypeOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/ViewAllUsersMeterDataOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/admin/ViewAllUsersMeterDataOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/MeterDataOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/MeterDataOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewCurrentMeterDataOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewCurrentMeterDataOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataForSpecifiedMonthOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataForSpecifiedMonthOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/impl/user/ViewMeterDataOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/util/PrinterMeterData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/patseev/monitoringservice/in/session/operation/util/PrinterMeterData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/controller/DataMeterControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/controller/DataMeterControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/db/DataMeterDatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/db/DataMeterDatabaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/db/MeterTypeDatabaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/db/MeterTypeDatabaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/DataMeterRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/repository/impl/DataMeterRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/repository/impl/MeterTypeRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/repository/impl/MeterTypeRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/data_meter_service/service/impl/DataMeterServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/patseev/monitoringservice/meter_service/service/impl/DataMeterServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,67 +110,58 @@
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="ru.patseev.monitoringservice.in.handler.operation" />
+      <recent name="ru.patseev.monitoringservice.in" />
       <recent name="ru.patseev.monitoringservice.data_meter_service.db" />
       <recent name="ru.patseev.monitoringservice.data_meter_service.repository.impl" />
       <recent name="ru.patseev.monitoringservice.audit_service.db" />
-      <recent name="ru.patseev.monitoringservice.user_service.db" />
-      <recent name="ru.patseev.monitoringservice.data_meter_service.service.impl" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="ru.patseev.monitoringservice.data_meter_service.domain" />
       <recent name="ru.patseev.monitoringservice" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MeterTypeRepositoryTest">
-    <configuration name="All in monitoring-service" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.RegistrationOperationHandlerTest">
+    <configuration name="MonitoringApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.MonitoringApplication" />
       <module name="monitoring-service" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DataMeterControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AuthenticationManagerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="monitoring-service" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ru.patseev.monitoringservice.data_meter_service.controller.*" />
+          <option name="PATTERN" value="ru.patseev.monitoringservice.in.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.data_meter_service.controller" />
-      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.data_meter_service.controller.DataMeterControllerTest" />
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.in" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.in.AuthenticationManagerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DataMeterServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AuthenticationManagerTest.renderInterface_callRegistrationOperation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="monitoring-service" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ru.patseev.monitoringservice.data_meter_service.service.impl.*" />
+          <option name="PATTERN" value="ru.patseev.monitoringservice.in.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.data_meter_service.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.data_meter_service.service.impl.DataMeterServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MeterTypeDatabaseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="monitoring-service" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.patseev.monitoringservice.data_meter_service.db.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.data_meter_service.db" />
-      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.data_meter_service.db.MeterTypeDatabaseTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.in" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.in.AuthenticationManagerTest" />
+      <option name="METHOD_NAME" value="renderInterface_callRegistrationOperation" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -150,12 +170,27 @@
       <module name="monitoring-service" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ru.patseev.monitoringservice.data_meter_service.repository.impl.*" />
+          <option name="PATTERN" value="ru.patseev.monitoringservice.meter_service.repository.impl.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.data_meter_service.repository.impl" />
-      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.data_meter_service.repository.impl.MeterTypeRepositoryTest" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.meter_service.repository.impl.MeterTypeRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegistrationOperationHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="monitoring-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.patseev.monitoringservice.in.handler.operation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.patseev.monitoringservice.in.handler.operation" />
+      <option name="MAIN_CLASS_NAME" value="ru.patseev.monitoringservice.in.handler.operation.RegistrationOperationHandlerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -163,11 +198,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegistrationOperationHandlerTest" />
+        <item itemvalue="JUnit.AuthenticationManagerTest" />
+        <item itemvalue="JUnit.AuthenticationManagerTest.renderInterface_callRegistrationOperation" />
+        <item itemvalue="Application.MonitoringApplication" />
         <item itemvalue="JUnit.MeterTypeRepositoryTest" />
-        <item itemvalue="JUnit.MeterTypeDatabaseTest" />
-        <item itemvalue="JUnit.All in monitoring-service" />
-        <item itemvalue="JUnit.DataMeterControllerTest" />
-        <item itemvalue="JUnit.DataMeterServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -190,7 +225,8 @@
       <workItem from="1706308123459" duration="250000" />
       <workItem from="1706308457233" duration="1532000" />
       <workItem from="1706335074121" duration="26742000" />
-      <workItem from="1706549335360" duration="11711000" />
+      <workItem from="1706549335360" duration="16005000" />
+      <workItem from="1706598341303" duration="2327000" />
     </task>
     <servers />
   </component>

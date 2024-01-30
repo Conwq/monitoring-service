@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
+import ru.patseev.monitoringservice.meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;

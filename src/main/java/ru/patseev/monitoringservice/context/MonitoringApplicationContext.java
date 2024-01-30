@@ -6,17 +6,17 @@ import ru.patseev.monitoringservice.audit_service.repository.AuditRepository;
 import ru.patseev.monitoringservice.audit_service.repository.impl.AuditRepositoryImpl;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.audit_service.service.impl.AuditServiceImpl;
-import ru.patseev.monitoringservice.data_meter_service.controller.MeterController;
-import ru.patseev.monitoringservice.data_meter_service.db.DataMeterDatabase;
-import ru.patseev.monitoringservice.data_meter_service.db.MeterTypeDatabase;
-import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
-import ru.patseev.monitoringservice.data_meter_service.repository.MeterTypeRepository;
-import ru.patseev.monitoringservice.data_meter_service.repository.impl.DataMeterRepositoryImpl;
-import ru.patseev.monitoringservice.data_meter_service.repository.impl.MeterTypeRepositoryImpl;
-import ru.patseev.monitoringservice.data_meter_service.service.MeterService;
-import ru.patseev.monitoringservice.data_meter_service.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.meter_service.controller.MeterController;
+import ru.patseev.monitoringservice.meter_service.db.DataMeterDatabase;
+import ru.patseev.monitoringservice.meter_service.db.MeterTypeDatabase;
+import ru.patseev.monitoringservice.meter_service.repository.DataMeterRepository;
+import ru.patseev.monitoringservice.meter_service.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.meter_service.repository.impl.DataMeterRepositoryImpl;
+import ru.patseev.monitoringservice.meter_service.repository.impl.MeterTypeRepositoryImpl;
+import ru.patseev.monitoringservice.meter_service.service.MeterService;
+import ru.patseev.monitoringservice.meter_service.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.in.AuthenticationManager;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
-import ru.patseev.monitoringservice.in.Application;
 import ru.patseev.monitoringservice.in.handler.operation.RegistrationOperationHandler;
 import ru.patseev.monitoringservice.in.handler.operation.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
@@ -41,29 +41,39 @@ public class MonitoringApplicationContext {
 	private final Scanner scanner = new Scanner(System.in);
 	private final PrinterMeterData printerMeterData = new PrinterMeterData();
 
-	//Databases
+	/*
+	 * Databases
+	 */
 	private final UserDatabase userDatabase = new UserDatabase();
 	private final AuditDatabase auditDatabase = new AuditDatabase();
 	private final DataMeterDatabase dataMeterDatabase = new DataMeterDatabase();
 	private final MeterTypeDatabase meterTypeDatabase = new MeterTypeDatabase();
 
-	//Repositories
+	/*
+	 * Repositories
+	 */
 	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);
 	private final AuditRepository auditRepository = new AuditRepositoryImpl(auditDatabase);
 	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(dataMeterDatabase);
 	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(meterTypeDatabase);
 
-	//Services
+	/*
+	 * Services
+	 */
 	private final UserService userService = new UserServiceImpl(userRepository);
 	private final AuditService auditService = new AuditServiceImpl(auditRepository);
 	private final MeterService meterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
 
-	//Controllers
+	/*
+	 * Controllers
+	 */
 	private final UserController userController = new UserController(userService, auditService);
 	private final AuditController auditController = new AuditController(auditService);
 	private final MeterController meterController = new MeterController(meterService, auditService);
 
-	//Operations
+	/*
+	 * Operations
+	 */
 	private final OperationManager operationManager =
 			new OperationManager(scanner, meterController, auditController, printerMeterData);
 	private final UserSessionManager clientSessionManager =
@@ -72,8 +82,11 @@ public class MonitoringApplicationContext {
 	private final AbstractOperationHandler signInOperationHandler =
 			new SignInOperationHandler(scanner, userController, clientSessionManager);
 
-	//Application
-	private final Application application = new Application(scanner, registrationOperation, signInOperationHandler);
+	/*
+	 * Application
+	 */
+	private final AuthenticationManager authenticationManager =
+			new AuthenticationManager(scanner, registrationOperation, signInOperationHandler);
 
 	private MonitoringApplicationContext() {
 	}
@@ -94,6 +107,6 @@ public class MonitoringApplicationContext {
 	 * Runs the monitoring service application, starting with rendering the user interface.
 	 */
 	public void runApplication() {
-		application.renderInterface();
+		authenticationManager.renderInterface();
 	}
 }
