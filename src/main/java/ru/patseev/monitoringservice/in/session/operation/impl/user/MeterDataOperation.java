@@ -1,13 +1,13 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.meter_service.controller.MeterController;
-import ru.patseev.monitoringservice.meter_service.dto.DataMeterDto;
-import ru.patseev.monitoringservice.meter_service.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.meter_service.exception.MeterDataFeedConflictException;
-import ru.patseev.monitoringservice.in.exception.MeterNotFoundException;
+import ru.patseev.monitoringservice.controller.MeterController;
+import ru.patseev.monitoringservice.dto.DataMeterDto;
+import ru.patseev.monitoringservice.dto.MeterTypeDto;
+import ru.patseev.monitoringservice.exception.MeterDataFeedConflictException;
+import ru.patseev.monitoringservice.exception.MeterNotFoundException;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.dto.UserDto;
 
 import java.time.LocalDate;
 import java.util.List;

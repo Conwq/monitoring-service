@@ -5,11 +5,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
-import ru.patseev.monitoringservice.audit_service.service.AuditService;
-import ru.patseev.monitoringservice.user_service.domain.Role;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.user_service.service.UserService;
+import ru.patseev.monitoringservice.controller.UserController;
+import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.domain.Role;
+import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.service.UserService;
 
 class UserControllerTest {
 	private static AuditService auditService;

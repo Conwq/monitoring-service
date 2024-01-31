@@ -5,9 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.meter_service.db.DataMeterDatabase;
-import ru.patseev.monitoringservice.meter_service.domain.DataMeter;
-import ru.patseev.monitoringservice.meter_service.domain.MeterType;
-import ru.patseev.monitoringservice.meter_service.repository.DataMeterRepository;
+import ru.patseev.monitoringservice.domain.DataMeter;
+import ru.patseev.monitoringservice.domain.MeterType;
+import ru.patseev.monitoringservice.repository.DataMeterRepository;
+import ru.patseev.monitoringservice.repository.impl.DataMeterRepositoryImpl;
 
 import java.time.LocalDate;
 import java.util.*;

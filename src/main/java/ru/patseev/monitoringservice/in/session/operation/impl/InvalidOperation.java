@@ -1,7 +1,7 @@
 package ru.patseev.monitoringservice.in.session.operation.impl;
 
 import ru.patseev.monitoringservice.in.session.operation.Operation;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.dto.UserDto;
 
 /**
  * The InvalidOperation class represents an operation that is executed when an invalid

@@ -4,8 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.meter_service.db.MeterTypeDatabase;
-import ru.patseev.monitoringservice.meter_service.domain.MeterType;
-import ru.patseev.monitoringservice.meter_service.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.domain.MeterType;
+import ru.patseev.monitoringservice.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
 
 import java.util.List;
 

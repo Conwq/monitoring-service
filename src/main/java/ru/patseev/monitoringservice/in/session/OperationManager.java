@@ -1,8 +1,8 @@
 package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.meter_service.controller.MeterController;
+import ru.patseev.monitoringservice.controller.AuditController;
+import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.InvalidOperation;
@@ -14,8 +14,7 @@ import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewCurrentMe
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataForSpecifiedMonthOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataOperation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.user_service.domain.Role;
-import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
+import ru.patseev.monitoringservice.dto.RoleEnum;
 
 import java.util.HashMap;
 import java.util.Map;

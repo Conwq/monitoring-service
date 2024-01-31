@@ -2,10 +2,10 @@ package ru.patseev.monitoringservice.in.handler.operation;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
-import ru.patseev.monitoringservice.user_service.controller.UserController;
-import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.user_service.exception.UserAlreadyExistException;
+import ru.patseev.monitoringservice.controller.UserController;
+import ru.patseev.monitoringservice.dto.RoleEnum;
+import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 
 import java.util.Scanner;
 

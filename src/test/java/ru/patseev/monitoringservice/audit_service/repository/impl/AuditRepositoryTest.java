@@ -5,9 +5,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.audit_service.db.AuditDatabase;
-import ru.patseev.monitoringservice.audit_service.domain.UserAction;
-import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
-import ru.patseev.monitoringservice.audit_service.repository.AuditRepository;
+import ru.patseev.monitoringservice.domain.UserAction;
+import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.repository.AuditRepository;
+import ru.patseev.monitoringservice.repository.impl.AuditRepositoryImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

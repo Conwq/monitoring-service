@@ -5,10 +5,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.patseev.monitoringservice.repository.impl.UserRepositoryImpl;
 import ru.patseev.monitoringservice.user_service.db.UserDatabase;
-import ru.patseev.monitoringservice.user_service.domain.Role;
-import ru.patseev.monitoringservice.user_service.domain.User;
-import ru.patseev.monitoringservice.user_service.repository.UserRepository;
+import ru.patseev.monitoringservice.domain.Role;
+import ru.patseev.monitoringservice.domain.User;
+import ru.patseev.monitoringservice.repository.UserRepository;
 
 import java.util.Optional;
 

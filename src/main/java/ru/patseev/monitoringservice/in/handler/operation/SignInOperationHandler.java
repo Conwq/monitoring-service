@@ -3,9 +3,9 @@ package ru.patseev.monitoringservice.in.handler.operation;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
-import ru.patseev.monitoringservice.user_service.controller.UserController;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
+import ru.patseev.monitoringservice.controller.UserController;
+import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
 
 import java.util.Scanner;
 

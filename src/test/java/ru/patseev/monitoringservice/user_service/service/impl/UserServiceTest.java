@@ -6,13 +6,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.patseev.monitoringservice.user_service.domain.Role;
-import ru.patseev.monitoringservice.user_service.domain.User;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
-import ru.patseev.monitoringservice.user_service.exception.UserAlreadyExistException;
-import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.user_service.repository.UserRepository;
-import ru.patseev.monitoringservice.user_service.service.UserService;
+import ru.patseev.monitoringservice.domain.Role;
+import ru.patseev.monitoringservice.domain.User;
+import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
+import ru.patseev.monitoringservice.repository.UserRepository;
+import ru.patseev.monitoringservice.service.UserService;
+import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
 
 import java.util.Optional;
 
