@@ -58,7 +58,7 @@ class AuditServiceTest {
 			add(new UserActionDto(logInAt, ActionEnum.LOG_IN));
 		}};
 
-		Mockito.when(auditRepository.findUserActionByUsername(userDto.username()))
+		Mockito.when(auditRepository.findUserActionByUserId(userDto.username()))
 				.thenReturn(userActions);
 
 		List<UserActionDto> expected = auditService.getUserAction(userDto.username());
@@ -68,7 +68,7 @@ class AuditServiceTest {
 
 	@Test
 	void mustThrowExceptionWhenGetUserAction() {
-		Mockito.when(auditRepository.findUserActionByUsername(userDto.username()))
+		Mockito.when(auditRepository.findUserActionByUserId(userDto.username()))
 				.thenReturn(null);
 
 		Assertions.assertThrows(UserNotFoundException.class,

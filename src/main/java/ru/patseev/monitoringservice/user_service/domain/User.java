@@ -16,6 +16,11 @@ import lombok.NoArgsConstructor;
 public class User {
 
 	/**
+	 * The unique identifier for the user.
+	 */
+	private Integer userId;
+
+	/**
 	 * The username of the user.
 	 */
 	private String username;
@@ -28,5 +33,5 @@ public class User {
 	/**
 	 * The role of the user, indicating their level of access and permissions.
 	 */
-	private Role role;
+	private Integer roleId;
 }

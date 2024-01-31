@@ -17,6 +17,7 @@
         <junit.version>5.10.1</junit.version>
         <mockito.version>5.7.0</mockito.version>
         <assertj.version>3.25.2</assertj.version>
+        <postgresql.version>42.6.0</postgresql.version>
     </properties>
 
     <dependencies>
@@ -48,6 +49,11 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
     </dependencies>
 </project>

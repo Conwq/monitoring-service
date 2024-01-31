@@ -6,6 +6,7 @@ import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.meter_service.controller.MeterController;
 import ru.patseev.monitoringservice.user_service.domain.Role;
+import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.Scanner;
@@ -48,7 +49,7 @@ public class UserSessionManager {
 	 */
 	private void operationMenuSelection(UserDto userDto) {
 		String terminalInterface =
-				userDto.role() == Role.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;
+				userDto.role() == RoleEnum.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;
 		boolean exit = false;
 		do {
 			System.out.println(terminalInterface);

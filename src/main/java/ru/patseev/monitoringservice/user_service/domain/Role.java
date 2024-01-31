@@ -1,9 +1,26 @@
 package ru.patseev.monitoringservice.user_service.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * Available roles for users.
+ * The Role class represents a user role in the system.
  */
-public enum Role {
-	USER,
-	ADMIN
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Role {
+
+	/**
+	 * The unique identifier for the role.
+	 */
+	private Integer roleId;
+
+	/**
+	 * The name of the role.
+	 */
+	private String roleName;
 }

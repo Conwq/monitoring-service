@@ -9,7 +9,8 @@ import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -29,20 +30,20 @@ public class AuditServiceImpl implements AuditService {
 	@Override
 	public void saveUserAction(ActionEnum action, UserDto userDto) {
 		UserAction userAction = UserAction.builder()
-				.actionAt(LocalDateTime.now())
+				.actionAt(Timestamp.from(Instant.now()))
 				.action(action)
 				.build();
 
-		auditRepository.save(userDto.username(), userAction);
+		auditRepository.save(userDto.userId(), userAction);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<UserActionDto> getUserAction(String username) {
+	public List<UserActionDto> getUserAction(int userId) {
 		List<UserAction> userAction = auditRepository
-				.findUserActionByUsername(username);
+				.findUserActionByUserId(userId);
 
 		if (userAction == null) {
 			throw new UserNotFoundException("\nПользователь не найден.");
@@ -61,6 +62,6 @@ public class AuditServiceImpl implements AuditService {
 	 * @return A UserActionDto representing the converted data.
 	 */
 	private UserActionDto toDto(UserAction userAction) {
-		return new UserActionDto(userAction.getActionAt(), userAction.getAction());
+		return new UserActionDto(userAction.getActionAt().toLocalDateTime(), userAction.getAction());
 	}
 }

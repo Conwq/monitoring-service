@@ -22,4 +22,12 @@ public interface MeterTypeRepository {
 	 * @param meterType New type of meter to be saved.
 	 */
 	void saveMeterType(MeterType meterType);
+
+	/**
+	 * Retrieves a meter type by its ID.
+	 *
+	 * @param meterTypeId The ID of the meter type to retrieve.
+	 * @return The MeterType object representing the meter type with the specified ID,or null if not found.
+	 */
+	MeterType getMeterTypeById(int meterTypeId);
 }

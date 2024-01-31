@@ -15,6 +15,7 @@ import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterData
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataOperation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
 import ru.patseev.monitoringservice.user_service.domain.Role;
+import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class OperationManager {
 	 * @param role            The role of the user.
 	 * @return The corresponding Operation based on the operation number and user role.
 	 */
-	public Operation getOperation(int operationNumber, Role role) {
+	public Operation getOperation(int operationNumber, RoleEnum role) {
 		Map<Integer, Operation> roleOperations =
 				switch (role) {
 					case ADMIN -> adminOperation;

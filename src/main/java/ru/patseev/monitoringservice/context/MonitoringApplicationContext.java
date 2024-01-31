@@ -1,20 +1,10 @@
 package ru.patseev.monitoringservice.context;
 
 import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.audit_service.db.AuditDatabase;
 import ru.patseev.monitoringservice.audit_service.repository.AuditRepository;
 import ru.patseev.monitoringservice.audit_service.repository.impl.AuditRepositoryImpl;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
 import ru.patseev.monitoringservice.audit_service.service.impl.AuditServiceImpl;
-import ru.patseev.monitoringservice.meter_service.controller.MeterController;
-import ru.patseev.monitoringservice.meter_service.db.DataMeterDatabase;
-import ru.patseev.monitoringservice.meter_service.db.MeterTypeDatabase;
-import ru.patseev.monitoringservice.meter_service.repository.DataMeterRepository;
-import ru.patseev.monitoringservice.meter_service.repository.MeterTypeRepository;
-import ru.patseev.monitoringservice.meter_service.repository.impl.DataMeterRepositoryImpl;
-import ru.patseev.monitoringservice.meter_service.repository.impl.MeterTypeRepositoryImpl;
-import ru.patseev.monitoringservice.meter_service.service.MeterService;
-import ru.patseev.monitoringservice.meter_service.service.impl.MeterServiceImpl;
 import ru.patseev.monitoringservice.in.AuthenticationManager;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.in.handler.operation.RegistrationOperationHandler;
@@ -22,9 +12,19 @@ import ru.patseev.monitoringservice.in.handler.operation.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
+import ru.patseev.monitoringservice.manager.ConnectionProvider;
+import ru.patseev.monitoringservice.manager.ResourceManager;
+import ru.patseev.monitoringservice.meter_service.controller.MeterController;
+import ru.patseev.monitoringservice.meter_service.repository.DataMeterRepository;
+import ru.patseev.monitoringservice.meter_service.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.meter_service.repository.impl.DataMeterRepositoryImpl;
+import ru.patseev.monitoringservice.meter_service.repository.impl.MeterTypeRepositoryImpl;
+import ru.patseev.monitoringservice.meter_service.service.MeterService;
+import ru.patseev.monitoringservice.meter_service.service.impl.MeterServiceImpl;
 import ru.patseev.monitoringservice.user_service.controller.UserController;
-import ru.patseev.monitoringservice.user_service.db.UserDatabase;
+import ru.patseev.monitoringservice.user_service.repository.RoleRepository;
 import ru.patseev.monitoringservice.user_service.repository.UserRepository;
+import ru.patseev.monitoringservice.user_service.repository.impl.RoleRepositoryImpl;
 import ru.patseev.monitoringservice.user_service.repository.impl.UserRepositoryImpl;
 import ru.patseev.monitoringservice.user_service.service.UserService;
 import ru.patseev.monitoringservice.user_service.service.impl.UserServiceImpl;
@@ -40,27 +40,22 @@ public class MonitoringApplicationContext {
 	private static MonitoringApplicationContext context;
 	private final Scanner scanner = new Scanner(System.in);
 	private final PrinterMeterData printerMeterData = new PrinterMeterData();
-
-	/*
-	 * Databases
-	 */
-	private final UserDatabase userDatabase = new UserDatabase();
-	private final AuditDatabase auditDatabase = new AuditDatabase();
-	private final DataMeterDatabase dataMeterDatabase = new DataMeterDatabase();
-	private final MeterTypeDatabase meterTypeDatabase = new MeterTypeDatabase();
+	private final ResourceManager resourceManager = new ResourceManager("application");
+	private final ConnectionProvider connectionProvider = new ConnectionProvider(resourceManager);
 
 	/*
 	 * Repositories
 	 */
-	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);
-	private final AuditRepository auditRepository = new AuditRepositoryImpl(auditDatabase);
-	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(dataMeterDatabase);
-	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(meterTypeDatabase);
+	private final UserRepository userRepository = new UserRepositoryImpl(connectionProvider);
+	private final RoleRepository roleRepository = new RoleRepositoryImpl(connectionProvider);
+	private final AuditRepository auditRepository = new AuditRepositoryImpl(connectionProvider);
+	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(connectionProvider);
+	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(connectionProvider);
 
 	/*
 	 * Services
 	 */
-	private final UserService userService = new UserServiceImpl(userRepository);
+	private final UserService userService = new UserServiceImpl(userRepository, roleRepository);
 	private final AuditService auditService = new AuditServiceImpl(auditRepository);
 	private final MeterService meterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
 
@@ -68,7 +63,7 @@ public class MonitoringApplicationContext {
 	 * Controllers
 	 */
 	private final UserController userController = new UserController(userService, auditService);
-	private final AuditController auditController = new AuditController(auditService);
+	private final AuditController auditController = new AuditController(auditService, userController);
 	private final MeterController meterController = new MeterController(meterService, auditService);
 
 	/*

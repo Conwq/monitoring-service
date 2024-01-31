@@ -51,7 +51,7 @@ public class SignInOperationHandler extends AbstractOperationHandler {
 
 			System.out.println();
 
-			UserDto request = new UserDto(username, password, null);
+			UserDto request = new UserDto(null, username, password, null);
 			UserDto authUserData = userController.authUser(request);
 
 			if (authUserData != null) {

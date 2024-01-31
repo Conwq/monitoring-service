@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.audit_service.dto.UserActionDto;
 import ru.patseev.monitoringservice.audit_service.enums.ActionEnum;
 import ru.patseev.monitoringservice.audit_service.service.AuditService;
+import ru.patseev.monitoringservice.user_service.controller.UserController;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class AuditController {
 	 */
 	private final AuditService auditService;
 
+	/**
+	 * UserController used by the controller to work with the users service.
+	 */
+	private final UserController userController;
 
 	/**
 	 * Retrieves a list of user actions based on the provided username.
@@ -28,7 +33,8 @@ public class AuditController {
 	 * @return A list of UserActionDto representing user actions.
 	 */
 	public List<UserActionDto> getListOfUserActions(String username, UserDto userDto) {
-		List<UserActionDto> userAction = auditService.getUserAction(username);
+		UserDto searchedUser = userController.getUser(username);
+		List<UserActionDto> userAction = auditService.getUserAction(searchedUser.userId());
 		auditService.saveUserAction(ActionEnum.GET_USERS_ACTION, userDto);
 		return userAction;
 	}

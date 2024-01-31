@@ -12,16 +12,16 @@ public interface AuditRepository {
 	/**
 	 * Saves a user action to the audit log.
 	 *
-	 * @param username   The username associated with the user who performed the action.
-	 * @param userAction The UserAction object representing the action performed by the user.
+	 * @param userId     The user ID associated with the user who performed the action.
+	 * @param userAction The {@code UserAction} object representing the action performed by the user.
 	 */
-	void save(String username, UserAction userAction);
+	void save(int userId, UserAction userAction);
 
 	/**
-	 * Retrieves a list of user actions for a specific username from the audit log.
+	 * Retrieves a list of user actions for a specific user from the audit log.
 	 *
-	 * @param username The username for which to retrieve user actions.
-	 * @return A list of UserAction objects representing the actions performed by the user.
+	 * @param userId The user ID for which to retrieve user actions.
+	 * @return A list of {@code UserAction} objects representing the actions performed by the user.
 	 */
-	List<UserAction> findUserActionByUsername(String username);
+	List<UserAction> findUserActionByUserId(int userId);
 }

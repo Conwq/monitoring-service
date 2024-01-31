@@ -1,10 +1,13 @@
 package ru.patseev.monitoringservice.user_service.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import ru.patseev.monitoringservice.user_service.domain.Role;
 import ru.patseev.monitoringservice.user_service.domain.User;
+import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 import ru.patseev.monitoringservice.user_service.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.user_service.exception.UserNotFoundException;
+import ru.patseev.monitoringservice.user_service.repository.RoleRepository;
 import ru.patseev.monitoringservice.user_service.repository.UserRepository;
 import ru.patseev.monitoringservice.user_service.service.UserService;
 
@@ -22,10 +25,15 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	/**
+	 * The role repository used to interact with the role store.
+	 */
+	private final RoleRepository roleRepository;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveUser(UserDto userDto) {
+	public UserDto saveUser(UserDto userDto) {
 		Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
 
 		if (optionalUser.isPresent()) {
@@ -35,10 +43,12 @@ public class UserServiceImpl implements UserService {
 		User user = User.builder()
 				.username(userDto.username())
 				.password(userDto.password())
-				.role(userDto.role())
+				.roleId(RoleEnum.USER.getRoleId())
 				.build();
 
-		userRepository.saveUser(user);
+		int generatedKey = userRepository.saveUser(user);
+
+		return new UserDto(generatedKey, userDto.username(), null, RoleEnum.USER);
 	}
 
 	/**
@@ -53,10 +63,43 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotFoundException("Пользователь не найден.");
 		}
 
+		Role role = roleRepository.getRoleById(user.getRoleId());
+		RoleEnum roleEnum = RoleEnum.valueOf(role.getRoleName());
+
+		return toDto(user, roleEnum);
+	}
+
+	/**
+	 * Retrieves a user DTO by the specified username.
+	 *
+	 * @param username The username of the user to retrieve.
+	 * @return A UserDto object representing the user with the specified username.
+	 * @throws UserNotFoundException If the user with the specified username is not found.
+	 */
+	@Override
+	public UserDto getUser(String username) {
+		return userRepository.findUserByUsername(username)
+				.map(user -> {
+					Role role = roleRepository.getRoleById(user.getRoleId());
+					RoleEnum roleEnum = RoleEnum.valueOf(role.getRoleName());
+					return toDto(user, roleEnum);
+				})
+				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
+	}
+
+	/**
+	 * Converts a User object to a code UserDto object.
+	 *
+	 * @param user     The User object to be converted.
+	 * @param roleEnum The code RoleEnum associated with the user.
+	 * @return A UserDto object representing the converted user.
+	 */
+	private UserDto toDto(User user, RoleEnum roleEnum) {
 		return new UserDto(
+				user.getUserId(),
 				user.getUsername(),
-				user.getPassword(),
-				user.getRole()
+				null,
+				roleEnum
 		);
 	}
 }

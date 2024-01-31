@@ -13,9 +13,10 @@ public interface UserService {
 	 * Saves a user based on the provided UserDto.
 	 *
 	 * @param userDto The UserDto object representing the user to be saved.
-	 * @throws UserAlreadyExistException Throws if such a user is already registered.
+	 * @return The saved UserDto object.
+	 * @throws UserAlreadyExistException Thrown if such a user is already registered.
 	 */
-	void saveUser(UserDto userDto) throws UserAlreadyExistException;
+	UserDto saveUser(UserDto userDto) throws UserAlreadyExistException;
 
 	/**
 	 * Authenticates a user based on the provided UserDto.
@@ -25,4 +26,12 @@ public interface UserService {
 	 * @throws UserNotFoundException Thrown if the user with the transferred data is not found.
 	 */
 	UserDto authUser(UserDto userDto) throws UserNotFoundException;
+
+	/**
+	 * Retrieves a user DTO by the specified username.
+	 *
+	 * @param username The username of the user to retrieve.
+	 * @return A UserDto object representing the user with the specified username.
+	 */
+	UserDto getUser(String username);
 }

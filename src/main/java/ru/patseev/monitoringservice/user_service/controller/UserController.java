@@ -28,7 +28,7 @@ public class UserController {
 	 * @param userDto The data transfer object containing user information.
 	 */
 	public void saveUser(UserDto userDto) {
-		userService.saveUser(userDto);
+		userDto = userService.saveUser(userDto);
 		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
 	}
 
@@ -43,4 +43,15 @@ public class UserController {
 		auditService.saveUserAction(ActionEnum.LOG_IN, userData);
 		return userData;
 	}
+
+	/**
+	 * Retrieves a user DTO by the specified username.
+	 *
+	 * @param username The username of the user to retrieve.
+	 * @return A UserDto object representing the user with the specified username,or null if the user is not found.
+	 */
+	public UserDto getUser(String username) {
+		return userService.getUser(username);
+	}
+
 }

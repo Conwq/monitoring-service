@@ -3,7 +3,7 @@ package ru.patseev.monitoringservice.in.handler.operation;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.user_service.controller.UserController;
-import ru.patseev.monitoringservice.user_service.domain.Role;
+import ru.patseev.monitoringservice.user_service.dto.RoleEnum;
 import ru.patseev.monitoringservice.user_service.dto.UserDto;
 import ru.patseev.monitoringservice.user_service.exception.UserAlreadyExistException;
 
@@ -44,7 +44,7 @@ public class RegistrationOperationHandler extends AbstractOperationHandler {
 			System.out.print("Введите пароль: ");
 			String password = scanner.nextLine();
 
-			UserDto userDto = new UserDto(username, password, Role.USER);
+			UserDto userDto = new UserDto(null, username, password, RoleEnum.USER);
 
 			userController.saveUser(userDto);
 

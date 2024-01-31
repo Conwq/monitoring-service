@@ -28,3 +28,5 @@
     - JUnit
     - Mockito
     - AssertJ
+    - JDBC
+    - PostgreSQL

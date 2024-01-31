@@ -23,9 +23,10 @@ public interface AuditService {
 	/**
 	 * Retrieves a list of user actions based on the provided username.
 	 *
-	 * @param username The username for which user actions are to be retrieved.
+	 * @param userId The user ID for which to retrieve user actions.
 	 * @return A list of UserActionDto representing user actions.
 	 * @throws UserNotFoundException If the specified user is not found.
 	 */
-	List<UserActionDto> getUserAction(String username) throws UserNotFoundException;
+	//todo
+	List<UserActionDto> getUserAction(int userId) throws UserNotFoundException;
 }
