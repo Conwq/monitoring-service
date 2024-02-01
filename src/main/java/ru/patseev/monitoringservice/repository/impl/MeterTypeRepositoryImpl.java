@@ -1,8 +1,8 @@
 package ru.patseev.monitoringservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
 import ru.patseev.monitoringservice.domain.MeterType;
+import ru.patseev.monitoringservice.manager.ConnectionProvider;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 
 import java.sql.*;
@@ -26,7 +26,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 */
 	@Override
 	public List<MeterType> findAllMeterType() {
-		final String selectMeterTypes = "SELECT * FROM meter_types";
+		final String selectMeterTypes = "SELECT * FROM monitoring_service.meter_types";
 
 		try (Connection connection = connectionProvider.takeConnection();
 			 Statement statement = connection.createStatement();
@@ -50,7 +50,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 */
 	@Override
 	public void saveMeterType(MeterType meterType) {
-		final String insertMeterTypeSql = "INSERT INTO meter_types (type_name) VALUES (?)";
+		final String insertMeterTypeSql = "INSERT INTO monitoring_service.meter_types (type_name) VALUES (?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -87,7 +87,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 */
 	@Override
 	public MeterType getMeterTypeById(int meterTypeId) {
-		final String selectMeterTypeSql = "SELECT * FROM meter_types WHERE meter_type_id = ?";
+		final String selectMeterTypeSql = "SELECT * FROM monitoring_service.meter_types WHERE meter_type_id = ?";
 
 		Connection connection = null;
 		PreparedStatement statement = null;

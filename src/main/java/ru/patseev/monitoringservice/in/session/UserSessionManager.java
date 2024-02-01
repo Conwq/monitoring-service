@@ -5,7 +5,7 @@ import ru.patseev.monitoringservice.display.TerminalInterface;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.controller.MeterController;
-import ru.patseev.monitoringservice.dto.RoleEnum;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.dto.UserDto;
 
 import java.util.Scanner;

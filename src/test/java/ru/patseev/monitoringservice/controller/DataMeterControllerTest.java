@@ -1,17 +1,17 @@
-package ru.patseev.monitoringservice.meter_service.controller;
+package ru.patseev.monitoringservice.controller;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.patseev.monitoringservice.controller.MeterController;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.service.MeterService;
-import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.service.MeterService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ class DataMeterControllerTest {
 	private static MeterService dataMeterService;
 	private static AuditService auditService;
 	private static MeterController dataMeterController;
+
 	private UserDto userDto;
 	private DataMeterDto dataMeterDto;
 	private List<DataMeterDto> dataMeterDtoList;
@@ -41,7 +42,7 @@ class DataMeterControllerTest {
 
 	@BeforeEach
 	void createData() {
-		userDto = new UserDto("test", "test", Role.USER);
+		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
 		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
 		dataMeterDtoList = new ArrayList<>() {{
 			add(dataMeterDto);
@@ -51,6 +52,7 @@ class DataMeterControllerTest {
 	}
 
 	@Test
+	@DisplayName("getCurrentMetricData should return last submit Meter Data")
 	void getCurrentMeterData_shouldReturnData() {
 		when(dataMeterService.getCurrentDataMeter(userDto))
 				.thenReturn(dataMeterDto);
@@ -59,11 +61,12 @@ class DataMeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
-		verify(auditService,times(1))
+		verify(auditService, times(1))
 				.saveUserAction(ActionEnum.GET_CURRENT_METER_DATA, userDto);
 	}
 
 	@Test
+	@DisplayName("saveMeterData should save MeterData")
 	void saveMeterData_shouldSaveMeterData() {
 		dataMeterController.saveMeterData(userDto, dataMeterDto);
 
@@ -74,6 +77,7 @@ class DataMeterControllerTest {
 	}
 
 	@Test
+	@DisplayName("getMeterDataForSpecifiedMonth should return users MeterData for specified month")
 	void getMeterDataForSpecifiedMonth_shouldReturnDataForSpecifiedMonth() {
 		when(dataMeterService.getMeterDataForSpecifiedMonth(userDto, 1))
 				.thenReturn(dataMeterDtoList);
@@ -82,11 +86,12 @@ class DataMeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDtoList);
-		verify(auditService, Mockito.times(1))
+		verify(auditService, times(1))
 				.saveUserAction(ActionEnum.GET_METER_DATA_FOR_SPECIFIED_MONTH, userDto);
 	}
 
 	@Test
+	@DisplayName("getMeterDataForUser should return list MeterData for specified user")
 	void getMeterDataForUser_shouldReturnData() {
 		when(dataMeterService.getAllMeterData(userDto))
 				.thenReturn(dataMeterDtoList);
@@ -100,11 +105,11 @@ class DataMeterControllerTest {
 	}
 
 	@Test
+	@DisplayName("getDataFromAllMeter user should return a map with a list of all his data")
 	void getDataFromAllMeterUsers_shouldReturnData() {
 		Map<String, List<DataMeterDto>> expected = new HashMap<>() {{
 			put(userDto.username(), dataMeterDtoList);
 		}};
-
 		when(dataMeterService.getDataFromAllMeterUsers())
 				.thenReturn(expected);
 
@@ -117,6 +122,7 @@ class DataMeterControllerTest {
 	}
 
 	@Test
+	@DisplayName("getAvailableMeterType should return MeterType")
 	void getAvailableMeterType_shouldReturnAvailableMeterType() {
 		when(dataMeterService.getAvailableMeterType())
 				.thenReturn(List.of(meterTypeDto));
@@ -130,6 +136,7 @@ class DataMeterControllerTest {
 	}
 
 	@Test
+	@DisplayName("addNewMeterType should save MeterType")
 	void addNewMeterType_shouldSaveNewMeterType() {
 		dataMeterController.addNewMeterType(userDto, meterTypeDto);
 

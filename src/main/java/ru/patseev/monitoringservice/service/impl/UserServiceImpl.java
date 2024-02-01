@@ -3,7 +3,7 @@ package ru.patseev.monitoringservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
-import ru.patseev.monitoringservice.dto.RoleEnum;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;

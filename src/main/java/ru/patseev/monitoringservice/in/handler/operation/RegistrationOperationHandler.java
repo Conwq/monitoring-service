@@ -3,7 +3,7 @@ package ru.patseev.monitoringservice.in.handler.operation;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.controller.UserController;
-import ru.patseev.monitoringservice.dto.RoleEnum;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 

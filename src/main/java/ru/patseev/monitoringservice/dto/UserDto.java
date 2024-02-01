@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.dto;
 
 import jakarta.annotation.Nullable;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 
 /**
  * The UserDto record represents a Data Transfer Object (DTO) for user-related information.

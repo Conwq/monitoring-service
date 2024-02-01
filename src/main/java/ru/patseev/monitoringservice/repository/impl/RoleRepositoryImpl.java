@@ -29,7 +29,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 	 */
 	@Override
 	public Role getRoleById(int roleId) {
-		final String selectRoleSql = "SELECT * FROM roles WHERE role_id = ?";
+		final String selectRoleSql = "SELECT * FROM monitoring_service.roles WHERE role_id = ?";
 
 		Connection connection = null;
 		PreparedStatement statement = null;

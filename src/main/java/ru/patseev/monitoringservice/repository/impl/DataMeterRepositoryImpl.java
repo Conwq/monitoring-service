@@ -25,7 +25,8 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 */
 	@Override
 	public Optional<DataMeter> findLastDataMeter(int userId) {
-		final String selectLastDataSql = "SELECT * FROM meters_data WHERE user_id = ? ORDER BY meter_data_id DESC LIMIT 1";
+		final String selectLastDataSql =
+				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? ORDER BY meter_data_id DESC LIMIT 1";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -62,7 +63,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public void saveDataMeter(DataMeter dataMeter) {
 		final String insertMeterDataSql =
-				"INSERT INTO meters_data (submission_date, value, meter_type_id, user_id) VALUES (?, ?, ?, ?)";
+				"INSERT INTO monitoring_service.meters_data (submission_date, value, meter_type_id, user_id) VALUES (?, ?, ?, ?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -103,7 +104,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public List<DataMeter> getMeterDataForSpecifiedMonth(int userId, int month) {
 		final String selectMeterDataForMonthSql =
-				"SELECT * FROM meters_data WHERE user_id = ? AND extract(month from submission_date) = ?";
+				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? AND extract(month from submission_date) = ?";
 
 		List<DataMeter> dataMeterList = new ArrayList<>();
 
@@ -140,7 +141,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 */
 	@Override
 	public List<DataMeter> getAllMeterData(int userId) {
-		final String selectAllMeterDataSql = "SELECT * FROM meters_data WHERE user_id = ?";
+		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data WHERE user_id = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -175,7 +176,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 */
 	@Override
 	public Map<Integer, List<DataMeter>> getDataFromAllMeterUsers() {
-		final String selectAllMeterDataSql = "SELECT * FROM meters_data";
+		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data";
 		Map<Integer, List<DataMeter>> allMeterData = new HashMap<>();
 
 		Connection connection = null;

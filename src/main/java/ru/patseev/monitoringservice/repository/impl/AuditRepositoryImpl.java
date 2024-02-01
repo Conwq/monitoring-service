@@ -27,7 +27,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 	 */
 	@Override
 	public void save(int userId, UserAction userAction) {
-		final String insertAuditSQL = "INSERT INTO actions (action_at, action, user_id) VALUES (?, ?, ?)";
+		final String insertAuditSQL = "INSERT INTO monitoring_service.actions (action_at, action, user_id) VALUES (?, ?, ?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -67,7 +67,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 	 */
 	@Override
 	public List<UserAction> findUserActionByUserId(int userId) {
-		final String selectActionsSql = "SELECT * FROM actions WHERE user_id = ?";
+		final String selectActionsSql = "SELECT * FROM monitoring_service.actions WHERE user_id = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="sequence-roles" author="Sergey.Patseev">
+        <createSequence sequenceName="role_id_seq"
+                        startValue="3"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="sequence-users" author="Sergey.Patseev">
+        <createSequence sequenceName="user_id_seq"
+                        startValue="2"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="sequence-meter-types" author="Sergey.Patseev">
+        <createSequence sequenceName="meter_type_id_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="sequence-meters-data" author="Sergey.Patseev">
+        <createSequence sequenceName="meter_data_id_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="sequence-actions" author="Sergey.Patseev">
+        <createSequence sequenceName="action_id_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>

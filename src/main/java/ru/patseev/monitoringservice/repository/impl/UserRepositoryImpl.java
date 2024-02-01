@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
 	 */
 	@Override
 	public Integer saveUser(User user) {
-		String insertDataSql = "INSERT INTO users (username, password, role_id) VALUES (?, ?, ?)";
+		String insertDataSql = "INSERT INTO monitoring_service.users (username, password, role_id) VALUES (?, ?, ?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -70,7 +70,7 @@ public class UserRepositoryImpl implements UserRepository {
 	 */
 	@Override
 	public Optional<User> findUserByUsername(String username) {
-		final String selectUserSql = "SELECT * FROM users WHERE username = ?";
+		final String selectUserSql = "SELECT * FROM monitoring_service.users WHERE username = ?";
 
 		Connection connection = null;
 		PreparedStatement statement = null;

@@ -14,7 +14,7 @@ import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewCurrentMe
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataForSpecifiedMonthOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataOperation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.dto.RoleEnum;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 
 import java.util.HashMap;
 import java.util.Map;

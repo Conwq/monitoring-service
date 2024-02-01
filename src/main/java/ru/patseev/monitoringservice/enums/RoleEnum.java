@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.dto;
+package ru.patseev.monitoringservice.enums;
 
 /**
  * Available roles for users.

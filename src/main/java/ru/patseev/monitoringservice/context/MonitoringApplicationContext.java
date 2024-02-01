@@ -1,6 +1,8 @@
 package ru.patseev.monitoringservice.context;
 
 import ru.patseev.monitoringservice.controller.AuditController;
+import ru.patseev.monitoringservice.migration.Migration;
+import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.repository.impl.AuditRepositoryImpl;
 import ru.patseev.monitoringservice.service.AuditService;
@@ -37,11 +39,13 @@ import java.util.Scanner;
  * This class follows the Singleton pattern to ensure a single instance throughout the application.
  */
 public class MonitoringApplicationContext {
+
 	private static MonitoringApplicationContext context;
 	private final Scanner scanner = new Scanner(System.in);
 	private final PrinterMeterData printerMeterData = new PrinterMeterData();
 	private final ResourceManager resourceManager = new ResourceManager("application");
 	private final ConnectionProvider connectionProvider = new ConnectionProvider(resourceManager);
+	private final Migration liquibaseMigration = new LiquibaseMigration(connectionProvider, resourceManager);
 
 	/*
 	 * Repositories
@@ -102,6 +106,7 @@ public class MonitoringApplicationContext {
 	 * Runs the monitoring service application, starting with rendering the user interface.
 	 */
 	public void runApplication() {
+		liquibaseMigration.performMigration();
 		authenticationManager.renderInterface();
 	}
 }
