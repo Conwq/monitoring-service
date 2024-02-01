@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.service;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.domain.UserAction;
@@ -11,7 +12,6 @@ import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
-import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.service.impl.AuditServiceImpl;
 
 import java.sql.Timestamp;
@@ -26,8 +26,10 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 class AuditServiceTest {
+
 	private static AuditRepository auditRepository;
 	private static AuditService auditService;
+
 	private UserDto userDto;
 
 	@BeforeAll
@@ -42,6 +44,7 @@ class AuditServiceTest {
 	}
 
 	@Test
+	@DisplayName("saveUserAction should save user")
 	void saveUserAction_shouldSaveUser() {
 		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
 
@@ -50,6 +53,7 @@ class AuditServiceTest {
 	}
 
 	@Test
+	@DisplayName("getUserAction should return all user actions")
 	void getUserAction_shouldReturnUserAction() {
 		Timestamp registrationAt = Timestamp.from(Instant.now());
 		Timestamp logInAt = Timestamp.from(Instant.now());
@@ -74,6 +78,7 @@ class AuditServiceTest {
 	}
 
 	@Test
+	@DisplayName("getUserAction should throw an exception due to no user")
 	void getUserAction_shouldThrowUserNotFoundException() {
 		Mockito.when(auditRepository.findUserActionByUserId(userDto.userId()))
 				.thenReturn(null);

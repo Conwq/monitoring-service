@@ -22,7 +22,7 @@ import java.util.Map;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
-class DataMeterControllerTest {
+class MeterControllerTest {
 
 	private static MeterService dataMeterService;
 	private static AuditService auditService;

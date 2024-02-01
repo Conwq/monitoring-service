@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.service;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
@@ -11,7 +12,6 @@ import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
-import ru.patseev.monitoringservice.service.UserService;
 import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
 
 import java.util.Optional;
@@ -25,6 +25,7 @@ class UserServiceTest {
 	private static UserRepository userRepository;
 	private static RoleRepository roleRepository;
 	private static UserService userService;
+
 	private UserDto userDto;
 	private User user;
 	private Role role;
@@ -44,6 +45,7 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("saveUser should save user")
 	void saveUser_shouldSaveUser() {
 		UserDto test = new UserDto(1, "test", null, RoleEnum.USER);
 		when(userRepository.findUserByUsername(userDto.username()))
@@ -58,6 +60,7 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("saveUser should throw an exception because a user with the same username exists")
 	void saveUser_shouldThrowUserAlreadyExistException() {
 		when(userRepository.findUserByUsername(userDto.username()))
 				.thenReturn(Optional.of(user));
@@ -68,6 +71,7 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("authUser should return user data")
 	void authUser_shouldReturnUserDto() {
 		UserDto test = new UserDto(1, "test", null, RoleEnum.USER);
 
@@ -83,6 +87,7 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("authUser should throw exception because input password invalid")
 	void authUser_shouldThrowExceptionWhenInvalidPassword() {
 		user.setPassword("incorrect_password");
 
@@ -95,6 +100,7 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("authUser should throw exception because the user with the entered username not exist")
 	void authUser_shouldThrowExceptionWhenInvalidUsername() {
 		when(userRepository.findUserByUsername(userDto.username()))
 				.thenReturn(Optional.empty());
