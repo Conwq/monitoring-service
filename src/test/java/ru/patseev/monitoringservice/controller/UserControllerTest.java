@@ -62,5 +62,15 @@ class UserControllerTest {
 				.saveUserAction(ActionEnum.LOG_IN, userDto);
 	}
 
-	//todo getUser(String username)
+	@Test
+	@DisplayName("getUser should return user data by username")
+	void getUser_shouldReturnUser() {
+		when(userService.getUser(userDto.username()))
+				.thenReturn(userDto);
+
+		UserDto actual = userController.getUser(userDto.username());
+
+		assertThat(actual)
+				.isEqualTo(userDto);
+	}
 }

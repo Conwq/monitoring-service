@@ -53,5 +53,4 @@ public class UserController {
 	public UserDto getUser(String username) {
 		return userService.getUser(username);
 	}
-
 }

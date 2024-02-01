@@ -39,7 +39,7 @@ class UserServiceTest {
 
 	@BeforeEach
 	public void createUser() {
-		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
+		userDto = new UserDto(1, "test", null, RoleEnum.USER);
 		user = new User(1, "test", "test", RoleEnum.USER.getRoleId());
 		role = new Role(RoleEnum.USER.getRoleId(), RoleEnum.USER.name());
 	}
@@ -73,17 +73,17 @@ class UserServiceTest {
 	@Test
 	@DisplayName("authUser should return user data")
 	void authUser_shouldReturnUserDto() {
-		UserDto test = new UserDto(1, "test", null, RoleEnum.USER);
+		UserDto request = new UserDto(1, "test", "test", RoleEnum.USER);
 
 		when(userRepository.findUserByUsername(userDto.username()))
 				.thenReturn(Optional.of(user));
 		when(roleRepository.getRoleById(user.getRoleId()))
 				.thenReturn(role);
 
-		UserDto userData = userService.authUser(userDto);
+		UserDto actual = userService.authUser(request);
 
-		assertThat(userData)
-				.isEqualTo(test);
+		assertThat(actual)
+				.isEqualTo(userDto);
 	}
 
 	@Test
@@ -110,5 +110,29 @@ class UserServiceTest {
 		);
 	}
 
-	//todo getUser
+	@Test
+	@DisplayName("getUser should return user data by username")
+	void getUser_shouldReturnUser() {
+		when(userRepository.findUserByUsername(userDto.username()))
+				.thenReturn(Optional.of(user));
+		when(roleRepository.getRoleById(userDto.role().getRoleId()))
+				.thenReturn(role);
+
+		UserDto actual = userService.getUser(userDto.username());
+
+		assertThat(actual)
+				.isEqualTo(userDto);
+	}
+
+	@Test
+	@DisplayName("getUser should throw an exception when the name of the user you are looking for does not exist")
+	void getUser_shouldThrowUSerNotFoundException() {
+		String testUsername = "not_found_user";
+
+		when(userRepository.findUserByUsername(testUsername))
+				.thenReturn(Optional.empty());
+
+		assertThrows(UserNotFoundException.class,
+				() -> userService.getUser(testUsername));
+	}
 }
