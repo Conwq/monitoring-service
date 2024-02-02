@@ -4,6 +4,7 @@ package ru.patseev.monitoringservice.enums;
  * Available roles for users.
  */
 public enum RoleEnum {
+
 	ADMIN() {
 		@Override
 		public int getRoleId() {

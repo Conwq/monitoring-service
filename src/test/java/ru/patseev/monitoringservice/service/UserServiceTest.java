@@ -47,7 +47,6 @@ class UserServiceTest {
 	@Test
 	@DisplayName("saveUser should save user")
 	void saveUser_shouldSaveUser() {
-		UserDto test = new UserDto(1, "test", null, RoleEnum.USER);
 		when(userRepository.findUserByUsername(userDto.username()))
 				.thenReturn(Optional.empty());
 		when(userRepository.saveUser(any(User.class)))
@@ -55,8 +54,8 @@ class UserServiceTest {
 
 		UserDto actual = userService.saveUser(userDto);
 
-		assertThat(test)
-				.isEqualTo(actual);
+		assertThat(actual)
+				.isEqualTo(userDto);
 	}
 
 	@Test

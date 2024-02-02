@@ -1,48 +1,63 @@
 package ru.patseev.monitoringservice.repository;
 
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
-import ru.patseev.monitoringservice.repository.UserRepository;
+import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
+import ru.patseev.monitoringservice.manager.ResourceManager;
+import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.UserRepositoryImpl;
 
 import java.util.Optional;
 
-class UserRepositoryTest {
-//	private static UserRepository userRepository;
-//	private User user;
-//
-//	@BeforeEach
-//	public void createUser() {
-//		user = User.builder()
-//				.username("test")
-//				.password("test")
-//				.role(Role.USER)
-//				.build();
-//	}
-//
-//	@BeforeAll
-//	public static void setUp() {
-//		userRepository = new UserRepositoryImpl();
-//	}
-//
-//	@Test
-//	void mustSuccessfullyRegisterUser() {
-//		userRepository.saveUser(user);
-//		Mockito.verify(, Mockito.times(1)).saveUser(user);
-//	}
-//
-//	@Test
-//	void mustFindUserByUsername() {
-//		Mockito.when(userDatabase.findUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
-//
-//		Optional<User> optionalUser = userRepository.findUserByUsername(user.getUsername());
-//
-//		Mockito.verify(userDatabase, Mockito.times(1)).findUserByUsername(user.getUsername());
-//		AssertionsForClassTypes.assertThat(optionalUser).isEqualTo(Optional.of(user));
-//	}
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+class UserRepositoryTest extends AbstractPostgreSQLContainer {
+
+	private static UserRepository userRepository;
+
+	private User user;
+
+	@BeforeAll
+	static void beforeAll() {
+		ConnectionManager connectionManager = new ConnectionManager(
+				POSTGRES.getJdbcUrl(),
+				POSTGRES.getUsername(),
+				POSTGRES.getPassword()
+		);
+
+		ResourceManager resourceManager = new ResourceManager("application");
+
+		new LiquibaseMigration(connectionManager, resourceManager)
+				.performMigration();
+
+		userRepository = new UserRepositoryImpl(connectionManager);
+	}
+
+	@BeforeEach
+	void setUp() {
+		user = User.builder()
+				.username("test")
+				.password("test")
+				.roleId(RoleEnum.USER.getRoleId()).build();
+	}
+
+	@Test
+	@DisplayName("saveUser should save the user in the database and return it")
+	void saveUser_shouldSaveUser() {
+		Integer userId = userRepository.saveUser(user);
+		user.setUserId(userId);
+
+		Optional<User> actual = userRepository.findUserByUsername(user.getUsername());
+
+		assertThat(actual)
+				.isPresent();
+		assertThat(actual)
+				.isEqualTo(Optional.of(user));
+		assertThat(userId)
+				.isEqualTo(2); //потому что на этапе миграции, у меня уже добавляется пользователь с id = 1
+	}
 }

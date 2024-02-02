@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
  * @param actionAt The timestamp of the action.
  * @param action   The type of action performed by the user.
  */
-public record UserActionDto(LocalDateTime actionAt, ActionEnum action) {
+public record UserActionDto(LocalDateTime actionAt,
+							ActionEnum action) {
 }

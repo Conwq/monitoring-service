@@ -1,8 +1,9 @@
 package ru.patseev.monitoringservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
 import ru.patseev.monitoringservice.domain.Role;
+import ru.patseev.monitoringservice.exception.RoleNotExistsException;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 
 import java.sql.Connection;
@@ -19,7 +20,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
-	private final ConnectionProvider connectionProvider;
+	private final ConnectionManager connectionManager;
 
 	/**
 	 * Retrieves a role by its unique identifier.
@@ -30,33 +31,35 @@ public class RoleRepositoryImpl implements RoleRepository {
 	@Override
 	public Role getRoleById(int roleId) {
 		final String selectRoleSql = "SELECT * FROM monitoring_service.roles WHERE role_id = ?";
+		Role role = null;
 
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			connection = connectionProvider.takeConnection();
-
-			statement = connection.prepareStatement(selectRoleSql);
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectRoleSql)) {
 			statement.setInt(1, roleId);
 
-			resultSet = statement.executeQuery();
-			resultSet.next();
-
-			roleId = resultSet.getInt("role_id");
-			String roleName = resultSet.getString("role_name");
-
-			return new Role(roleId, roleName);
-		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-			return null;
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (!resultSet.next()) {
+					throw new RoleNotExistsException("Роль не найдена");
+				}
+				role = extractRole(resultSet);
 			}
+		} catch (SQLException e) {
+			System.err.println("Operation error");
 		}
+		return role;
+	}
+
+	/**
+	 * Extract Role from a ResultSet.
+	 *
+	 * @param resultSet The ResultSet object from which data is extracted.
+	 * @return A Role entity representing the extracted data.
+	 * @throws SQLException If an exception occurs while working with the ResultSet.
+	 */
+	private Role extractRole(ResultSet resultSet) throws SQLException {
+		int roleId = resultSet.getInt("role_id");
+		String roleName = resultSet.getString("role_name");
+
+		return new Role(roleId, roleName);
 	}
 }

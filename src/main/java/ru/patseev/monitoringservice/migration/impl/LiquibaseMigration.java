@@ -6,7 +6,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.Migration;
 
@@ -21,9 +21,9 @@ import java.sql.Statement;
 public class LiquibaseMigration implements Migration {
 
 	/**
-	 * The ConnectionProvider used to obtain the database connection for the migration.
+	 * The connectionManager used to obtain the database connection for the migration.
 	 */
-	private final ConnectionProvider connectionProvider;
+	private final ConnectionManager connectionManager;
 
 	/**
 	 * The resource manager used for retrieving database connection details.
@@ -36,7 +36,7 @@ public class LiquibaseMigration implements Migration {
 	 */
 	@Override
 	public void performMigration() {
-		try (Connection connection = connectionProvider.takeConnection();
+		try (Connection connection = connectionManager.takeConnection();
 			 Statement statement = connection.createStatement()) {
 			statement.executeUpdate("CREATE SCHEMA IF NOT EXISTS migration");
 

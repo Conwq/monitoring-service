@@ -10,5 +10,8 @@ import java.time.LocalDate;
  * @param meterTypeId    The ID of the meter type associated with the data.
  * @param meterTypeName  The name of the meter type associated with the data.
  */
-public record DataMeterDto(LocalDate date, Long value, Integer meterTypeId, String meterTypeName) {
+public record DataMeterDto(LocalDate date,
+						   Long value,
+						   Integer meterTypeId,
+						   String meterTypeName) {
 }

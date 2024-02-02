@@ -1,8 +1,8 @@
 package ru.patseev.monitoringservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
 import ru.patseev.monitoringservice.domain.DataMeter;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 
 import java.sql.*;
@@ -18,7 +18,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
-	private final ConnectionProvider connectionProvider;
+	private final ConnectionManager connectionManager;
 
 	/**
 	 * {@inheritDoc}
@@ -27,34 +27,24 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	public Optional<DataMeter> findLastDataMeter(int userId) {
 		final String selectLastDataSql =
 				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? ORDER BY meter_data_id DESC LIMIT 1";
+		Optional<DataMeter> optionalDataMeter = Optional.empty();
 
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectLastDataSql)) {
 
-		try {
-			connection = connectionProvider.takeConnection();
-			statement = connection.prepareStatement(selectLastDataSql);
 			statement.setInt(1, userId);
-			resultSet = statement.executeQuery();
 
-			if (!resultSet.next()) {
-				return Optional.empty();
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (!resultSet.next()) {
+					return optionalDataMeter;
+				}
+				DataMeter dataMeter = extractDataMeter(resultSet);
+				optionalDataMeter = Optional.of(dataMeter);
 			}
-
-			DataMeter dataMeter = extractData(resultSet);
-			return Optional.of(dataMeter);
-
 		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-			return Optional.empty();
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			System.err.println("Operation error");
 		}
+		return optionalDataMeter;
 	}
 
 	/**
@@ -62,39 +52,19 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 */
 	@Override
 	public void saveDataMeter(DataMeter dataMeter) {
-		final String insertMeterDataSql =
-				"INSERT INTO monitoring_service.meters_data (submission_date, value, meter_type_id, user_id) VALUES (?, ?, ?, ?)";
-
 		Connection connection = null;
-		PreparedStatement statement = null;
 
 		try {
-			connection = connectionProvider.takeConnection();
+			connection = connectionManager.takeConnection();
 			connection.setAutoCommit(false);
 
-			statement = connection.prepareStatement(insertMeterDataSql);
-			statement.setTimestamp(1, dataMeter.getSubmissionDate());
-			statement.setLong(2, dataMeter.getValue());
-			statement.setInt(3, dataMeter.getMeterTypeId());
-			statement.setInt(4, dataMeter.getUserId());
-			statement.executeUpdate();
+			saveDataMeterWithTransaction(connection, dataMeter);
 
 			connection.commit();
 		} catch (SQLException e) {
-			try {
-				if (connection != null) {
-					connection.rollback();
-				}
-			} catch (SQLException ex) {
-				System.out.println("Ошибка отката");
-			}
-			System.out.println("Ошибка операции");
+			connectionManager.rollbackTransaction(connection);
 		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			connectionManager.closeConnection(connection);
 		}
 	}
 
@@ -105,33 +75,21 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	public List<DataMeter> getMeterDataForSpecifiedMonth(int userId, int month) {
 		final String selectMeterDataForMonthSql =
 				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? AND extract(month from submission_date) = ?";
-
 		List<DataMeter> dataMeterList = new ArrayList<>();
 
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectMeterDataForMonthSql)) {
 
-		try {
-			connection = connectionProvider.takeConnection();
-			statement = connection.prepareStatement(selectMeterDataForMonthSql);
 			statement.setInt(1, userId);
 			statement.setInt(2, month);
-
-			resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-				DataMeter dataMeter = extractData(resultSet);
-				dataMeterList.add(dataMeter);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					DataMeter dataMeter = extractDataMeter(resultSet);
+					dataMeterList.add(dataMeter);
+				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			System.err.println("Operation error");
 		}
 		return dataMeterList;
 	}
@@ -142,33 +100,23 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	@Override
 	public List<DataMeter> getAllMeterData(int userId) {
 		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data WHERE user_id = ?";
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+		List<DataMeter> dataMetersList = new ArrayList<>();
 
-		try {
-			connection = connectionProvider.takeConnection();
-			statement = connection.prepareStatement(selectAllMeterDataSql);
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectAllMeterDataSql)) {
 			statement.setInt(1, userId);
-			resultSet = statement.executeQuery();
 
-			ArrayList<DataMeter> dataMetersList = new ArrayList<>();
-
-			while (resultSet.next()) {
-				DataMeter dataMeter = extractData(resultSet);
-				dataMetersList.add(dataMeter);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					DataMeter dataMeter = extractDataMeter(resultSet);
+					dataMetersList.add(dataMeter);
+				}
+				return dataMetersList;
 			}
-			return dataMetersList;
 		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-			return new ArrayList<>();
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			System.err.println("Operation error");
 		}
+		return dataMetersList;
 	}
 
 	/**
@@ -179,43 +127,53 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data";
 		Map<Integer, List<DataMeter>> allMeterData = new HashMap<>();
 
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			connection = connectionProvider.takeConnection();
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(selectAllMeterDataSql);
+		try (Connection connection = connectionManager.takeConnection();
+			 Statement statement = connection.createStatement();
+			 ResultSet resultSet = statement.executeQuery(selectAllMeterDataSql)) {
 
 			while (resultSet.next()) {
-				DataMeter dataMeter = extractData(resultSet);
+				DataMeter dataMeter = extractDataMeter(resultSet);
 				if (!allMeterData.containsKey(dataMeter.getUserId())) {
 					allMeterData.put(dataMeter.getUserId(), new ArrayList<>());
 				}
 				allMeterData.get(dataMeter.getUserId()).add(dataMeter);
 			}
 		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			System.err.println("Operation error");
 		}
 		return allMeterData;
 	}
 
 	/**
-	 * Extracts and creates a {@code DataMeter} object from the provided {@code ResultSet}.
+	 * Stores the DataMeter within a transaction in the database.
+	 *
+	 * @param connection The database connection to use for the transaction.
+	 * @param dataMeter  The DataMeter object to be inserted into the database.
+	 * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+	 */
+	private void saveDataMeterWithTransaction(Connection connection, DataMeter dataMeter) throws SQLException {
+		final String insertMeterDataSql =
+				"INSERT INTO monitoring_service.meters_data (submission_date, value, meter_type_id, user_id) VALUES (?, ?, ?, ?)";
+
+		try (PreparedStatement statement = connection.prepareStatement(insertMeterDataSql)) {
+
+			statement.setTimestamp(1, dataMeter.getSubmissionDate());
+			statement.setLong(2, dataMeter.getValue());
+			statement.setInt(3, dataMeter.getMeterTypeId());
+			statement.setInt(4, dataMeter.getUserId());
+			statement.executeUpdate();
+		}
+	}
+
+	/**
+	 * Extracts and creates a DataMeter object from the provided ResultSet.
 	 *
 	 * @param resultSet The ResultSet containing data from a database query.
-	 * @return A {@code DataMeter} object representing the extracted data.
+	 * @return A DataMeter object representing the extracted data.
 	 * @throws SQLException If a database access error occurs or this method is
 	 *                      called on a closed result set.
 	 */
-	private DataMeter extractData(ResultSet resultSet) throws SQLException {
+	private DataMeter extractDataMeter(ResultSet resultSet) throws SQLException {
 		int meterDataId = resultSet.getInt("meter_data_id");
 		Timestamp submissionDate = resultSet.getTimestamp("submission_date");
 		long value = resultSet.getLong("value");

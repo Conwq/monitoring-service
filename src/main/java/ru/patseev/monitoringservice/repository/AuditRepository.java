@@ -13,7 +13,7 @@ public interface AuditRepository {
 	 * Saves a user action to the audit log.
 	 *
 	 * @param userId     The user ID associated with the user who performed the action.
-	 * @param userAction The {@code UserAction} object representing the action performed by the user.
+	 * @param userAction The UserAction object representing the action performed by the user.
 	 */
 	void save(int userId, UserAction userAction);
 
@@ -21,7 +21,7 @@ public interface AuditRepository {
 	 * Retrieves a list of user actions for a specific user from the audit log.
 	 *
 	 * @param userId The user ID for which to retrieve user actions.
-	 * @return A list of {@code UserAction} objects representing the actions performed by the user.
+	 * @return A list of UserAction objects representing the actions performed by the user.
 	 */
-	List<UserAction> findUserActionByUserId(int userId);
+	List<UserAction> findUserActionsByUserId(int userId);
 }

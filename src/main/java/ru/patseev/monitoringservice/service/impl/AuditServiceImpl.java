@@ -43,7 +43,7 @@ public class AuditServiceImpl implements AuditService {
 	@Override
 	public List<UserActionDto> getUserAction(int userId) {
 		List<UserAction> userAction = auditRepository
-				.findUserActionByUserId(userId);
+				.findUserActionsByUserId(userId);
 
 		if (userAction == null) {
 			throw new UserNotFoundException("\nПользователь не найден.");

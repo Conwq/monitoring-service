@@ -35,7 +35,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("Should save user")
+	@DisplayName("saveUser should save user")
 	void saveUser_shouldSaveUser() {
 		when(userService.saveUser(userDto))
 				.thenReturn(userDto);
@@ -49,7 +49,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("Should return UserDto")
+	@DisplayName("authUser should return UserDto")
 	void authUser_shouldReturnUserDto() {
 		when(userService.authUser(userDto))
 				.thenReturn(userDto);

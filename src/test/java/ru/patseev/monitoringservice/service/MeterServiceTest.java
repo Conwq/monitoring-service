@@ -41,8 +41,8 @@ class MeterServiceTest {
 
 	@BeforeAll
 	static void setUp() {
-		dataMeterRepository = Mockito.mock(DataMeterRepository.class);
-		meterTypeRepository = Mockito.mock(MeterTypeRepository.class);
+		dataMeterRepository = mock(DataMeterRepository.class);
+		meterTypeRepository = mock(MeterTypeRepository.class);
 		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
 	}
 

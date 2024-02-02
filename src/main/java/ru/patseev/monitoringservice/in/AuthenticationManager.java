@@ -1,8 +1,8 @@
 package ru.patseev.monitoringservice.in;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 import ru.patseev.monitoringservice.display.TerminalInterface;
+import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
 
 import java.util.Scanner;
 

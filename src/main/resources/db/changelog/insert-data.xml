@@ -20,5 +20,10 @@
             <column name="password" value="1"/>
             <column name="role_id" value="1"/>
         </insert>
+
+        <insert schemaName="monitoring_service" tableName="meter_types">
+            <column name="meter_type_id" value="1"/>
+            <column name="type_name" value="hot water"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

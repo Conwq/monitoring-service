@@ -1,52 +1,81 @@
 package ru.patseev.monitoringservice.repository;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.domain.MeterType;
-import ru.patseev.monitoringservice.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
+import ru.patseev.monitoringservice.manager.ResourceManager;
+import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MeterTypeRepositoryTest {
-//
-//	private static MeterTypeRepository meterTypeRepository;
-//	private MeterType meterType;
-//
-//	@BeforeAll
-//	static void setUp() {
-//		meterTypeRepository = new MeterTypeRepositoryImpl();
-//	}
-//
-//	@BeforeEach
-//	void createData() {
-//		meterType = new MeterType(1, "hot water");
-//	}
-//
-//	@Test
-//	void findAllMeterType_shouldReturnAllMeterType() {
-//		when(meterTypeDatabase.getAllMeterType())
-//				.thenReturn(List.of(meterType));
-//
-//		List<MeterType> actual = meterTypeRepository.findAllMeterType();
-//
-//		assertThat(actual)
-//				.isNotNull();
-//		assertThat(actual.size())
-//				.isEqualTo(1);
-//		assertThat(actual)
-//				.isEqualTo(List.of(meterType));
-//	}
-//
-//	@Test
-//	void saveMeterType_shouldSaveMeterType() {
-//		meterTypeRepository.saveMeterType(meterType);
-//
-//		verify(meterTypeDatabase, times(1))
-//				.putMeterType(meterType);
-//	}
+class MeterTypeRepositoryTest extends AbstractPostgreSQLContainer {
+
+	private static MeterTypeRepository meterTypeRepository;
+
+	@BeforeAll
+	static void beforeAll() {
+		ConnectionManager connectionManager = new ConnectionManager(
+				POSTGRES.getJdbcUrl(),
+				POSTGRES.getUsername(),
+				POSTGRES.getPassword()
+		);
+
+		ResourceManager resourceManager = new ResourceManager("application");
+
+		new LiquibaseMigration(connectionManager, resourceManager)
+				.performMigration();
+
+		meterTypeRepository = new MeterTypeRepositoryImpl(connectionManager);
+	}
+
+	@Test
+	@DisplayName("saveMeterType should save meter type in database and return value from database")
+	void saveMeterType_shouldSaveMeterType() {
+		String electricity = "electricity";
+		String coldWater = "cold water";
+
+		MeterType typeElectricity = MeterType.builder()
+				.typeName(electricity).build();
+		MeterType typeColdWater = MeterType.builder()
+				.typeName(coldWater).build();
+
+		meterTypeRepository.saveMeterType(typeElectricity);
+		meterTypeRepository.saveMeterType(typeColdWater);
+
+		List<MeterType> actual = meterTypeRepository.findAllMeterType();
+
+		assertThat(actual.size())
+				.isEqualTo(3);
+		assertThat(actual.get(0).getTypeName())
+				.isEqualTo("hot water");
+		assertThat(actual.get(1).getTypeName())
+				.isEqualTo(electricity);
+		assertThat(actual.get(2).getTypeName())
+				.isEqualTo(coldWater);
+	}
+
+	@Test
+	@DisplayName("getMeterTypeById should return meter type by id")
+	void getMeterTypeById_shouldReturnMeterType() {
+		MeterType actual = meterTypeRepository.getMeterTypeById(1);
+
+		assertThat(actual)
+				.isNotNull();
+		assertThat(actual)
+				.isEqualTo(new MeterType(1, "hot water"));
+	}
+
+	@Test
+	@DisplayName("getMeterTypeById should throw an exception if such counter id does not exist in the database")
+	void getMeterTypeById_shouldThrowExceptionWhenNotFound() {
+		assertThrows(MeterTypeNotFoundException.class,
+				() -> meterTypeRepository.getMeterTypeById(4));
+	}
 }

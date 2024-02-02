@@ -19,7 +19,7 @@
 
     <changeSet id="sequence-meter-types" author="Sergey.Patseev">
         <createSequence sequenceName="meter_type_id_seq"
-                        startValue="1"
+                        startValue="2"
                         incrementBy="1"/>
     </changeSet>
 

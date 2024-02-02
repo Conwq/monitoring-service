@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -35,8 +34,8 @@ class MeterControllerTest {
 
 	@BeforeAll
 	static void setUp() {
-		dataMeterService = Mockito.mock(MeterService.class);
-		auditService = Mockito.mock(AuditService.class);
+		dataMeterService = mock(MeterService.class);
+		auditService = mock(AuditService.class);
 		dataMeterController = new MeterController(dataMeterService, auditService);
 	}
 

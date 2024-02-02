@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
  * Represents a type of meter with a unique identifier and a name.
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MeterType {

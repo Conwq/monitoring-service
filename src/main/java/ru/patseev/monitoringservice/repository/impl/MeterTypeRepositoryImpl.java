@@ -2,7 +2,8 @@ package ru.patseev.monitoringservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.MeterType;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
+import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 
 import java.sql.*;
@@ -19,7 +20,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
-	private final ConnectionProvider connectionProvider;
+	private final ConnectionManager connectionManager;
 
 	/**
 	 * {@inheritDoc}
@@ -27,22 +28,19 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	@Override
 	public List<MeterType> findAllMeterType() {
 		final String selectMeterTypes = "SELECT * FROM monitoring_service.meter_types";
+		List<MeterType> meterTypeList = new ArrayList<>();
 
-		try (Connection connection = connectionProvider.takeConnection();
+		try (Connection connection = connectionManager.takeConnection();
 			 Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(selectMeterTypes)) {
-
-			List<MeterType> meterTypeList = new ArrayList<>();
-
 			while (resultSet.next()) {
-				MeterType meterType = extractData(resultSet);
+				MeterType meterType = extractMeterType(resultSet);
 				meterTypeList.add(meterType);
 			}
-			return meterTypeList;
 		} catch (SQLException e) {
 			System.out.println("Ошибка операции");
-			return new ArrayList<>();
 		}
+		return meterTypeList;
 	}
 
 	/**
@@ -50,35 +48,18 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 */
 	@Override
 	public void saveMeterType(MeterType meterType) {
-		final String insertMeterTypeSql = "INSERT INTO monitoring_service.meter_types (type_name) VALUES (?)";
-
 		Connection connection = null;
-		PreparedStatement statement = null;
-
 		try {
-			connection = connectionProvider.takeConnection();
+			connection = connectionManager.takeConnection();
 			connection.setAutoCommit(false);
 
-			statement = connection.prepareStatement(insertMeterTypeSql);
-			statement.setString(1, meterType.getTypeName());
-			statement.executeUpdate();
+			saveMeterTypeWithTransaction(connection, meterType);
 
 			connection.commit();
 		} catch (SQLException e) {
-			try {
-				if (connection != null) {
-					connection.rollback();
-				}
-			} catch (SQLException ex) {
-				System.out.println("Ошибка отката");
-			}
-			System.out.println("Ошибка операции");
+			connectionManager.rollbackTransaction(connection);
 		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
-			}
+			connectionManager.closeConnection(connection);
 		}
 	}
 
@@ -88,31 +69,22 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	@Override
 	public MeterType getMeterTypeById(int meterTypeId) {
 		final String selectMeterTypeSql = "SELECT * FROM monitoring_service.meter_types WHERE meter_type_id = ?";
+		MeterType meterType = null;
 
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			connection = connectionProvider.takeConnection();
-
-			statement = connection.prepareStatement(selectMeterTypeSql);
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectMeterTypeSql)) {
 			statement.setInt(1, meterTypeId);
 
-			resultSet = statement.executeQuery();
-			resultSet.next();
-
-			return extractData(resultSet);
-		} catch (SQLException e) {
-			System.out.println("Ошибка операции");
-			return null;
-		} finally {
-			try {
-				connectionProvider.closeConnections(connection, statement, resultSet);
-			} catch (SQLException e) {
-				System.out.println("Ошибка с освобождением ресурсов");
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (!resultSet.next()) {
+					throw new MeterTypeNotFoundException("Счетчик не найден");
+				}
+				meterType = extractMeterType(resultSet);
 			}
+		} catch (SQLException e) {
+			System.err.println("Operation error");
 		}
+		return meterType;
 	}
 
 	/**
@@ -122,9 +94,25 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 * @return A MeterType object representing the extracted data.
 	 * @throws SQLException If a database access error occurs or this method is called on a closed result set.
 	 */
-	private MeterType extractData(ResultSet resultSet) throws SQLException {
+	private MeterType extractMeterType(ResultSet resultSet) throws SQLException {
 		int meterTypeId = resultSet.getInt("meter_type_id");
 		String typeName = resultSet.getString("type_name");
 		return new MeterType(meterTypeId, typeName);
+	}
+
+	/**
+	 * Stores the MeterType within a transaction in the database.
+	 *
+	 * @param connection The database connection to use for the transaction.
+	 * @param meterType  The MeterType object to be inserted into the database.
+	 * @throws SQLException If a database access error occurs or this method is called on a closed connection.
+	 */
+	private void saveMeterTypeWithTransaction(Connection connection, MeterType meterType) throws SQLException {
+		final String insertMeterTypeSql = "INSERT INTO monitoring_service.meter_types (type_name) VALUES (?)";
+
+		try (PreparedStatement statement = connection.prepareStatement(insertMeterTypeSql)) {
+			statement.setString(1, meterType.getTypeName());
+			statement.executeUpdate();
+		}
 	}
 }

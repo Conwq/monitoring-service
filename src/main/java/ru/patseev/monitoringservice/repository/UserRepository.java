@@ -12,7 +12,7 @@ public interface UserRepository {
 	/**
 	 * Saves a user to the repository.
 	 *
-	 * @param user The {@code User} object representing the user to be saved.
+	 * @param user The User object representing the user to be saved.
 	 * @return The unique identifier (id) assigned to the saved user.
 	 */
 	Integer saveUser(User user);

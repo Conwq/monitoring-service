@@ -14,7 +14,7 @@ import ru.patseev.monitoringservice.in.handler.operation.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.manager.ConnectionProvider;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
@@ -44,17 +44,17 @@ public class MonitoringApplicationContext {
 	private final Scanner scanner = new Scanner(System.in);
 	private final PrinterMeterData printerMeterData = new PrinterMeterData();
 	private final ResourceManager resourceManager = new ResourceManager("application");
-	private final ConnectionProvider connectionProvider = new ConnectionProvider(resourceManager);
-	private final Migration liquibaseMigration = new LiquibaseMigration(connectionProvider, resourceManager);
+	private final ConnectionManager connectionManager = new ConnectionManager(resourceManager);
+	private final Migration liquibaseMigration = new LiquibaseMigration(connectionManager, resourceManager);
 
 	/*
 	 * Repositories
 	 */
-	private final UserRepository userRepository = new UserRepositoryImpl(connectionProvider);
-	private final RoleRepository roleRepository = new RoleRepositoryImpl(connectionProvider);
-	private final AuditRepository auditRepository = new AuditRepositoryImpl(connectionProvider);
-	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(connectionProvider);
-	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(connectionProvider);
+	private final UserRepository userRepository = new UserRepositoryImpl(connectionManager);
+	private final RoleRepository roleRepository = new RoleRepositoryImpl(connectionManager);
+	private final AuditRepository auditRepository = new AuditRepositoryImpl(connectionManager);
+	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(connectionManager);
+	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(connectionManager);
 
 	/*
 	 * Services
