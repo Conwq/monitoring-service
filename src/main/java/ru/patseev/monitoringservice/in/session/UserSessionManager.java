@@ -1,12 +1,12 @@
 package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.display.TerminalInterface;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
-import ru.patseev.monitoringservice.display.TerminalInterface;
-import ru.patseev.monitoringservice.user_service.domain.Role;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.controller.MeterController;
+import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.dto.UserDto;
 
 import java.util.Scanner;
 
@@ -24,7 +24,7 @@ public class UserSessionManager {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	public final DataMeterController dataMeterController;
+	public final MeterController dataMeterController;
 
 
 	/**
@@ -48,9 +48,8 @@ public class UserSessionManager {
 	 */
 	private void operationMenuSelection(UserDto userDto) {
 		String terminalInterface =
-				userDto.role() == Role.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;
+				userDto.role() == RoleEnum.ADMIN ? TerminalInterface.ADMIN_INTERFACE : TerminalInterface.AUTH_USER_INTERFACE;
 		boolean exit = false;
-
 		do {
 			System.out.println(terminalInterface);
 			if (scanner.hasNextInt()) {

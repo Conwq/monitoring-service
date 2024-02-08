@@ -1,11 +1,11 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.admin;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
-import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
+import ru.patseev.monitoringservice.controller.MeterController;
+import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.dto.UserDto;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class ViewAllUsersMeterDataOperation implements Operation {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * The printer responsible for displaying meter data.
@@ -35,7 +35,7 @@ public class ViewAllUsersMeterDataOperation implements Operation {
 	 */
 	@Override
 	public void execute(UserDto userDto) {
-		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = dataMeterController.getDataFromAllMeterUsers(userDto);
+		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = meterController.getDataFromAllMeterUsers(userDto);
 		displayAllUsersMeterData(dataFromAllMeterUsers);
 	}
 

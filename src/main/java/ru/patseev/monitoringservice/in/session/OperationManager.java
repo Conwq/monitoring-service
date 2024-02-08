@@ -1,8 +1,8 @@
 package ru.patseev.monitoringservice.in.session;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
+import ru.patseev.monitoringservice.controller.AuditController;
+import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.impl.ExitOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.InvalidOperation;
@@ -14,7 +14,7 @@ import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewCurrentMe
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataForSpecifiedMonthOperation;
 import ru.patseev.monitoringservice.in.session.operation.impl.user.ViewMeterDataOperation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.user_service.domain.Role;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class OperationManager {
 	 * @param printerMeterData    The printer for displaying meter data.
 	 */
 	public OperationManager(Scanner scanner,
-							DataMeterController dataMeterController,
+							MeterController dataMeterController,
 							AuditController auditController,
 							PrinterMeterData printerMeterData) {
 		// Инициализирует операции пользователя
@@ -69,7 +69,7 @@ public class OperationManager {
 	 * @param role            The role of the user.
 	 * @return The corresponding Operation based on the operation number and user role.
 	 */
-	public Operation getOperation(int operationNumber, Role role) {
+	public Operation getOperation(int operationNumber, RoleEnum role) {
 		Map<Integer, Operation> roleOperations =
 				switch (role) {
 					case ADMIN -> adminOperation;

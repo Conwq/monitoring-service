@@ -1,0 +1,12 @@
+version: "1.0"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_cont
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: monitoring_service_database
+    ports:
+      - 5432:5432

@@ -1,12 +1,12 @@
 package ru.patseev.monitoringservice.in.session.operation.impl.user;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
-import ru.patseev.monitoringservice.data_meter_service.dto.DataMeterDto;
-import ru.patseev.monitoringservice.data_meter_service.exception.DataMeterNotFoundException;
+import ru.patseev.monitoringservice.controller.MeterController;
+import ru.patseev.monitoringservice.dto.DataMeterDto;
+import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.in.session.operation.Operation;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.user_service.dto.UserDto;
+import ru.patseev.monitoringservice.dto.UserDto;
 
 /**
  * The ViewCurrentMeterDataOperation class represents an operation for viewing the current meter data.
@@ -18,7 +18,7 @@ public class ViewCurrentMeterDataOperation implements Operation {
 	/**
 	 * The controller responsible for managing data meter operations.
 	 */
-	private final DataMeterController dataMeterController;
+	private final MeterController meterController;
 
 	/**
 	 * The printer responsible for displaying meter data.
@@ -34,7 +34,7 @@ public class ViewCurrentMeterDataOperation implements Operation {
 	@Override
 	public void execute(UserDto userDto) {
 		try {
-			DataMeterDto currentDataMeter = dataMeterController.getCurrentMeterData(userDto);
+			DataMeterDto currentDataMeter = meterController.getCurrentMeterData(userDto);
 			printerMeterData.printData(currentDataMeter);
 		} catch (DataMeterNotFoundException e) {
 			System.out.println(e.getMessage());

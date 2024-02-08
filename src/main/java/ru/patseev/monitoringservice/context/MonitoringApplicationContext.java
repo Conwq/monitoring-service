@@ -1,30 +1,35 @@
 package ru.patseev.monitoringservice.context;
 
-import ru.patseev.monitoringservice.audit_service.controller.AuditController;
-import ru.patseev.monitoringservice.audit_service.db.AuditDatabase;
-import ru.patseev.monitoringservice.audit_service.repository.AuditRepository;
-import ru.patseev.monitoringservice.audit_service.repository.impl.AuditRepositoryImpl;
-import ru.patseev.monitoringservice.audit_service.service.AuditService;
-import ru.patseev.monitoringservice.audit_service.service.impl.AuditServiceImpl;
-import ru.patseev.monitoringservice.data_meter_service.controller.DataMeterController;
-import ru.patseev.monitoringservice.data_meter_service.db.DataMeterDatabase;
-import ru.patseev.monitoringservice.data_meter_service.repository.DataMeterRepository;
-import ru.patseev.monitoringservice.data_meter_service.repository.impl.DataMeterRepositoryImpl;
-import ru.patseev.monitoringservice.data_meter_service.service.DataMeterService;
-import ru.patseev.monitoringservice.data_meter_service.service.impl.DataMeterServiceImpl;
+import ru.patseev.monitoringservice.controller.AuditController;
+import ru.patseev.monitoringservice.migration.Migration;
+import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
+import ru.patseev.monitoringservice.repository.AuditRepository;
+import ru.patseev.monitoringservice.repository.impl.AuditRepositoryImpl;
+import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.service.impl.AuditServiceImpl;
+import ru.patseev.monitoringservice.in.AuthenticationManager;
 import ru.patseev.monitoringservice.in.handler.AbstractOperationHandler;
-import ru.patseev.monitoringservice.in.Application;
 import ru.patseev.monitoringservice.in.handler.operation.RegistrationOperationHandler;
 import ru.patseev.monitoringservice.in.handler.operation.SignInOperationHandler;
 import ru.patseev.monitoringservice.in.session.OperationManager;
 import ru.patseev.monitoringservice.in.session.UserSessionManager;
 import ru.patseev.monitoringservice.in.session.operation.util.PrinterMeterData;
-import ru.patseev.monitoringservice.user_service.controller.UserController;
-import ru.patseev.monitoringservice.user_service.db.UserDatabase;
-import ru.patseev.monitoringservice.user_service.repository.UserRepository;
-import ru.patseev.monitoringservice.user_service.repository.impl.UserRepositoryImpl;
-import ru.patseev.monitoringservice.user_service.service.UserService;
-import ru.patseev.monitoringservice.user_service.service.impl.UserServiceImpl;
+import ru.patseev.monitoringservice.manager.ConnectionManager;
+import ru.patseev.monitoringservice.manager.ResourceManager;
+import ru.patseev.monitoringservice.controller.MeterController;
+import ru.patseev.monitoringservice.repository.DataMeterRepository;
+import ru.patseev.monitoringservice.repository.MeterTypeRepository;
+import ru.patseev.monitoringservice.repository.impl.DataMeterRepositoryImpl;
+import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
+import ru.patseev.monitoringservice.service.MeterService;
+import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.controller.UserController;
+import ru.patseev.monitoringservice.repository.RoleRepository;
+import ru.patseev.monitoringservice.repository.UserRepository;
+import ru.patseev.monitoringservice.repository.impl.RoleRepositoryImpl;
+import ru.patseev.monitoringservice.repository.impl.UserRepositoryImpl;
+import ru.patseev.monitoringservice.service.UserService;
+import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
 
 import java.util.Scanner;
 
@@ -34,29 +39,53 @@ import java.util.Scanner;
  * This class follows the Singleton pattern to ensure a single instance throughout the application.
  */
 public class MonitoringApplicationContext {
+
 	private static MonitoringApplicationContext context;
 	private final Scanner scanner = new Scanner(System.in);
 	private final PrinterMeterData printerMeterData = new PrinterMeterData();
-	private final UserDatabase userDatabase = new UserDatabase();
-	private final DataMeterDatabase dataMeterDatabase = new DataMeterDatabase();
-	private final AuditDatabase auditDatabase = new AuditDatabase();
-	private final AuditRepository auditRepository = new AuditRepositoryImpl(auditDatabase);
+	private final ResourceManager resourceManager = new ResourceManager("application");
+	private final ConnectionManager connectionManager = new ConnectionManager(resourceManager);
+	private final Migration liquibaseMigration = new LiquibaseMigration(connectionManager, resourceManager);
+
+	/*
+	 * Repositories
+	 */
+	private final UserRepository userRepository = new UserRepositoryImpl(connectionManager);
+	private final RoleRepository roleRepository = new RoleRepositoryImpl(connectionManager);
+	private final AuditRepository auditRepository = new AuditRepositoryImpl(connectionManager);
+	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(connectionManager);
+	private final MeterTypeRepository meterTypeRepository = new MeterTypeRepositoryImpl(connectionManager);
+
+	/*
+	 * Services
+	 */
+	private final UserService userService = new UserServiceImpl(userRepository, roleRepository);
 	private final AuditService auditService = new AuditServiceImpl(auditRepository);
-	private final AuditController auditController = new AuditController(auditService);
-	private final DataMeterRepository dataMeterRepository = new DataMeterRepositoryImpl(dataMeterDatabase);
-	private final DataMeterService dataMeterService = new DataMeterServiceImpl(dataMeterRepository);
-	private final DataMeterController dataMeterController = new DataMeterController(dataMeterService, auditService);
-	private final OperationManager operationManager =
-			new OperationManager(scanner, dataMeterController, auditController, printerMeterData);
-	private final UserSessionManager clientSessionManager =
-			new UserSessionManager(scanner, dataMeterController, operationManager);
-	private final UserRepository userRepository = new UserRepositoryImpl(userDatabase);
-	private final UserService userService = new UserServiceImpl(userRepository);
+	private final MeterService meterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
+
+	/*
+	 * Controllers
+	 */
 	private final UserController userController = new UserController(userService, auditService);
+	private final AuditController auditController = new AuditController(auditService, userController);
+	private final MeterController meterController = new MeterController(meterService, auditService);
+
+	/*
+	 * Operations
+	 */
+	private final OperationManager operationManager =
+			new OperationManager(scanner, meterController, auditController, printerMeterData);
+	private final UserSessionManager clientSessionManager =
+			new UserSessionManager(scanner, meterController, operationManager);
 	private final AbstractOperationHandler registrationOperation = new RegistrationOperationHandler(scanner, userController);
 	private final AbstractOperationHandler signInOperationHandler =
 			new SignInOperationHandler(scanner, userController, clientSessionManager);
-	private final Application application = new Application(scanner, registrationOperation, signInOperationHandler);
+
+	/*
+	 * Application
+	 */
+	private final AuthenticationManager authenticationManager =
+			new AuthenticationManager(scanner, registrationOperation, signInOperationHandler);
 
 	private MonitoringApplicationContext() {
 	}
@@ -77,6 +106,7 @@ public class MonitoringApplicationContext {
 	 * Runs the monitoring service application, starting with rendering the user interface.
 	 */
 	public void runApplication() {
-		application.renderInterface();
+		liquibaseMigration.performMigration();
+		authenticationManager.renderInterface();
 	}
 }
