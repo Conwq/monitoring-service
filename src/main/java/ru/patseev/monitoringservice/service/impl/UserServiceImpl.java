@@ -1,10 +1,11 @@
 package ru.patseev.monitoringservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import ru.patseev.monitoringservice.aspect.annotation.Loggable;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
-import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
@@ -34,10 +35,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public UserDto saveUser(UserDto userDto) {
-		Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
-
-		if (optionalUser.isPresent()) {
-			throw new UserAlreadyExistException("Такой пользователь уже существует.");
+		if (userRepository.existUserByUsername(userDto.username())) {
+			throw new UserAlreadyExistException("User with this username already exists.");
 		}
 
 		User user = User.builder()
@@ -54,6 +53,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Loggable
 	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())

@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.service.AuditService;
-import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -28,13 +27,13 @@ public class AuditServiceImpl implements AuditService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveUserAction(ActionEnum action, UserDto userDto) {
+	public void saveUserAction(ActionEnum action, int userId) {
 		UserAction userAction = UserAction.builder()
 				.actionAt(Timestamp.from(Instant.now()))
 				.action(action)
 				.build();
 
-		auditRepository.save(userDto.userId(), userAction);
+		auditRepository.save(userId, userAction);
 	}
 
 	/**
@@ -62,6 +61,6 @@ public class AuditServiceImpl implements AuditService {
 	 * @return A UserActionDto representing the converted data.
 	 */
 	private UserActionDto toDto(UserAction userAction) {
-		return new UserActionDto(userAction.getActionAt().toLocalDateTime(), userAction.getAction());
+		return new UserActionDto(userAction.getActionAt(), userAction.getAction());
 	}
 }

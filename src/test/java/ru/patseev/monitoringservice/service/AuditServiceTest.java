@@ -46,7 +46,7 @@ class AuditServiceTest {
 	@Test
 	@DisplayName("saveUserAction should save user")
 	void saveUserAction_shouldSaveUser() {
-		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
+		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto.userId());
 
 		verify(auditRepository, times(1))
 				.save(anyInt(), any(UserAction.class));
@@ -64,8 +64,8 @@ class AuditServiceTest {
 		}};
 
 		List<UserActionDto> expected = new ArrayList<>() {{
-			add(new UserActionDto(registrationAt.toLocalDateTime(), ActionEnum.REGISTRATION));
-			add(new UserActionDto(logInAt.toLocalDateTime(), ActionEnum.LOG_IN));
+			add(new UserActionDto(registrationAt, ActionEnum.REGISTRATION));
+			add(new UserActionDto(logInAt, ActionEnum.LOG_IN));
 		}};
 
 		when(auditRepository.findUserActionsByUserId(userDto.userId()))

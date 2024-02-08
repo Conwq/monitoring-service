@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.dto;
 
 import ru.patseev.monitoringservice.enums.ActionEnum;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -10,6 +11,6 @@ import java.time.LocalDateTime;
  * @param actionAt The timestamp of the action.
  * @param action   The type of action performed by the user.
  */
-public record UserActionDto(LocalDateTime actionAt,
+public record UserActionDto(Timestamp actionAt,
 							ActionEnum action) {
 }

@@ -9,9 +9,9 @@ import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.MeterService;
-import ru.patseev.monitoringservice.dto.UserDto;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +37,8 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DataMeterDto getCurrentDataMeter(UserDto userDto) {
-		return dataMeterRepository.findLastDataMeter(userDto.userId())
+	public DataMeterDto getCurrentDataMeter(int userId) {
+		return dataMeterRepository.findLastDataMeter(userId)
 				.map(this::toDto)
 				.orElseThrow(() -> new DataMeterNotFoundException("Данные счетчика не найдены."));
 	}
@@ -47,8 +47,8 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveDataMeter(UserDto userDto, DataMeterDto dataMeterDto) {
-		DataMeter dataMeter = toEntity(userDto, dataMeterDto);
+	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) {
+		DataMeter dataMeter = toEntity(userId, dataMeterDto);
 		dataMeterRepository.saveDataMeter(dataMeter);
 	}
 
@@ -56,9 +56,9 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<DataMeterDto> getMeterDataForSpecifiedMonth(UserDto userDto, int month) {
+	public List<DataMeterDto> getMeterDataForSpecifiedMonth(int userId, int month) {
 		return dataMeterRepository
-				.getMeterDataForSpecifiedMonth(userDto.userId(), month)
+				.getMeterDataForSpecifiedMonth(userId, month)
 				.stream()
 				.map(this::toDto)
 				.collect(Collectors.toList());
@@ -68,8 +68,8 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<DataMeterDto> getAllMeterData(UserDto userDto) {
-		List<DataMeter> allMeterData = dataMeterRepository.getAllMeterData(userDto.userId());
+	public List<DataMeterDto> getAllMeterData(int userId) {
+		List<DataMeter> allMeterData = dataMeterRepository.getAllMeterData(userId);
 
 		if (allMeterData.isEmpty()) {
 			return Collections.emptyList();
@@ -149,7 +149,7 @@ public class MeterServiceImpl implements MeterService {
 		MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
 
 		return new DataMeterDto(
-				dataMeter.getSubmissionDate().toLocalDateTime().toLocalDate(),
+				dataMeter.getSubmissionDate(),
 				dataMeter.getValue(),
 				meterType.getMeterTypeId(),
 				meterType.getTypeName()
@@ -162,12 +162,12 @@ public class MeterServiceImpl implements MeterService {
 	 * @param dto The DataMeterDto to be converted.
 	 * @return The DataMeter entity.
 	 */
-	private DataMeter toEntity(UserDto userDto, DataMeterDto dto) {
+	private DataMeter toEntity(int userId, DataMeterDto dto) {
 		return DataMeter.builder()
-				.submissionDate(Timestamp.valueOf(dto.date().atStartOfDay()))
+				.submissionDate(Timestamp.from(Instant.now()))
 				.value(dto.value())
 				.meterTypeId(dto.meterTypeId())
-				.userId(userDto.userId())
+				.userId(userId)
 				.build();
 	}
 }

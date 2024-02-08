@@ -11,6 +11,19 @@ import java.sql.SQLException;
 public class ConnectionManager {
 
 	/**
+	 * Static block that loads the PostgreSQL JDBC driver when the class is initialized.
+	 *
+	 * @throws RuntimeException If the PostgreSQL driver class is not found.
+	 */
+	static {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * The JDBC URL for connecting to the database.
 	 */
 	private final String url;

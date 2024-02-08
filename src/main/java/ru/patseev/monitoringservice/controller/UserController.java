@@ -1,10 +1,14 @@
 package ru.patseev.monitoringservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.jwt.JwtService;
+import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller class for handling user-related operations.
@@ -23,25 +27,45 @@ public class UserController {
 	private final AuditService auditService;
 
 	/**
-	 * Saves a user using the UserService.
-	 *
-	 * @param userDto The data transfer object containing user information.
+	 * Service responsible for generating and parsing JSON Web Tokens (JWT).
 	 */
-	public void saveUser(UserDto userDto) {
-		userDto = userService.saveUser(userDto);
-		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
+	private final JwtService jwtService;
+
+	/**
+	 * Saves user data and generates a JWT token based on the saved user data.
+	 *
+	 * @param userDto The user data to be saved.
+	 * @return The JWT token generated based on the saved user data.
+	 */
+	public String saveUser(UserDto userDto) {
+		UserDto savedUserData = userService.saveUser(userDto);
+		auditService.saveUserAction(ActionEnum.REGISTRATION, savedUserData.userId());
+
+		Map<String, Object> extraClaims = new HashMap<>() {{
+			put("role", savedUserData.role());
+			put("userId", savedUserData.userId());
+		}};
+
+		return jwtService.generateToken(extraClaims, savedUserData);
 	}
 
 	/**
-	 * Authenticates a user using the UserService.
+	 * Authenticates a user using the UserService and generates a JWT token with extra claims.
 	 *
 	 * @param userDto The data transfer object containing user authentication information.
-	 * @return A dto object that stores authenticated user data.
+	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-	public UserDto authUser(UserDto userDto) {
+	public String authUser(UserDto userDto) {
 		UserDto userData = userService.authUser(userDto);
-		auditService.saveUserAction(ActionEnum.LOG_IN, userData);
-		return userData;
+
+		auditService.saveUserAction(ActionEnum.LOG_IN, userData.userId());
+
+		Map<String, Object> extraClaims = new HashMap<>() {{
+			put("role", userData.role());
+			put("userId", userData.userId());
+		}};
+
+		return jwtService.generateToken(extraClaims, userDto);
 	}
 
 	/**

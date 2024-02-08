@@ -17,6 +17,7 @@ import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +59,7 @@ class MeterServiceTest {
 				meterType.getMeterTypeId(),
 				userDto.userId()
 		);
-		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
+		dataMeterDto = new DataMeterDto(Timestamp.from(Instant.now()), 1L, 1, "Hot water.");
 	}
 
 	@Test
@@ -69,7 +70,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		DataMeterDto actual = dataMeterService.getCurrentDataMeter(userDto);
+		DataMeterDto actual = dataMeterService.getCurrentDataMeter(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
@@ -82,7 +83,7 @@ class MeterServiceTest {
 				.thenReturn(Optional.empty());
 
 		assertThrows(DataMeterNotFoundException.class,
-				() -> dataMeterService.getCurrentDataMeter(userDto));
+				() -> dataMeterService.getCurrentDataMeter(userDto.userId()));
 	}
 
 	@Test
@@ -91,13 +92,13 @@ class MeterServiceTest {
 		DataMeter test =
 				new DataMeter(
 						null, //при сохранении в бд у меня еще нету id
-						Timestamp.valueOf(dataMeterDto.date().atStartOfDay()),
+						dataMeterDto.date(),
 						dataMeterDto.value(),
 						dataMeterDto.meterTypeId(),
 						userDto.userId()
 				);
 
-		dataMeterService.saveDataMeter(userDto, dataMeterDto);
+		dataMeterService.saveDataMeter(userDto.userId(), dataMeterDto);
 
 		verify(dataMeterRepository, Mockito.times(1))
 				.saveDataMeter(test);
@@ -110,7 +111,7 @@ class MeterServiceTest {
 				.thenReturn(List.of(dataMeter));
 
 		List<DataMeterDto> actual =
-				dataMeterService.getMeterDataForSpecifiedMonth(userDto, LocalDate.now().getMonth().getValue());
+				dataMeterService.getMeterDataForSpecifiedMonth(userDto.userId(), LocalDate.now().getMonth().getValue());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -124,7 +125,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto);
+		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -136,7 +137,7 @@ class MeterServiceTest {
 		when(dataMeterRepository.getAllMeterData(userDto.userId()))
 				.thenReturn(Collections.emptyList());
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto);
+		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto.userId());
 
 		assertThat(actual.size())
 				.isEqualTo(0);

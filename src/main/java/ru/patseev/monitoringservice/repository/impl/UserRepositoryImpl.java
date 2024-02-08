@@ -58,9 +58,29 @@ public class UserRepositoryImpl implements UserRepository {
 				optionalUser = extractUser(resultSet);
 			}
 		} catch (SQLException e) {
-			System.err.println("Operation error");
+			System.err.println("Error during operation: " + e.getMessage());
 		}
 		return optionalUser;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean existUserByUsername(String username) {
+		final String selectUserSql = "SELECT * FROM monitoring_service.users WHERE username = ?";
+
+		try(Connection connection = connectionManager.takeConnection();
+			PreparedStatement statement = connection.prepareStatement(selectUserSql)) {
+
+			statement.setString(1, username);
+			try(ResultSet resultSet = statement.executeQuery()) {
+				return resultSet.next();
+			}
+		} catch (SQLException e) {
+			System.err.println("Error during operation: " + e.getMessage());
+			return false;
+		}
 	}
 
 	/**

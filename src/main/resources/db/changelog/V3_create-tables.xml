@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="1" author="Sergey.Patseev">
+        <createTable schemaName="monitoring_service" tableName="roles" remarks="Table for storing user roles">
+            <column name="role_id" type="int" defaultValueSequenceNext="role_id_seq" remarks="The unique ID of the role">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="role_name" type="VARCHAR(10)" remarks="The name of the role"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Sergey.Patseev">
+        <createTable schemaName="monitoring_service" tableName="users" remarks="Table for storing user information">
+            <column name="user_id" type="int" defaultValueSequenceNext="user_id_seq" remarks="The unique ID of the user">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(50)" remarks="The username of the user"/>
+            <column name="password" type="varchar(50)" remarks="The password of the user"/>
+            <column name="role_id" type="int" remarks="The role ID of the user">
+                <constraints foreignKeyName="fk_users_roles"
+                             references="monitoring_service.roles(role_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Sergey.Patseev">
+        <createTable schemaName="monitoring_service" tableName="meter_types" remarks="Table for storing meter types">
+            <column name="meter_type_id" type="int" defaultValueSequenceNext="meter_type_id_seq"
+                    remarks="The unique ID of the meter type">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type_name" type="varchar(200)" remarks="The name of the meter type"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="Sergey.Patseev">
+        <createTable schemaName="monitoring_service" tableName="meters_data" remarks="Table for storing meter data">
+            <column name="meter_data_id" type="int" defaultValueSequenceNext="meter_data_id_seq"
+                    remarks="The unique ID of the meter data">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="submission_date" type="timestamp" remarks="The date of meter data submission"/>
+            <column name="value" type="int" remarks="The value of the meter data"/>
+            <column name="meter_type_id" type="int" remarks="The ID of the meter type">
+                <constraints foreignKeyName="fk_meters_data_meter_types"
+                             references="monitoring_service.meter_types(meter_type_id)"/>
+            </column>
+            <column name="user_id" type="int" remarks="The ID of the user">
+                <constraints foreignKeyName="fk_meters_data_users"
+                             references="monitoring_service.users(user_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Sergey.Patseev">
+        <createTable schemaName="monitoring_service" tableName="actions" remarks="Table for storing user actions">
+            <column name="action_id" type="int" defaultValueSequenceNext="action_id_seq" remarks="The unique ID of the action">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="action_at" type="timestamp" remarks="The timestamp of the action"/>
+            <column name="action" type="varchar(50)" remarks="The description of the action"/>
+            <column name="user_id" type="int" remarks="The ID of the user">
+                <constraints foreignKeyName="fk_actions_users"
+                             references="monitoring_service.users(user_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
