@@ -48,7 +48,7 @@ class AuditRepositoryTest extends AbstractPostgreSQLContainer {
 
 		UserAction logInAction = UserAction.builder()
 				.actionAt(currentTime)
-				.action(ActionEnum.LOG_IN)
+				.action(ActionEnum.AUTHORIZATION)
 				.userId(userId).build();
 
 		auditRepository.save(userId, registrationAction);

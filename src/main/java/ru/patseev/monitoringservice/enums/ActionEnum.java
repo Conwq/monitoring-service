@@ -5,7 +5,7 @@ package ru.patseev.monitoringservice.enums;
  */
 public enum ActionEnum {
 	REGISTRATION,
-	LOG_IN,
+	AUTHORIZATION,
 	GET_LATEST_METER_DATA,
 	SAVE_METER_DATA,
 	GET_METER_DATA_FOR_SPECIFIED_MONTH,

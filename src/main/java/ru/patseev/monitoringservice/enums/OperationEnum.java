@@ -18,7 +18,7 @@ public enum OperationEnum {
 	/**
 	 * Retrieving current data operation.
 	 */
-	CURRENT_DATA,
+	LAST_DATA,
 
 	/**
 	 * Retrieving data for a specified month operation.
@@ -38,7 +38,7 @@ public enum OperationEnum {
 	/**
 	 * Retrieving meter type operation.
 	 */
-	METER_TYPE,
+	ALL_METER_TYPES,
 
 	/**
 	 * Saving data operation.

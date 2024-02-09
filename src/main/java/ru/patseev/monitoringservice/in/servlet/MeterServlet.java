@@ -28,6 +28,15 @@ public class MeterServlet extends HttpServlet {
 	}
 
 	/**
+	 * Initializes the servlet with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager to be used by the servlet.
+	 */
+	public MeterServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
+	}
+
+	/**
 	 * Handles HTTP GET requests.
 	 *
 	 * @param req  The HTTP servlet request.

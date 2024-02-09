@@ -27,7 +27,7 @@ public class AuthorizationOperationHandler implements OperationHandler {
 	private final ObjectExtractor objectExtractor;
 
 	//todo
-	private final Validator<UserDto> userDtoValidator = new UserDtoValidator();
+	private final Validator<UserDto> userDtoValidator;
 
 	/**
 	 * Handles the operation of user authorization.
@@ -44,6 +44,11 @@ public class AuthorizationOperationHandler implements OperationHandler {
 			return;
 		}
 		String jwtToken = userController.authUser(userDto);
+
+		if (jwtToken == null || jwtToken.isEmpty()) {
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+			return;
+		}
 
 		resp.setHeader("Authorization", jwtToken);
 		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, jwtToken);

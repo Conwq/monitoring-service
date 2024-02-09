@@ -71,6 +71,8 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("saveMeterData should save MeterData")
 	void saveMeterData_shouldSaveMeterData() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		dataMeterController.saveMeterData("auth_token", dataMeterDto);
 
 		verify(dataMeterService, times(1))
@@ -82,6 +84,8 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("getMeterDataForSpecifiedMonth should return users MeterData for specified month")
 	void getMeterDataForSpecifiedMonth_shouldReturnDataForSpecifiedMonth() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getMeterDataForSpecifiedMonth(userDto.userId(), 1))
 				.thenReturn(dataMeterDtoList);
 
@@ -96,6 +100,8 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("getMeterDataForUser should return list MeterData for specified user")
 	void getMeterDataForUser_shouldReturnData() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getAllMeterData(userDto.userId()))
 				.thenReturn(dataMeterDtoList);
 
@@ -113,6 +119,8 @@ class MeterControllerTest {
 		Map<String, List<DataMeterDto>> expected = new HashMap<>() {{
 			put(userDto.username(), dataMeterDtoList);
 		}};
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getDataFromAllMeterUsers())
 				.thenReturn(expected);
 
@@ -127,6 +135,8 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("getAvailableMeterType should return MeterType")
 	void getAvailableMeterType_shouldReturnAvailableMeterType() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getAvailableMeterType())
 				.thenReturn(List.of(meterTypeDto));
 
@@ -141,6 +151,9 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("addNewMeterType should save MeterType")
 	void addNewMeterType_shouldSaveNewMeterType() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
+
 		dataMeterController.addNewMeterType("token", meterTypeDto);
 
 		verify(dataMeterService, times(1))

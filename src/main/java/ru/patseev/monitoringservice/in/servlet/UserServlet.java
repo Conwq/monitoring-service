@@ -25,6 +25,15 @@ public class UserServlet extends HttpServlet {
 	}
 
 	/**
+	 * Initializes the UserServlet with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager to be used by the UserServlet.
+	 */
+	public UserServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
+	}
+
+	/**
 	 * Handles HTTP POST requests.
 	 *
 	 * @param req  The HTTP servlet request.

@@ -60,12 +60,12 @@ class AuditServiceTest {
 
 		List<UserAction> userActions = new ArrayList<>() {{
 			add(new UserAction(1, registrationAt, ActionEnum.REGISTRATION, userDto.userId()));
-			add(new UserAction(2, logInAt, ActionEnum.LOG_IN, userDto.userId()));
+			add(new UserAction(2, logInAt, ActionEnum.AUTHORIZATION, userDto.userId()));
 		}};
 
 		List<UserActionDto> expected = new ArrayList<>() {{
 			add(new UserActionDto(registrationAt, ActionEnum.REGISTRATION));
-			add(new UserActionDto(logInAt, ActionEnum.LOG_IN));
+			add(new UserActionDto(logInAt, ActionEnum.AUTHORIZATION));
 		}};
 
 		when(auditRepository.findUserActionsByUserId(userDto.userId()))

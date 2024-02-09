@@ -58,7 +58,7 @@ public class UserController {
 	public String authUser(UserDto userDto) {
 		UserDto userData = userService.authUser(userDto);
 
-		auditService.saveUserAction(ActionEnum.LOG_IN, userData.userId());
+		auditService.saveUserAction(ActionEnum.AUTHORIZATION, userData.userId());
 
 		Map<String, Object> extraClaims = new HashMap<>() {{
 			put("role", userData.role());

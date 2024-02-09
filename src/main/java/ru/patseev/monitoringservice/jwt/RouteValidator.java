@@ -21,10 +21,10 @@ public class RouteValidator {
 
 	/** The map containing close endpoints (operations requiring specific roles). */
 	private final Map<OperationEnum, RoleEnum> closeEndpoints = new HashMap<>() {{
-		put(OperationEnum.CURRENT_DATA, USER_ROLE);
+		put(OperationEnum.LAST_DATA, USER_ROLE);
 		put(OperationEnum.SPECIFIED_MONTH_DATA, USER_ROLE);
 		put(OperationEnum.USER_DATA, USER_ROLE);
-		put(OperationEnum.METER_TYPE, USER_ROLE);
+		put(OperationEnum.ALL_METER_TYPES, USER_ROLE);
 		put(OperationEnum.SAVE_DATA, USER_ROLE);
 
 		put(OperationEnum.ALL_DATA, ADMIN_ROLE);

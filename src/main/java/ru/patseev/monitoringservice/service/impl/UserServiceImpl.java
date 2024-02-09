@@ -12,8 +12,6 @@ import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
 import ru.patseev.monitoringservice.service.UserService;
 
-import java.util.Optional;
-
 /**
  * The UserServiceImpl class is an implementation of the UserService interface.
  */

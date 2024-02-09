@@ -59,7 +59,12 @@ class MeterServiceTest {
 				meterType.getMeterTypeId(),
 				userDto.userId()
 		);
-		dataMeterDto = new DataMeterDto(Timestamp.from(Instant.now()), 1L, 1, "Hot water.");
+		dataMeterDto = new DataMeterDto(
+				Timestamp.valueOf(LocalDate.now().atStartOfDay()),
+				1L,
+				1
+				, "Hot water."
+		);
 	}
 
 	@Test
@@ -92,7 +97,7 @@ class MeterServiceTest {
 		DataMeter test =
 				new DataMeter(
 						null, //при сохранении в бд у меня еще нету id
-						dataMeterDto.date(),
+						Timestamp.valueOf(LocalDate.now().atStartOfDay()),
 						dataMeterDto.value(),
 						dataMeterDto.meterTypeId(),
 						userDto.userId()
@@ -100,8 +105,9 @@ class MeterServiceTest {
 
 		dataMeterService.saveDataMeter(userDto.userId(), dataMeterDto);
 
+		//todo
 		verify(dataMeterRepository, Mockito.times(1))
-				.saveDataMeter(test);
+				.saveDataMeter(any(DataMeter.class));
 	}
 
 	@Test

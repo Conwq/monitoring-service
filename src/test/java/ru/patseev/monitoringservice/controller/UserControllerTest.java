@@ -54,16 +54,18 @@ class UserControllerTest {
 	@Test
 	@DisplayName("authUser should return UserDto")
 	void authUser_shouldReturnUserDto() {
+		String jwtToken = "jwtToken";
 		when(userService.authUser(userDto))
 				.thenReturn(userDto);
+		when(jwtService.generateToken(anyMap(), any(UserDto.class)))
+				.thenReturn(jwtToken);
 
-		//todo
-		UserDto userData = null;
+		String actual = userController.authUser(userDto);
 
-		assertThat(userData)
-				.isEqualTo(userDto);
+		assertThat(actual)
+				.isEqualTo(jwtToken);
 		verify(auditService)
-				.saveUserAction(ActionEnum.LOG_IN, userDto.userId());
+				.saveUserAction(ActionEnum.AUTHORIZATION, userDto.userId());
 	}
 
 	@Test

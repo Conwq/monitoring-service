@@ -13,6 +13,7 @@ import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
 import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.UserMapper;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ class UserServiceTest {
 	private static UserRepository userRepository;
 	private static RoleRepository roleRepository;
 	private static UserService userService;
+	private static UserMapper userMapper;
 
 	private UserDto userDto;
 	private User user;
@@ -34,6 +36,8 @@ class UserServiceTest {
 	public static void setUp() {
 		userRepository = mock(UserRepository.class);
 		roleRepository = mock(RoleRepository.class);
+		userMapper = mock(UserMapper.class);
+
 		userService = new UserServiceImpl(userRepository, roleRepository);
 	}
 
@@ -61,8 +65,8 @@ class UserServiceTest {
 	@Test
 	@DisplayName("saveUser should throw an exception because a user with the same username exists")
 	void saveUser_shouldThrowUserAlreadyExistException() {
-		when(userRepository.findUserByUsername(userDto.username()))
-				.thenReturn(Optional.of(user));
+		when(userRepository.existUserByUsername(userDto.username()))
+				.thenReturn(true);
 
 		assertThrows(UserAlreadyExistException.class,
 				() -> userService.saveUser(userDto)

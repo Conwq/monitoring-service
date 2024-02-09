@@ -13,7 +13,6 @@ import ru.patseev.monitoringservice.service.AuditService;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,13 +42,15 @@ class AuditControllerTest {
 		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
 		actionDtoList = new ArrayList<>() {{
 			add(new UserActionDto(Timestamp.from(Instant.now()), ActionEnum.REGISTRATION));
-			add(new UserActionDto(Timestamp.from(Instant.now()), ActionEnum.LOG_IN));
+			add(new UserActionDto(Timestamp.from(Instant.now()), ActionEnum.AUTHORIZATION));
 		}};
 	}
 
 	@Test
 	@DisplayName("getListUserActions should return list of UserActions")
 	void getListOfUserActions_shouldReturnListUserActions() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(userController.getUser(userDto.username()))
 				.thenReturn(userDto);
 		when(auditService.getUserAction(userDto.userId()))

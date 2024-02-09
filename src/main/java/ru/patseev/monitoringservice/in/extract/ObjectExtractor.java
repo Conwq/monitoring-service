@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.in.extract;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,21 +10,13 @@ import java.io.IOException;
 /**
  * The ObjectExtractor class extracts objects from HTTP requests.
  */
+@RequiredArgsConstructor
 public class ObjectExtractor {
 
 	/**
 	 * The object mapper for deserializing JSON into objects.
 	 */
 	private final ObjectMapper objectMapper;
-
-	/**
-	 * Constructs an ObjectExtractor instance with the specified object mapper.
-	 *
-	 * @param objectMapper The object mapper to be used for deserialization.
-	 */
-	public ObjectExtractor(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper;
-	}
 
 	/**
 	 * Extracts an object of the specified class from the HTTP request body.

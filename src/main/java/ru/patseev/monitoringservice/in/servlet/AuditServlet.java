@@ -27,6 +27,15 @@ public class AuditServlet extends HttpServlet {
 	}
 
 	/**
+	 * Initializes the servlet with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager to be used by the servlet.
+	 */
+	public AuditServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
+	}
+
+	/**
 	 * Handles GET requests by delegating the request to the appropriate operation handler.
 	 *
 	 * @param req  The HttpServletRequest object representing the HTTP request.

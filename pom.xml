@@ -25,6 +25,7 @@
         <jackson.version>2.15.3</jackson.version>
         <json.web.token.version>0.12.5</json.web.token.version>
         <aspectj.version>1.9.20.1</aspectj.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -94,6 +95,13 @@
             <version>${aspectj.version}</version>
 <!--            <scope>runtime</scope>-->
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
+<!--        <dependency>-->
+<!--            <groupId>org.mapstruct</groupId>-->
+<!--            <artifactId>mapstruct</artifactId>-->
+<!--            <version>${mapstruct.version}</version>-->
+<!--        </dependency>-->
+
 
 
 
@@ -124,6 +132,33 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.5.1</version>-->
+<!--                <configuration>-->
+<!--                    <annotationProcessorPaths>-->
+<!--                        <path>-->
+<!--                            <groupId>org.projectlombok</groupId>-->
+<!--                            <artifactId>lombok</artifactId>-->
+<!--                            <version>${lombok.version}</version>-->
+<!--                        </path>-->
+<!--                        <path>-->
+<!--                            <groupId>org.mapstruct</groupId>-->
+<!--                            <artifactId>mapstruct-processor</artifactId>-->
+<!--                            <version>${mapstruct.version}</version>-->
+<!--                        </path>-->
+<!--                    </annotationProcessorPaths>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+
+
+
 
 <!--    <build>-->
 <!--        <plugins>-->

@@ -5,9 +5,10 @@ import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.enums.OperationEnum;
 import ru.patseev.monitoringservice.in.extract.ObjectExtractor;
-import ru.patseev.monitoringservice.in.operation.OperationHandler;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
+import ru.patseev.monitoringservice.in.operation.OperationHandler;
 import ru.patseev.monitoringservice.in.operation.impl.*;
+import ru.patseev.monitoringservice.in.validator.impl.UserDtoValidator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +18,19 @@ import java.util.Map;
  */
 public class OperationManager {
 
-	/** The map containing operation handlers indexed by operation enums. */
+	/**
+	 * The map containing operation handlers indexed by operation enums.
+	 */
 	private final Map<OperationEnum, OperationHandler> operations;
 
 	/**
 	 * Constructs an OperationManager instance with specified controllers and extractors.
 	 *
-	 * @param meterController     The MeterController for managing meter-related operations.
-	 * @param responseGenerator   The ResponseGenerator for generating HTTP responses.
-	 * @param userController      The UserController for managing user-related operations.
-	 * @param objectExtractor     The ObjectExtractor for extracting objects from requests.
-	 * @param auditController     The AuditController for managing audit-related operations.
+	 * @param meterController   The MeterController for managing meter-related operations.
+	 * @param responseGenerator The ResponseGenerator for generating HTTP responses.
+	 * @param userController    The UserController for managing user-related operations.
+	 * @param objectExtractor   The ObjectExtractor for extracting objects from requests.
+	 * @param auditController   The AuditController for managing audit-related operations.
 	 */
 	public OperationManager(MeterController meterController,
 							ResponseGenerator responseGenerator,
@@ -36,33 +39,32 @@ public class OperationManager {
 							AuditController auditController) {
 
 		operations = new HashMap<>() {{
-			put(OperationEnum.CURRENT_DATA,
-					new ObtainingLatestRelevantDataOperationHandler(meterController, responseGenerator)
-			);
+			//meter data
+			put(OperationEnum.LAST_DATA,
+					new ObtainingLatestDataMeterOperationHandler(meterController, responseGenerator));
 			put(OperationEnum.SPECIFIED_MONTH_DATA,
-					new SpecifiedMonthDataOperationHandler(meterController, responseGenerator)
-			);
+					new SpecifiedMonthDataOperationHandler(meterController, responseGenerator));
 			put(OperationEnum.USER_DATA,
-					new RetrievingAllUserMeterDataOperationHandler(meterController, responseGenerator)
-			);
+					new RetrievingUserMeterDataOperationHandler(meterController, responseGenerator));
 			put(OperationEnum.ALL_DATA,
-					new RetrievalForAllUserMeterDataOperationHandler(meterController, responseGenerator)
-			);
-			put(OperationEnum.METER_TYPE,
-					new GettingAllMeterTypesOperationHandler(meterController, responseGenerator)
-			);
+					new RetrievalForAllUserMeterDataOperationHandler(meterController, responseGenerator));
+
 			put(OperationEnum.SAVE_DATA,
-					new SavingMeterReadingDataOperationHandler(meterController, responseGenerator, objectExtractor)
-			);
+					new SavingMeterReadingDataOperationHandler(meterController, responseGenerator, objectExtractor));
+
+			//meter type
+			put(OperationEnum.ALL_METER_TYPES,
+					new GettingAllMeterTypesOperationHandler(meterController, responseGenerator));
 			put(OperationEnum.ADD_METER_TYPE,
-					new AddingNewCounterTypeOperationHandler(meterController, responseGenerator, objectExtractor)
-			);
+					new AddingNewMeterTypeOperationHandler(meterController, responseGenerator, objectExtractor));
+
+			//user
 			put(OperationEnum.AUTH,
-					new AuthorizationOperationHandler(responseGenerator, userController, objectExtractor)
-			);
+					new AuthorizationOperationHandler(responseGenerator, userController, objectExtractor, new UserDtoValidator()));
 			put(OperationEnum.REGISTRATION,
-					new RegistrationOperationHandler(responseGenerator, userController, objectExtractor)
-			);
+					new RegistrationOperationHandler(responseGenerator, userController, objectExtractor, new UserDtoValidator()));
+
+
 			put(OperationEnum.GET_AUDIT,
 					new GettingAuditOperationHandler(responseGenerator, auditController)
 			);

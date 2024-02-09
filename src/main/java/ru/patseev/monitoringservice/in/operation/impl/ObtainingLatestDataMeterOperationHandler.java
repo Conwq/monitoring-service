@@ -8,13 +8,11 @@ import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.operation.OperationHandler;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 
-import java.util.List;
-
 /**
- * The RetrievingAllUserMeterDataOperationHandler class handles the operation of retrieving all user meter data.
+ * The ObtainingLatestRelevantDataOperationHandler class handles the operation of obtaining the latest relevant data.
  */
 @RequiredArgsConstructor
-public class RetrievingAllUserMeterDataOperationHandler implements OperationHandler {
+public class ObtainingLatestDataMeterOperationHandler implements OperationHandler {
 
 	/** The meter controller for managing meter-related operations. */
 	private final MeterController meterController;
@@ -23,7 +21,7 @@ public class RetrievingAllUserMeterDataOperationHandler implements OperationHand
 	private final ResponseGenerator responseGenerator;
 
 	/**
-	 * Handles the operation of retrieving all user meter data.
+	 * Handles the operation of obtaining the latest relevant data.
 	 *
 	 * @param req  The HTTP servlet request.
 	 * @param resp The HTTP servlet response.
@@ -31,7 +29,7 @@ public class RetrievingAllUserMeterDataOperationHandler implements OperationHand
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
 		String jwtToken = req.getHeader("Authorization");
-		List<DataMeterDto> meterDataForUser = meterController.getMeterDataForUser(jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, meterDataForUser);
+		DataMeterDto currentMeterData = meterController.getLatestMeterData(jwtToken);
+		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, currentMeterData);
 	}
 }
