@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 /**
- * The DataMeter class represents metered data for a specific user on a particular date.
- * It includes information such as date, heating data, cold water data, hot water data, and the associated username.
+ * The DataMeter class represents metered data for a specific user on a particular submissionDate.
+ * It includes information such as submissionDate, heating data, cold water data, hot water data, and the associated username.
  */
 @Data
 @Builder
@@ -23,12 +23,12 @@ public class DataMeter {
 	private Integer meterDataId;
 
 	/**
-	 * The date for which the metered data is recorded.
+	 * The submissionDate for which the metered data is recorded.
 	 */
 	private Timestamp submissionDate;
 
 	/**
-	 * The metered value for the specified date.
+	 * The metered value for the specified submissionDate.
 	 */
 	private Long value;
 

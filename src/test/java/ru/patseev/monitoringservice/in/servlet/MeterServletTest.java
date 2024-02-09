@@ -5,14 +5,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.patseev.monitoringservice.controller.AuditController;
 import ru.patseev.monitoringservice.controller.MeterController;
-import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.in.extract.ObjectExtractor;
+import ru.patseev.monitoringservice.in.extractor.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
-import ru.patseev.monitoringservice.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.MeterOperationManager;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -40,14 +39,12 @@ class MeterServletTest {
 	void setUp() {
 		req = mock(HttpServletRequest.class);
 		resp = mock(HttpServletResponse.class);
-		AuditController auditController = mock(AuditController.class);
-		UserController userController = mock(UserController.class);
-		objectExtractor = mock(ObjectExtractor.class);
-		responseGenerator = mock(ResponseGenerator.class);
 		meterController = mock(MeterController.class);
+		responseGenerator = mock(ResponseGenerator.class);
+		objectExtractor = mock(ObjectExtractor.class);
 
 		OperationManager operationManager
-				= new OperationManager(meterController, responseGenerator, userController, objectExtractor, auditController);
+				= new MeterOperationManager(meterController, responseGenerator, objectExtractor);
 		meterServlet = new MeterServlet(operationManager);
 
 		meterTypeDto = new MeterTypeDto(1, "electricity");

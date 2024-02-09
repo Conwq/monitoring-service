@@ -5,14 +5,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.patseev.monitoringservice.controller.AuditController;
-import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.RoleEnum;
-import ru.patseev.monitoringservice.in.extract.ObjectExtractor;
+import ru.patseev.monitoringservice.in.extractor.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
-import ru.patseev.monitoringservice.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.UserOperationManager;
 
 import static org.mockito.Mockito.*;
 
@@ -35,14 +34,12 @@ class UserServletTest {
 	void setUp() {
 		req = mock(HttpServletRequest.class);
 		resp = mock(HttpServletResponse.class);
-		AuditController auditController = mock(AuditController.class);
 
 		objectExtractor = mock(ObjectExtractor.class);
 		userController = mock(UserController.class);
 		responseGenerator = mock(ResponseGenerator.class);
-		MeterController meterController = mock(MeterController.class);
 		OperationManager operationManager
-				= new OperationManager(meterController, responseGenerator, userController, objectExtractor, auditController);
+				= new UserOperationManager(userController, responseGenerator, objectExtractor);
 
 		userServlet = new UserServlet(operationManager);
 

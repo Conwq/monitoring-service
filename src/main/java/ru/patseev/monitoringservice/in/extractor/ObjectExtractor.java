@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.extract;
+package ru.patseev.monitoringservice.in.extractor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,8 +22,8 @@ public class ObjectExtractor {
 	 * Extracts an object of the specified class from the HTTP request body.
 	 *
 	 * @param req    The HTTP servlet request.
-	 * @param tClass The class of the object to extract.
-	 * @param <T>    The type of the object to extract.
+	 * @param tClass The class of the object to extractor.
+	 * @param <T>    The type of the object to extractor.
 	 * @return The extracted object.
 	 * @throws RuntimeException If an error occurs during extraction.
 	 */
@@ -36,7 +36,6 @@ public class ObjectExtractor {
 			}
 			return objectMapper.readValue(jsonObject.toString(), tClass);
 		} catch (IOException e) {
-			//todo: handle exception appropriately
 			throw new RuntimeException(e);
 		}
 	}

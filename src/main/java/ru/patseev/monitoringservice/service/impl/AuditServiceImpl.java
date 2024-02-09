@@ -7,9 +7,13 @@ import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,16 +28,17 @@ public class AuditServiceImpl implements AuditService {
 	private final AuditRepository auditRepository;
 
 	/**
+	 * The mapper for converting between ActionEnum objects and UserAction objects.
+	 */
+	private final AuditMapper auditMapper;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void saveUserAction(ActionEnum action, int userId) {
-		UserAction userAction = UserAction.builder()
-				.actionAt(Timestamp.from(Instant.now()))
-				.action(action)
-				.build();
-
-		auditRepository.save(userId, userAction);
+		UserAction userAction = auditMapper.toEntity(action, userId);
+		auditRepository.save(userAction);
 	}
 
 	/**
@@ -45,22 +50,12 @@ public class AuditServiceImpl implements AuditService {
 				.findUserActionsByUserId(userId);
 
 		if (userAction == null) {
-			throw new UserNotFoundException("\nПользователь не найден.");
+			throw new UserNotFoundException("User is not found");
 		}
 
 		return userAction
 				.stream()
-				.map(this::toDto)
+				.map(auditMapper::toDto)
 				.toList();
-	}
-
-	/**
-	 * Converts a UserAction object to a UserActionDto.
-	 *
-	 * @param userAction The UserAction object to be converted.
-	 * @return A UserActionDto representing the converted data.
-	 */
-	private UserActionDto toDto(UserAction userAction) {
-		return new UserActionDto(userAction.getActionAt(), userAction.getAction());
 	}
 }

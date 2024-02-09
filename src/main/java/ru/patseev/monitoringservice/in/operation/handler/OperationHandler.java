@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.operation;
+package ru.patseev.monitoringservice.in.operation.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

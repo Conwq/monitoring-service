@@ -33,7 +33,6 @@ public class ResponseGenerator {
 			ServletOutputStream outputStream = resp.getOutputStream();
 			outputStream.write(objectMapper.writeValueAsBytes(object));
 		} catch (IOException e) {
-			//todo
 			throw new RuntimeException(e);
 		}
 	}

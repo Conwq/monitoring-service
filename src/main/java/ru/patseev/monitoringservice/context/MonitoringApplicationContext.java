@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.patseev.monitoringservice.controller.AuditController;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.controller.UserController;
-import ru.patseev.monitoringservice.in.extract.ObjectExtractor;
+import ru.patseev.monitoringservice.in.extractor.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
+import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.AuditOperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.MeterOperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.UserOperationManager;
 import ru.patseev.monitoringservice.jwt.JwtService;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.OperationManager;
 import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.Migration;
 import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
@@ -20,6 +23,10 @@ import ru.patseev.monitoringservice.service.UserService;
 import ru.patseev.monitoringservice.service.impl.AuditServiceImpl;
 import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
 import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
+import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
+import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
+import ru.patseev.monitoringservice.service.mapper.UserMapper;
 
 /**
  * The MonitoringApplicationContext class represents the application context for the monitoring service.
@@ -29,12 +36,17 @@ import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
 public class MonitoringApplicationContext {
 
 	private static MonitoringApplicationContext context;
+	private final UserMapper userMapper = UserMapper.instance;
+	private final AuditMapper auditMapper = AuditMapper.instance;
+	private final MeterTypeMapper meterTypeMapper = MeterTypeMapper.instance;
+	private final MeterDataMapper meterDataMapper = MeterDataMapper.instance;
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectExtractor objectExtractor = new ObjectExtractor(objectMapper);
+	private final ResponseGenerator responseGenerator = new ResponseGenerator(objectMapper);
 	private final ResourceManager resourceManager = new ResourceManager("application");
+	private final JwtService jwtService = new JwtService(resourceManager);
 	private final ConnectionManager connectionManager = new ConnectionManager(resourceManager);
 	private final Migration liquibaseMigration = new LiquibaseMigration(connectionManager, resourceManager);
-	private final JwtService jwtService = new JwtService(resourceManager);
-	private final ObjectMapper objectMapper = new ObjectMapper();
-	private final ResponseGenerator responseGenerator = new ResponseGenerator(objectMapper);
 
 	/*
 	 * Repositories
@@ -48,9 +60,9 @@ public class MonitoringApplicationContext {
 	/*
 	 * Services
 	 */
-	private final UserService userService = new UserServiceImpl(userRepository, roleRepository);
-	private final AuditService auditService = new AuditServiceImpl(auditRepository);
-	private final MeterService meterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
+	private final UserService userService = new UserServiceImpl(userRepository, roleRepository, userMapper);
+	private final AuditService auditService = new AuditServiceImpl(auditRepository, auditMapper);
+	private final MeterService meterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository, meterTypeMapper, meterDataMapper);
 
 	/*
 	 * Controllers
@@ -59,9 +71,17 @@ public class MonitoringApplicationContext {
 	private final MeterController meterController = new MeterController(meterService, auditService, jwtService);
 	private final AuditController auditController = new AuditController(auditService, userController, jwtService);
 
-	private final ObjectExtractor objectExtractor = new ObjectExtractor(objectMapper);
-	private final OperationManager operationManager
-			= new OperationManager(meterController, responseGenerator, userController, objectExtractor, auditController);
+	/*
+	 * Operation manager
+	 */
+	private final OperationManager userOperationManager
+			= new UserOperationManager(userController, responseGenerator, objectExtractor);
+
+	private final OperationManager meterOperationManager
+			= new MeterOperationManager(meterController, responseGenerator, objectExtractor);
+
+	private final OperationManager auditOperationManager
+			= new AuditOperationManager(auditController, responseGenerator);
 
 	private MonitoringApplicationContext() {
 	}
@@ -93,8 +113,16 @@ public class MonitoringApplicationContext {
 		return jwtService;
 	}
 
-	public OperationManager getOperationManager() {
-		return operationManager;
+	public OperationManager getUserOperationManager() {
+		return userOperationManager;
+	}
+
+	public OperationManager getMeterOperationManager() {
+		return meterOperationManager;
+	}
+
+	public OperationManager getAuditOperationManager() {
+		return auditOperationManager;
 	}
 
 	public ResponseGenerator getResponseGenerator() {

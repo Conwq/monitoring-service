@@ -51,8 +51,8 @@ class AuditRepositoryTest extends AbstractPostgreSQLContainer {
 				.action(ActionEnum.AUTHORIZATION)
 				.userId(userId).build();
 
-		auditRepository.save(userId, registrationAction);
-		auditRepository.save(userId, logInAction);
+		auditRepository.save(registrationAction);
+		auditRepository.save(logInAction);
 
 		List<UserAction> actual = auditRepository.findUserActionsByUserId(userId);
 

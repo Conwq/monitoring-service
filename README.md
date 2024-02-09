@@ -27,19 +27,28 @@
     User - 'root' 
     Password - '1'
 
+В корне приложения приложен файл JSON с URL по отправке HTTP запросов, сгенерированный с помощью Postman.
+
 ## Технологии
 
 Проект использует следующие технологии:
 
-    - Java 17
-    - Lombok
+    - java 17
+    - lombok
     - JDBC
-    - PostgreSQL
-    - Docker container (для работы Postgres и Testcontainer)
-    - Liquibase
+    - postgreSQL
+    - docker container (для работы postgres и testcontainer)
+    - liquibase
+    - java servlets
+    - jakarta
+    - jackson
+    - JSON Web Token
+    - mapstruct
+    - aspectj
+    - postman
 
     ### Testing ###
-    - Testcontainer
-    - JUnit
-    - AssertJ
-    - Mockito
+    - testcontainer
+    - junit
+    - assertJ
+    - mockito

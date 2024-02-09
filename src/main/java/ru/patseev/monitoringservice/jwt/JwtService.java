@@ -67,7 +67,7 @@ public class JwtService {
 	/**
 	 * Extracts the username from the JWT token.
 	 *
-	 * @param jwt The JWT token from which to extract the username.
+	 * @param jwt The JWT token from which to extractor the username.
 	 * @return The extracted username.
 	 */
 	public String extractUsername(String jwt) {
@@ -77,7 +77,7 @@ public class JwtService {
 	/**
 	 * Extracts the player ID from the JWT token.
 	 *
-	 * @param jwt The JWT token from which to extract the player ID.
+	 * @param jwt The JWT token from which to extractor the player ID.
 	 * @return The extracted player ID.
 	 */
 	public int extractPlayerId(String jwt) {
@@ -87,7 +87,7 @@ public class JwtService {
 	/**
 	 * Extracts the role from the JWT token.
 	 *
-	 * @param jwt The JWT token from which to extract the role.
+	 * @param jwt The JWT token from which to extractor the role.
 	 * @return The extracted role.
 	 */
 	public String extractRole(String jwt) {
@@ -97,7 +97,7 @@ public class JwtService {
 	/**
 	 * Extracts a specific claim from the provided JWT token.
 	 *
-	 * @param jwt           The JWT token from which to extract the claim.
+	 * @param jwt           The JWT token from which to extractor the claim.
 	 * @param claimsResolver The function to resolve the desired claim from the JWT claims.
 	 * @param <T>           The type of the extracted claim.
 	 * @return The extracted claim.
@@ -110,7 +110,7 @@ public class JwtService {
 	/**
 	 * Extracts all claims from the provided JWT token.
 	 *
-	 * @param jwt The JWT token from which to extract all claims.
+	 * @param jwt The JWT token from which to extractor all claims.
 	 * @return The claims extracted from the JWT token.
 	 */
 	private Claims extractAllClaims(String jwt) {

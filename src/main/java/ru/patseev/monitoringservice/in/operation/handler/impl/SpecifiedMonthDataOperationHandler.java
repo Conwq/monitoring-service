@@ -1,20 +1,20 @@
-package ru.patseev.monitoringservice.in.operation.impl;
+package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
-import ru.patseev.monitoringservice.in.operation.OperationHandler;
+import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 
 import java.util.List;
 
 /**
- * The RetrievingAllUserMeterDataOperationHandler class handles the operation of retrieving all user meter data.
+ * The SpecifiedMonthDataOperationHandler class handles the operation of retrieving meter data for a specified month.
  */
 @RequiredArgsConstructor
-public class RetrievingUserMeterDataOperationHandler implements OperationHandler {
+public class SpecifiedMonthDataOperationHandler implements OperationHandler {
 
 	/** The meter controller for managing meter-related operations. */
 	private final MeterController meterController;
@@ -23,7 +23,7 @@ public class RetrievingUserMeterDataOperationHandler implements OperationHandler
 	private final ResponseGenerator responseGenerator;
 
 	/**
-	 * Handles the operation of retrieving all user meter data.
+	 * Handles the operation of retrieving meter data for a specified month.
 	 *
 	 * @param req  The HTTP servlet request.
 	 * @param resp The HTTP servlet response.
@@ -31,7 +31,8 @@ public class RetrievingUserMeterDataOperationHandler implements OperationHandler
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
 		String jwtToken = req.getHeader("Authorization");
-		List<DataMeterDto> userDataMeter = meterController.getMeterDataForUser(jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, userDataMeter);
+		String month = req.getParameter("month");
+		List<DataMeterDto> meterDataForSpecifiedMonth = meterController.getMeterDataForSpecifiedMonth(jwtToken, month);
+		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, meterDataForSpecifiedMonth);
 	}
 }

@@ -6,13 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.controller.AuditController;
-import ru.patseev.monitoringservice.controller.MeterController;
-import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.in.extract.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
-import ru.patseev.monitoringservice.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
+import ru.patseev.monitoringservice.in.operation.manager.impl.AuditOperationManager;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -37,13 +35,9 @@ class AuditServletTest {
 		req = mock(HttpServletRequest.class);
 		resp = mock(HttpServletResponse.class);
 		auditController = mock(AuditController.class);
-
-		ObjectExtractor objectExtractor = mock(ObjectExtractor.class);
-		UserController userController = mock(UserController.class);
 		responseGenerator = mock(ResponseGenerator.class);
-		MeterController meterController = mock(MeterController.class);
 		OperationManager operationManager
-				= new OperationManager(meterController, responseGenerator, userController, objectExtractor, auditController);
+				= new AuditOperationManager(auditController, responseGenerator);
 
 		auditServlet = new AuditServlet(operationManager);
 	}

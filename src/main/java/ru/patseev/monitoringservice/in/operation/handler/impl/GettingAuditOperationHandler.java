@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.in.operation.impl;
+package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.AuditController;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
-import ru.patseev.monitoringservice.in.operation.OperationHandler;
+import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 
 import java.util.List;
 

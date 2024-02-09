@@ -1,19 +1,18 @@
-package ru.patseev.monitoringservice.in.operation.impl;
+package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
-import ru.patseev.monitoringservice.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.in.operation.OperationHandler;
+import ru.patseev.monitoringservice.dto.DataMeterDto;
+import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
-import java.util.List;
 
 /**
- * The GettingAllMeterTypesOperationHandler class handles the operation of retrieving all meter types.
+ * The ObtainingLatestRelevantDataOperationHandler class handles the operation of obtaining the latest relevant data.
  */
 @RequiredArgsConstructor
-public class GettingAllMeterTypesOperationHandler implements OperationHandler {
+public class ObtainingLatestDataMeterOperationHandler implements OperationHandler {
 
 	/** The meter controller for managing meter-related operations. */
 	private final MeterController meterController;
@@ -22,7 +21,7 @@ public class GettingAllMeterTypesOperationHandler implements OperationHandler {
 	private final ResponseGenerator responseGenerator;
 
 	/**
-	 * Handles the operation of retrieving all meter types.
+	 * Handles the operation of obtaining the latest relevant data.
 	 *
 	 * @param req  The HTTP servlet request.
 	 * @param resp The HTTP servlet response.
@@ -30,8 +29,7 @@ public class GettingAllMeterTypesOperationHandler implements OperationHandler {
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
 		String jwtToken = req.getHeader("Authorization");
-
-		List<MeterTypeDto> availableMeterType = meterController.getAvailableMeterType(jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, availableMeterType);
+		DataMeterDto currentMeterData = meterController.getLatestMeterData(jwtToken);
+		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, currentMeterData);
 	}
 }

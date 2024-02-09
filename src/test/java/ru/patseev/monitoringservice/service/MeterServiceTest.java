@@ -15,6 +15,8 @@ import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
+import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -44,7 +46,10 @@ class MeterServiceTest {
 	static void setUp() {
 		dataMeterRepository = mock(DataMeterRepository.class);
 		meterTypeRepository = mock(MeterTypeRepository.class);
-		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
+		MeterTypeMapper meterTypeMapper = MeterTypeMapper.instance;
+		MeterDataMapper meterDataMapper = MeterDataMapper.instance;
+
+		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository, meterTypeMapper, meterDataMapper);
 	}
 
 	@BeforeEach
@@ -94,19 +99,9 @@ class MeterServiceTest {
 	@Test
 	@DisplayName("saveDataMeter should save data meter in db")
 	void saveDataMeter_shouldSaveData() {
-		DataMeter test =
-				new DataMeter(
-						null, //при сохранении в бд у меня еще нету id
-						Timestamp.valueOf(LocalDate.now().atStartOfDay()),
-						dataMeterDto.value(),
-						dataMeterDto.meterTypeId(),
-						userDto.userId()
-				);
-
 		dataMeterService.saveDataMeter(userDto.userId(), dataMeterDto);
 
-		//todo
-		verify(dataMeterRepository, Mockito.times(1))
+		verify(dataMeterRepository)
 				.saveDataMeter(any(DataMeter.class));
 	}
 

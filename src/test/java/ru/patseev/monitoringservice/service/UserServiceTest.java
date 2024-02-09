@@ -26,7 +26,6 @@ class UserServiceTest {
 	private static UserRepository userRepository;
 	private static RoleRepository roleRepository;
 	private static UserService userService;
-	private static UserMapper userMapper;
 
 	private UserDto userDto;
 	private User user;
@@ -36,9 +35,10 @@ class UserServiceTest {
 	public static void setUp() {
 		userRepository = mock(UserRepository.class);
 		roleRepository = mock(RoleRepository.class);
-		userMapper = mock(UserMapper.class);
 
-		userService = new UserServiceImpl(userRepository, roleRepository);
+		UserMapper userMapper = UserMapper.instance;
+
+		userService = new UserServiceImpl(userRepository, roleRepository, userMapper);
 	}
 
 	@BeforeEach

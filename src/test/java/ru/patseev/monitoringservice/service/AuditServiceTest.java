@@ -13,6 +13,7 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.service.impl.AuditServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -35,7 +36,9 @@ class AuditServiceTest {
 	@BeforeAll
 	static void setUp() {
 		auditRepository = mock(AuditRepository.class);
-		auditService = new AuditServiceImpl(auditRepository);
+		AuditMapper auditMapper = AuditMapper.instance;
+
+		auditService = new AuditServiceImpl(auditRepository, auditMapper);
 	}
 
 	@BeforeEach
@@ -49,7 +52,7 @@ class AuditServiceTest {
 		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto.userId());
 
 		verify(auditRepository, times(1))
-				.save(anyInt(), any(UserAction.class));
+				.save(any(UserAction.class));
 	}
 
 	@Test

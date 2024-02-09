@@ -26,13 +26,13 @@ public class AuditRepositoryImpl implements AuditRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(int userId, UserAction userAction) {
+	public void save(UserAction userAction) {
 		Connection connection = null;
 		try {
 			connection = connectionManager.takeConnection();
 			connection.setAutoCommit(false);
 
-			saveUserActionWithTransaction(userId, userAction, connection);
+			saveUserActionWithTransaction(userAction, connection);
 
 			connection.commit();
 		} catch (SQLException e) {
@@ -69,18 +69,17 @@ public class AuditRepositoryImpl implements AuditRepository {
 	/**
 	 * Stores the user action within a transaction in the database.
 	 *
-	 * @param userId     The ID of the user associated with the action.
 	 * @param userAction The UserAction object to be saved.
 	 * @param connection The database connection to be used.
 	 * @throws SQLException If an exception occurs during database operations.
 	 */
-	private void saveUserActionWithTransaction(int userId, UserAction userAction, Connection connection) throws SQLException {
+	private void saveUserActionWithTransaction(UserAction userAction, Connection connection) throws SQLException {
 		final String insertAuditSQL = "INSERT INTO monitoring_service.actions (action_at, action, user_id) VALUES (?, ?, ?)";
 
 		try (PreparedStatement statement = connection.prepareStatement(insertAuditSQL)) {
 			statement.setTimestamp(1, userAction.getActionAt());
 			statement.setString(2, userAction.getAction().name());
-			statement.setInt(3, userId);
+			statement.setInt(3, userAction.getUserId());
 			statement.executeUpdate();
 		}
 	}
