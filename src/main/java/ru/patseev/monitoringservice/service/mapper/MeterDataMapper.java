@@ -41,7 +41,9 @@ public interface MeterDataMapper {
 	 * @param meterType The MeterType object containing meter type information.
 	 * @return The DataMeterDto object.
 	 */
-	@Mapping(target = "meterTypeName", source = "meterType.typeName")
-	@Mapping(target = "meterTypeId", source = "meterType.meterTypeId")
+	@Mappings({
+			@Mapping(target = "meterTypeName", source = "meterType.typeName"),
+			@Mapping(target = "meterTypeId", source = "meterType.meterTypeId")
+	})
 	DataMeterDto toDto(DataMeter dataMeter, MeterType meterType);
 }

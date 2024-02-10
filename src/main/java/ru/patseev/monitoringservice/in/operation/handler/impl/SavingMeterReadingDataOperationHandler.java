@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
+import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
 import ru.patseev.monitoringservice.in.extractor.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
@@ -44,14 +45,18 @@ public class SavingMeterReadingDataOperationHandler implements OperationHandler 
 	 */
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
-		String jwtToken = req.getHeader("Authorization");
-		DataMeterDto dataMeterDto = objectExtractor.extractObject(req, DataMeterDto.class);
-		if (!dataMeterDtoValidator.validate(dataMeterDto)) {
-			responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
-			return;
-		}
+		try {
+			String jwtToken = req.getHeader("Authorization");
+			DataMeterDto dataMeterDto = objectExtractor.extractObject(req, DataMeterDto.class);
+			if (!dataMeterDtoValidator.validate(dataMeterDto)) {
+				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
+				return;
+			}
 
-		meterController.saveMeterData(jwtToken, dataMeterDto);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, "Meter reading data sent");
+			meterController.saveMeterData(jwtToken, dataMeterDto);
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, "Meter reading data sent");
+		} catch (MeterDataWasSubmittedException e) {
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_CONFLICT, e.getMessage());
+		}
 	}
 }

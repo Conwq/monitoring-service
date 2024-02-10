@@ -49,4 +49,13 @@ public interface DataMeterRepository {
 	 * @return A map containing user ID as the key and a list of DataMeter as the value.
 	 */
 	Map<Integer, List<DataMeter>> getDataFromAllMeterUsers();
+
+	/**
+	 * Checks if meter data has been submitted for the current month for the specified user and meter type.
+	 *
+	 * @param userId     The ID of the user for whom to check the meter data.
+	 * @param meterTypeId The ID of the meter type for which to check the meter data.
+	 * @return {@code true} if meter data has been submitted for the current month, {@code false} otherwise.
+	 */
+	boolean checkMeterDataForCurrentMonth(int userId, int meterTypeId);
 }

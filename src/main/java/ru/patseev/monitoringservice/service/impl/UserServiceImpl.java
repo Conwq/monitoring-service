@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto saveUser(UserDto userDto) {
 		if (userRepository.existUserByUsername(userDto.username())) {
-			throw new UserAlreadyExistException("User with this username already exists.");
+			throw new UserAlreadyExistException("User with this username already exists");
 		}
 
 		User user = userMapper.toEntity(userDto);
@@ -58,10 +58,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())
-				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
+				.orElseThrow(() -> new UserNotFoundException("User is not found"));
 
 		if (!user.getPassword().equals(userDto.password())) {
-			throw new UserNotFoundException("Пользователь не найден.");
+			throw new UserNotFoundException("User is not found");
 		}
 
 		Role role = roleRepository.getRoleById(user.getRoleId());
@@ -85,6 +85,6 @@ public class UserServiceImpl implements UserService {
 					RoleEnum roleEnum = RoleEnum.valueOf(role.getRoleName());
 					return userMapper.toDto(user, roleEnum);
 				})
-				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
+				.orElseThrow(() -> new UserNotFoundException("User is not found"));
 	}
 }

@@ -5,8 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
-import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
+import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
+import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 
 /**
  * The ObtainingLatestRelevantDataOperationHandler class handles the operation of obtaining the latest relevant data.
@@ -14,10 +15,14 @@ import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 @RequiredArgsConstructor
 public class ObtainingLatestDataMeterOperationHandler implements OperationHandler {
 
-	/** The meter controller for managing meter-related operations. */
+	/**
+	 * The meter controller for managing meter-related operations.
+	 */
 	private final MeterController meterController;
 
-	/** The response generator for generating HTTP responses. */
+	/**
+	 * The response generator for generating HTTP responses.
+	 */
 	private final ResponseGenerator responseGenerator;
 
 	/**
@@ -28,8 +33,12 @@ public class ObtainingLatestDataMeterOperationHandler implements OperationHandle
 	 */
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
-		String jwtToken = req.getHeader("Authorization");
-		DataMeterDto currentMeterData = meterController.getLatestMeterData(jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, currentMeterData);
+		try {
+			String jwtToken = req.getHeader("Authorization");
+			DataMeterDto currentMeterData = meterController.getLatestMeterData(jwtToken);
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, currentMeterData);
+		} catch (DataMeterNotFoundException e) {
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+		}
 	}
 }

@@ -6,12 +6,13 @@ import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
+import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.MeterService;
+import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
+import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,27 @@ public class MeterServiceImpl implements MeterService {
 	private final MeterTypeRepository meterTypeRepository;
 
 	/**
+	 * The MeterTypeMapper is responsible for mapping between MeterType entities and MeterTypeDto DTOs.
+	 */
+	private final MeterTypeMapper meterTypeMapper;
+
+	/**
+	 * The MeterDataMapper is responsible for mapping between DataMeter entities and DataMeterDto DTOs.
+	 */
+	private final MeterDataMapper meterDataMapper;
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public DataMeterDto getCurrentDataMeter(int userId) {
 		return dataMeterRepository.findLastDataMeter(userId)
-				.map(this::toDto)
-				.orElseThrow(() -> new DataMeterNotFoundException("Данные счетчика не найдены."));
+				.map(dataMeter -> {
+					MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
+					return meterDataMapper.toDto(dataMeter, meterType);
+				})
+				.orElseThrow(() -> new DataMeterNotFoundException("Data meter not found"));
 	}
 
 	/**
@@ -48,7 +63,13 @@ public class MeterServiceImpl implements MeterService {
 	 */
 	@Override
 	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) {
-		DataMeter dataMeter = toEntity(userId, dataMeterDto);
+		boolean meterDataSubmitted = dataMeterRepository.checkMeterDataForCurrentMonth(userId, dataMeterDto.meterTypeId());
+		System.out.println(meterDataSubmitted);
+		if (meterDataSubmitted) {
+			throw new MeterDataWasSubmittedException("Meter data submitted for the current month");
+		}
+
+		DataMeter dataMeter = meterDataMapper.toEntity(userId, dataMeterDto);
 		dataMeterRepository.saveDataMeter(dataMeter);
 	}
 
@@ -60,7 +81,10 @@ public class MeterServiceImpl implements MeterService {
 		return dataMeterRepository
 				.getMeterDataForSpecifiedMonth(userId, month)
 				.stream()
-				.map(this::toDto)
+				.map(dataMeter -> {
+					MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
+					return meterDataMapper.toDto(dataMeter, meterType);
+				})
 				.collect(Collectors.toList());
 	}
 
@@ -68,7 +92,7 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<DataMeterDto> getAllMeterData(int userId) {
+	public List<DataMeterDto> getUserMeterData(int userId) {
 		List<DataMeter> allMeterData = dataMeterRepository.getAllMeterData(userId);
 
 		if (allMeterData.isEmpty()) {
@@ -76,7 +100,10 @@ public class MeterServiceImpl implements MeterService {
 		}
 
 		return allMeterData.stream()
-				.map(this::toDto)
+				.map(dataMeter -> {
+					MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
+					return meterDataMapper.toDto(dataMeter, meterType);
+				})
 				.toList();
 	}
 
@@ -95,7 +122,14 @@ public class MeterServiceImpl implements MeterService {
 				.entrySet()
 				.stream()
 				.collect(Collectors.toMap(integerListEntry -> String.valueOf(integerListEntry.getKey()),
-						entry -> entry.getValue().stream().map(this::toDto).collect(Collectors.toList())
+						entry -> entry
+								.getValue()
+								.stream()
+								.map(dataMeter -> {
+									MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
+									return meterDataMapper.toDto(dataMeter, meterType);
+								})
+								.collect(Collectors.toList())
 				));
 	}
 
@@ -106,7 +140,7 @@ public class MeterServiceImpl implements MeterService {
 	public List<MeterTypeDto> getAvailableMeterType() {
 		return meterTypeRepository.findAllMeterType()
 				.stream()
-				.map(this::toDto)
+				.map(meterTypeMapper::toDto)
 				.collect(Collectors.toList());
 	}
 
@@ -115,59 +149,7 @@ public class MeterServiceImpl implements MeterService {
 	 */
 	@Override
 	public void saveMeterType(MeterTypeDto meterTypeDto) {
-		MeterType meterType = toEntity(meterTypeDto);
+		MeterType meterType = meterTypeMapper.toEntity(meterTypeDto);
 		meterTypeRepository.saveMeterType(meterType);
-	}
-
-	/**
-	 * Converts a MeterTypeDto object to a corresponding MeterType entity.
-	 *
-	 * @param meterTypeDto The MeterTypeDto object to be converted.
-	 * @return The MeterType entity.
-	 */
-	private MeterType toEntity(MeterTypeDto meterTypeDto) {
-		return new MeterType(meterTypeDto.meterTypeId(), meterTypeDto.typeName());
-	}
-
-	/**
-	 * Converts a MeterType entity to a corresponding MeterTypeDto object.
-	 *
-	 * @param meterType The MeterType entity to be converted.
-	 * @return The MeterTypeDto object.
-	 */
-	private MeterTypeDto toDto(MeterType meterType) {
-		return new MeterTypeDto(meterType.getMeterTypeId(), meterType.getTypeName());
-	}
-
-	/**
-	 * Converts a DataMeter entity to a corresponding DataMeterDto object.
-	 *
-	 * @param dataMeter The DataMeter entity to be converted.
-	 * @return The DataMeterDto object.
-	 */
-	private DataMeterDto toDto(DataMeter dataMeter) {
-		MeterType meterType = meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId());
-
-		return new DataMeterDto(
-				dataMeter.getSubmissionDate(),
-				dataMeter.getValue(),
-				meterType.getMeterTypeId(),
-				meterType.getTypeName()
-		);
-	}
-
-	/**
-	 * Converts a DataMeterDto object to a corresponding DataMeter entity.
-	 *
-	 * @param dto The DataMeterDto to be converted.
-	 * @return The DataMeter entity.
-	 */
-	private DataMeter toEntity(int userId, DataMeterDto dto) {
-		return DataMeter.builder()
-				.submissionDate(Timestamp.from(Instant.now()))
-				.value(dto.value())
-				.meterTypeId(dto.meterTypeId())
-				.userId(userId)
-				.build();
 	}
 }

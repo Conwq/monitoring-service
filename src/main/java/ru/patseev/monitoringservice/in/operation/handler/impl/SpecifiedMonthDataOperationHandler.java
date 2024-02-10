@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
-import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
+import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 
 import java.util.List;
 
@@ -16,10 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpecifiedMonthDataOperationHandler implements OperationHandler {
 
-	/** The meter controller for managing meter-related operations. */
+	/**
+	 * The meter controller for managing meter-related operations.
+	 */
 	private final MeterController meterController;
 
-	/** The response generator for generating HTTP responses. */
+	/**
+	 * The response generator for generating HTTP responses.
+	 */
 	private final ResponseGenerator responseGenerator;
 
 	/**

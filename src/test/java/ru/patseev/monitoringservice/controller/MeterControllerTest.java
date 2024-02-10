@@ -102,7 +102,7 @@ class MeterControllerTest {
 	void getMeterDataForUser_shouldReturnData() {
 		when(jwtService.extractPlayerId(anyString()))
 				.thenReturn(userDto.userId());
-		when(dataMeterService.getAllMeterData(userDto.userId()))
+		when(dataMeterService.getUserMeterData(userDto.userId()))
 				.thenReturn(dataMeterDtoList);
 
 		List<DataMeterDto> actual = dataMeterController.getMeterDataForUser("auth_token");

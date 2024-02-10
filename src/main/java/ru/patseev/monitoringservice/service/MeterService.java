@@ -42,7 +42,7 @@ public interface MeterService {
 	 * @param userId The ID of the user for whom all data meter readings are requested.
 	 * @return A list of data meter readings as DataMeterDto objects.
 	 */
-	List<DataMeterDto> getAllMeterData(int userId);
+	List<DataMeterDto> getUserMeterData(int userId);
 
 	/**
 	 * Retrieves data from all meter users.

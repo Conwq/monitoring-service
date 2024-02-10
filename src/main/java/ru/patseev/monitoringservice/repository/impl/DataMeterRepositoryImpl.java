@@ -145,6 +145,36 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean checkMeterDataForCurrentMonth(int userId, int meterTypeId) {
+		final String checkMonthlyMeterData = """
+				SELECT COUNT(*) FROM monitoring_service.meters_data
+				WHERE user_id = ?
+				AND meter_type_id = ?
+				AND EXTRACT(MONTH FROM submission_date) = EXTRACT(MONTH FROM current_date)
+				""";
+
+		boolean dataExists = false;
+
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(checkMonthlyMeterData)) {
+
+			statement.setInt(1, userId);
+			statement.setInt(2, meterTypeId);
+
+			try (ResultSet resultSet = statement.executeQuery()) {
+				resultSet.next();
+				dataExists = resultSet.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			System.err.println("Operation error");
+		}
+		return dataExists;
+	}
+
+	/**
 	 * Stores the DataMeter within a transaction in the database.
 	 *
 	 * @param connection The database connection to use for the transaction.

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.AuditController;
 import ru.patseev.monitoringservice.dto.UserActionDto;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 
@@ -34,10 +35,14 @@ public class GettingAuditOperationHandler implements OperationHandler {
 	 */
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
-		String jwtToken = req.getHeader("Authorization");
-		String username = req.getParameter("username");
+		try {
+			String jwtToken = req.getHeader("Authorization");
+			String username = req.getParameter("username");
 
-		List<UserActionDto> listOfUserActions = auditController.getListOfUserActions(username, jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, listOfUserActions);
+			List<UserActionDto> listOfUserActions = auditController.getListOfUserActions(username, jwtToken);
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, listOfUserActions);
+		} catch (UserNotFoundException e) {
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+		}
 	}
 }

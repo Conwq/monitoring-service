@@ -84,7 +84,7 @@ public class MeterController {
 	public List<DataMeterDto> getMeterDataForUser(String jwtToken) {
 		int userId = jwtService.extractPlayerId(jwtToken);
 
-		List<DataMeterDto> allMeterDataByUsername = meterService.getAllMeterData(userId);
+		List<DataMeterDto> allMeterDataByUsername = meterService.getUserMeterData(userId);
 		auditService.saveUserAction(ActionEnum.GET_METER_DATA_FOR_USER, userId);
 		return allMeterDataByUsername;
 	}

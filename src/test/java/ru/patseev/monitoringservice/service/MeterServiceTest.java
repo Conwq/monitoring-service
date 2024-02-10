@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -19,7 +18,6 @@ import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
 import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -126,7 +124,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto.userId());
+		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -138,7 +136,7 @@ class MeterServiceTest {
 		when(dataMeterRepository.getAllMeterData(userDto.userId()))
 				.thenReturn(Collections.emptyList());
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto.userId());
+		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual.size())
 				.isEqualTo(0);

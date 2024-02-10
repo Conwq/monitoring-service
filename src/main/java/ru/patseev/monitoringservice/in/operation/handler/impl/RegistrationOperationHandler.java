@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.in.extractor.ObjectExtractor;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
@@ -44,15 +45,19 @@ public class RegistrationOperationHandler implements OperationHandler {
 	 */
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp) {
-		UserDto userDto = objectExtractor.extractObject(req, UserDto.class);
+		try {
+			UserDto userDto = objectExtractor.extractObject(req, UserDto.class);
 
-		if (!userDtoValidator.validate(userDto)) {
-			responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "The data is not valid");
-			return;
+			if (!userDtoValidator.validate(userDto)) {
+				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "The data is not valid");
+				return;
+			}
+			String jwtToken = userController.saveUser(userDto);
+
+			resp.setHeader("Authorization", jwtToken);
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, jwtToken);
+		} catch (UserAlreadyExistException e) {
+			responseGenerator.generateResponse(resp, HttpServletResponse.SC_CONFLICT, e.getMessage());
 		}
-		String jwtToken = userController.saveUser(userDto);
-
-		resp.setHeader("Authorization", jwtToken);
-		responseGenerator.generateResponse(resp, HttpServletResponse.SC_OK, jwtToken);
 	}
 }
