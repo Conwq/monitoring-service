@@ -65,7 +65,7 @@ public class AddingNewMeterTypeOperationHandler implements OperationHandler {
 			String jwtToken = req.getHeader("Authorization");
 			MeterTypeDto meterTypeDto = objectExtractor.extractObject(req, MeterTypeDto.class);
 
-			if (!meterTypeDtoValidator.validate(meterTypeDto)) {
+			if (meterTypeDtoValidator.validate(meterTypeDto)) {
 				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
 				return;
 			}

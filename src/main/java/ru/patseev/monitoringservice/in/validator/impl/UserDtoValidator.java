@@ -19,9 +19,9 @@ public class UserDtoValidator implements Validator<UserDto> {
 		String username = userDto.username();
 		String password = userDto.password();
 
-		return username.length() > 0 &&
-				!username.isBlank() &&
-				password.length() > 0 &&
-				!password.isBlank();
+		return username.length() == 0 ||
+				username.isBlank() ||
+				password.length() == 0 ||
+				password.isBlank();
 	}
 }

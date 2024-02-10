@@ -64,7 +64,7 @@ public class AuthorizationOperationHandler implements OperationHandler {
 		try {
 			UserDto userDto = objectExtractor.extractObject(req, UserDto.class);
 
-			if (!userDtoValidator.validate(userDto)) {
+			if (userDtoValidator.validate(userDto)) {
 				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "The data is not valid");
 				return;
 			}

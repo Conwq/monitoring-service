@@ -16,8 +16,8 @@ public class MeterTypeValidator implements Validator<MeterTypeDto> {
 	 */
 	@Override
 	public boolean validate(MeterTypeDto meterTypeDto) {
-		return meterTypeDto != null &&
-				meterTypeDto.typeName() != null &&
-				meterTypeDto.typeName().trim().length() > 4;
+		return meterTypeDto == null ||
+				meterTypeDto.typeName() == null ||
+				meterTypeDto.typeName().trim().length() <= 4;
 	}
 }

@@ -16,6 +16,6 @@ public class MeterDataValidator implements Validator<DataMeterDto> {
 	 */
 	@Override
 	public boolean validate(DataMeterDto dataMeterDto) {
-		return dataMeterDto != null && dataMeterDto.value() > 0;
+		return dataMeterDto == null || dataMeterDto.value() <= 0;
 	}
 }

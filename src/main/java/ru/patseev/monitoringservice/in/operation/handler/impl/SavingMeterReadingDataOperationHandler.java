@@ -64,7 +64,7 @@ public class SavingMeterReadingDataOperationHandler implements OperationHandler 
 		try {
 			String jwtToken = req.getHeader("Authorization");
 			DataMeterDto dataMeterDto = objectExtractor.extractObject(req, DataMeterDto.class);
-			if (!dataMeterDtoValidator.validate(dataMeterDto)) {
+			if (dataMeterDtoValidator.validate(dataMeterDto)) {
 				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
 				return;
 			}
