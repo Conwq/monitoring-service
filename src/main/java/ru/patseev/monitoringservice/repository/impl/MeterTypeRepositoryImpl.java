@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
@@ -12,15 +11,22 @@ import java.util.List;
 
 /**
  * The MeterTypeRepositoryImpl class is an implementation of the MeterTypeRepository interface.
- * It provides methods for interacting with meter type data storage.
  */
-@RequiredArgsConstructor
 public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
+
+	/**
+	 * Constructs an MeterTypeRepositoryImpl object with the provided ConnectionManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 */
+	public MeterTypeRepositoryImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -85,6 +91,25 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 			System.err.println("Operation error");
 		}
 		return meterType;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean checkMeterTypeExistence(String typeName) {
+		final String selectMeterTypeSql = "SELECT * FROM monitoring_service.meter_types WHERE type_name = ?";
+		boolean meterTypeExistence = false;
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectMeterTypeSql)) {
+			statement.setString(1, typeName);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				meterTypeExistence = resultSet.next();
+			}
+		} catch (SQLException e) {
+			System.err.println("Operation error");
+		}
+		return meterTypeExistence;
 	}
 
 	/**

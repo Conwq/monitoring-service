@@ -67,8 +67,8 @@ public class MonitoringApplicationContext {
 	/*
 	 * Controllers
 	 */
-	private final UserController userController = new UserController(userService, auditService, jwtService);
-	private final MeterController meterController = new MeterController(meterService, auditService, jwtService);
+	private final UserController userController = new UserController(userService, jwtService);
+	private final MeterController meterController = new MeterController(meterService, jwtService);
 	private final AuditController auditController = new AuditController(auditService, userController, jwtService);
 
 	/*

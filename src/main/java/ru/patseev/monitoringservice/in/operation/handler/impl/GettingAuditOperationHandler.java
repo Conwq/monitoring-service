@@ -2,7 +2,6 @@ package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.AuditController;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -14,7 +13,6 @@ import java.util.List;
 /**
  * Operation handler for retrieving audit-related data.
  */
-@RequiredArgsConstructor
 public class GettingAuditOperationHandler implements OperationHandler {
 
 	/**
@@ -26,6 +24,17 @@ public class GettingAuditOperationHandler implements OperationHandler {
 	 * AuditController used for handling audit-related operations.
 	 */
 	private final AuditController auditController;
+
+	/**
+	 * Constructs a GettingAuditOperationHandler object with the provided dependencies.
+	 *
+	 * @param responseGenerator The ResponseGenerator instance used for generating HTTP responses.
+	 * @param auditController   The AuditController instance used for audit-related operations.
+	 */
+	public GettingAuditOperationHandler(ResponseGenerator responseGenerator, AuditController auditController) {
+		this.responseGenerator = responseGenerator;
+		this.auditController = auditController;
+	}
 
 	/**
 	 * Handles the incoming HTTP request to retrieve audit-related data.

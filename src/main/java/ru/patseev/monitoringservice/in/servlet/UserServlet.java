@@ -4,7 +4,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import ru.patseev.monitoringservice.context.MonitoringApplicationContext;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
@@ -13,10 +12,11 @@ import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
  * The UserServlet class handles HTTP POST requests related to user operations.
  */
 @WebServlet("/users")
-@AllArgsConstructor
 public class UserServlet extends HttpServlet {
 
-	/** The operation manager responsible for choosing the appropriate operation handler. */
+	/**
+	 * The operation manager responsible for choosing the appropriate operation handler.
+	 */
 	private final OperationManager operationManager;
 
 	/**
@@ -24,6 +24,15 @@ public class UserServlet extends HttpServlet {
 	 */
 	public UserServlet() {
 		this.operationManager = MonitoringApplicationContext.getContext().getUserOperationManager();
+	}
+
+	/**
+	 * Constructs a UserServlet object with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager instance to be used by the UserServlet.
+	 */
+	public UserServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
 	}
 
 	/**

@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 class MeterControllerTest {
 
 	private static MeterService dataMeterService;
-	private static AuditService auditService;
 	private static JwtService jwtService;
 	private static MeterController dataMeterController;
 
@@ -38,9 +37,8 @@ class MeterControllerTest {
 	@BeforeAll
 	static void setUp() {
 		dataMeterService = mock(MeterService.class);
-		auditService = mock(AuditService.class);
 		jwtService = mock(JwtService.class);
-		dataMeterController = new MeterController(dataMeterService, auditService, jwtService);
+		dataMeterController = new MeterController(dataMeterService, jwtService);
 	}
 
 	@BeforeEach
@@ -64,8 +62,6 @@ class MeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_LATEST_METER_DATA, userDto.userId());
 	}
 
 	@Test
@@ -75,10 +71,8 @@ class MeterControllerTest {
 				.thenReturn(userDto.userId());
 		dataMeterController.saveMeterData("auth_token", dataMeterDto);
 
-		verify(dataMeterService, times(1))
+		verify(dataMeterService)
 				.saveDataMeter(userDto.userId(), dataMeterDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.SAVE_METER_DATA, userDto.userId());
 	}
 
 	@Test
@@ -93,8 +87,6 @@ class MeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDtoList);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_METER_DATA_FOR_SPECIFIED_MONTH, userDto.userId());
 	}
 
 	@Test
@@ -109,8 +101,6 @@ class MeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDtoList);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_METER_DATA_FOR_USER, userDto.userId());
 	}
 
 	@Test
@@ -128,8 +118,6 @@ class MeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(expected);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_DATA_FROM_ALL_METER_USER, userDto.userId());
 	}
 
 	@Test
@@ -144,8 +132,6 @@ class MeterControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(List.of(meterTypeDto));
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_AVAILABLE_METER_TYPE, userDto.userId());
 	}
 
 	@Test
@@ -156,9 +142,7 @@ class MeterControllerTest {
 
 		dataMeterController.addNewMeterType("token", meterTypeDto);
 
-		verify(dataMeterService, times(1))
+		verify(dataMeterService)
 				.saveMeterType(meterTypeDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.ADD_NEW_METER_TYPE, userDto.userId());
 	}
 }

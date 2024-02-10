@@ -30,4 +30,12 @@ public interface MeterTypeRepository {
 	 * @return The MeterType object representing the meter type with the specified ID,or null if not found.
 	 */
 	MeterType getMeterTypeById(int meterTypeId);
+
+	/**
+	 * Checks the existence of a meter type with the specified type name.
+	 *
+	 * @param typeName the name of the meter type to check for existence
+	 * @return true if a meter type with the specified type name exists; false otherwise
+	 */
+	boolean checkMeterTypeExistence(String typeName);
 }

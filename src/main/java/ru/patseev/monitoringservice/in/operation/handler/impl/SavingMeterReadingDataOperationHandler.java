@@ -2,7 +2,6 @@ package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
@@ -14,7 +13,6 @@ import ru.patseev.monitoringservice.in.validator.Validator;
 /**
  * The SavingMeterReadingDataOperationHandler class handles the operation of saving meter reading data.
  */
-@RequiredArgsConstructor
 public class SavingMeterReadingDataOperationHandler implements OperationHandler {
 
 	/**
@@ -36,6 +34,24 @@ public class SavingMeterReadingDataOperationHandler implements OperationHandler 
 	 * The validator for validating DataMeterDto objects.
 	 */
 	private final Validator<DataMeterDto> dataMeterDtoValidator;
+
+	/**
+	 * Constructs a SavingMeterReadingDataOperationHandler object with the provided dependencies.
+	 *
+	 * @param meterController       The MeterController instance used for handling meter-related operations.
+	 * @param responseGenerator     The ResponseGenerator instance used for generating HTTP responses.
+	 * @param objectExtractor       The ObjectExtractor instance used for extracting objects from HTTP requests.
+	 * @param dataMeterDtoValidator The Validator instance used for validating DataMeterDto objects.
+	 */
+	public SavingMeterReadingDataOperationHandler(MeterController meterController,
+												  ResponseGenerator responseGenerator,
+												  ObjectExtractor objectExtractor,
+												  Validator<DataMeterDto> dataMeterDtoValidator) {
+		this.meterController = meterController;
+		this.responseGenerator = responseGenerator;
+		this.objectExtractor = objectExtractor;
+		this.dataMeterDtoValidator = dataMeterDtoValidator;
+	}
 
 	/**
 	 * Handles the operation of saving meter reading data.

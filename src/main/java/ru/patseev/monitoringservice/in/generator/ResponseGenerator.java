@@ -3,20 +3,27 @@ package ru.patseev.monitoringservice.in.generator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 
 /**
  * The ResponseGenerator class generates HTTP responses.
  */
-@RequiredArgsConstructor
 public class ResponseGenerator {
 
 	/**
 	 * The object mapper for serializing objects into JSON.
 	 */
 	private final ObjectMapper objectMapper;
+
+	/**
+	 * Constructs a ResponseGenerator object with the specified object mapper.
+	 *
+	 * @param objectMapper The ObjectMapper instance used for serialization.
+	 */
+	public ResponseGenerator(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
 
 	/**
 	 * Generates an HTTP response with the specified status code and object.

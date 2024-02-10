@@ -39,10 +39,7 @@ class UserRepositoryTest extends AbstractPostgreSQLContainer {
 
 	@BeforeEach
 	void setUp() {
-		user = User.builder()
-				.username("test")
-				.password("test")
-				.roleId(RoleEnum.USER.getRoleId()).build();
+		user = new User(null, "test", "test", RoleEnum.USER.getRoleId());
 	}
 
 	@Test

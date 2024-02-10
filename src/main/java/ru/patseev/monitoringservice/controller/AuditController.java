@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.controller;
 
-import lombok.RequiredArgsConstructor;
+import ru.patseev.monitoringservice.aspect.annotation.Loggable;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Controller for handling audit-related operations.
  */
-@RequiredArgsConstructor
 public class AuditController {
 
 	/**
@@ -31,18 +30,28 @@ public class AuditController {
 	private final JwtService jwtService;
 
 	/**
+	 * Constructs a new AuditController with the specified dependencies.
+	 *
+	 * @param auditService   The service for audit operations
+	 * @param userController The controller for user-related operations
+	 * @param jwtService     The service for JWT operations
+	 */
+	public AuditController(AuditService auditService, UserController userController, JwtService jwtService) {
+		this.auditService = auditService;
+		this.userController = userController;
+		this.jwtService = jwtService;
+	}
+
+	/**
 	 * Retrieves a list of user actions based on the provided username.
 	 *
-	 * @param username  The username for which user actions are to be retrieved.
-	 * @param jwtToken  The JWT token for user authentication.
+	 * @param username The username for which user actions are to be retrieved.
+	 * @param jwtToken The JWT token for user authentication.
 	 * @return A list of UserActionDto representing user actions.
 	 */
+	@Loggable
 	public List<UserActionDto> getListOfUserActions(String username, String jwtToken) {
-		int userId = jwtService.extractPlayerId(jwtToken);
-
 		UserDto searchedUser = userController.getUser(username);
-		List<UserActionDto> userActions = auditService.getUserAction(searchedUser.userId());
-		auditService.saveUserAction(ActionEnum.GET_USERS_ACTION, userId);
-		return userActions;
+		return auditService.getUserAction(searchedUser.userId());
 	}
 }

@@ -16,7 +16,6 @@ import static org.mockito.Mockito.*;
 
 class UserControllerTest {
 
-	private static AuditService auditService;
 	private static UserService userService;
 	private static JwtService jwtService;
 	private static UserController userController;
@@ -25,11 +24,10 @@ class UserControllerTest {
 
 	@BeforeAll
 	public static void setUp() {
-		auditService = mock(AuditService.class);
 		userService = mock(UserService.class);
 		jwtService = mock(JwtService.class);
 
-		userController = new UserController(userService, auditService, jwtService);
+		userController = new UserController(userService, jwtService);
 	}
 
 	@BeforeEach
@@ -45,10 +43,8 @@ class UserControllerTest {
 
 		userController.saveUser(userDto);
 
-		verify(userService, times(1))
+		verify(userService)
 				.saveUser(userDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.REGISTRATION, userDto.userId());
 	}
 
 	@Test
@@ -64,8 +60,6 @@ class UserControllerTest {
 
 		assertThat(actual)
 				.isEqualTo(jwtToken);
-		verify(auditService)
-				.saveUserAction(ActionEnum.AUTHORIZATION, userDto.userId());
 	}
 
 	@Test

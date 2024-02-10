@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
@@ -12,15 +11,22 @@ import java.util.List;
 
 /**
  * The AuditRepositoryImpl class is an implementation of the AuditRepository interface.
- * It provides methods for interacting with user data storage.
  */
-@RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {
 
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
+
+	/**
+	 * Constructs an AuditRepositoryImpl object with the provided ConnectionManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 */
+	public AuditRepositoryImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
 
 	/**
 	 * {@inheritDoc}

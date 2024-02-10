@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
@@ -10,15 +9,22 @@ import java.util.*;
 
 /**
  * The DataMeterRepositoryImpl class is an implementation of the DataMeterRepository interface.
- * It provides methods for interacting with user data storage.
  */
-@RequiredArgsConstructor
 public class DataMeterRepositoryImpl implements DataMeterRepository {
 
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
+
+	/**
+	 * Constructs an DataMeterRepositoryImpl object with the provided ConnectionManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 */
+	public DataMeterRepositoryImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
 
 	/**
 	 * {@inheritDoc}

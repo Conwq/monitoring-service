@@ -15,11 +15,15 @@ import java.util.function.Predicate;
  */
 public class RouteValidator {
 
-	/** The role required for accessing each operation. */
+	/**
+	 * The role required for accessing each operation.
+	 */
 	private static final RoleEnum USER_ROLE = RoleEnum.USER;
 	private static final RoleEnum ADMIN_ROLE = RoleEnum.ADMIN;
 
-	/** The map containing close endpoints (operations requiring specific roles). */
+	/**
+	 * The map containing close endpoints (operations requiring specific roles).
+	 */
 	private final Map<OperationEnum, RoleEnum> closeEndpoints = new HashMap<>() {{
 		put(OperationEnum.LAST_DATA, USER_ROLE);
 		put(OperationEnum.SPECIFIED_MONTH_DATA, USER_ROLE);
@@ -33,7 +37,9 @@ public class RouteValidator {
 		put(OperationEnum.GET_AUDIT, ADMIN_ROLE);
 	}};
 
-	/** The set containing open endpoints (operations accessible without specific roles). */
+	/**
+	 * The set containing open endpoints (operations accessible without specific roles).
+	 */
 	private final Set<OperationEnum> openEndpoints = new HashSet<>() {{
 		add(OperationEnum.AUTH);
 		add(OperationEnum.REGISTRATION);
@@ -49,7 +55,9 @@ public class RouteValidator {
 		return closeEndpoints.get(operationEnum);
 	}
 
-	/** Predicate indicating whether an endpoint is secured. */
+	/**
+	 * Predicate indicating whether an endpoint is secured.
+	 */
 	public final Predicate<HttpServletRequest> isSecured =
 			request -> openEndpoints.stream()
 					.noneMatch(operation -> request.getParameter("operation").toUpperCase().contains(operation.name()));

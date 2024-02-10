@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.UserRepository;
@@ -10,15 +9,22 @@ import java.util.Optional;
 
 /**
  * The UserRepositoryImpl class is an implementation of the UserRepository interface.
- * It provides methods for interacting with user data storage.
  */
-@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
+
+	/**
+	 * Constructs an UserRepositoryImpl object with the provided ConnectionManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 */
+	public UserRepositoryImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -70,11 +76,11 @@ public class UserRepositoryImpl implements UserRepository {
 	public boolean existUserByUsername(String username) {
 		final String selectUserSql = "SELECT * FROM monitoring_service.users WHERE username = ?";
 
-		try(Connection connection = connectionManager.takeConnection();
-			PreparedStatement statement = connection.prepareStatement(selectUserSql)) {
+		try (Connection connection = connectionManager.takeConnection();
+			 PreparedStatement statement = connection.prepareStatement(selectUserSql)) {
 
 			statement.setString(1, username);
-			try(ResultSet resultSet = statement.executeQuery()) {
+			try (ResultSet resultSet = statement.executeQuery()) {
 				return resultSet.next();
 			}
 		} catch (SQLException e) {

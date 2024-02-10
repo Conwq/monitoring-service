@@ -4,7 +4,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import ru.patseev.monitoringservice.context.MonitoringApplicationContext;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
@@ -13,13 +12,16 @@ import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
  * The MeterServlet class handles HTTP GET and POST requests related to meter operations.
  */
 @WebServlet("/meters")
-@AllArgsConstructor
 public class MeterServlet extends HttpServlet {
 
-	/** The name of the parameter indicating the operation to perform. */
+	/**
+	 * The name of the parameter indicating the operation to perform.
+	 */
 	private static final String OPERATION_PARAM = "operation";
 
-	/** The operation manager responsible for choosing the appropriate operation handler. */
+	/**
+	 * The operation manager responsible for choosing the appropriate operation handler.
+	 */
 	private final OperationManager operationManager;
 
 	/**
@@ -27,6 +29,15 @@ public class MeterServlet extends HttpServlet {
 	 */
 	public MeterServlet() {
 		this.operationManager = MonitoringApplicationContext.getContext().getMeterOperationManager();
+	}
+
+	/**
+	 * Constructs a MeterServlet object with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager instance to be used by the MeterServlet.
+	 */
+	public MeterServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
 	}
 
 	/**

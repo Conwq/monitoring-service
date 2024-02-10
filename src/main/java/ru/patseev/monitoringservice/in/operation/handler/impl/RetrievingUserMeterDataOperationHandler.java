@@ -2,7 +2,6 @@ package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.MeterController;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
@@ -13,7 +12,6 @@ import java.util.List;
 /**
  * The RetrievingAllUserMeterDataOperationHandler class handles the operation of retrieving all user meter data.
  */
-@RequiredArgsConstructor
 public class RetrievingUserMeterDataOperationHandler implements OperationHandler {
 
 	/**
@@ -25,6 +23,17 @@ public class RetrievingUserMeterDataOperationHandler implements OperationHandler
 	 * The response generator for generating HTTP responses.
 	 */
 	private final ResponseGenerator responseGenerator;
+
+	/**
+	 * Constructs a RetrievingUserMeterDataOperationHandler object with the provided dependencies.
+	 *
+	 * @param meterController   The MeterController instance used for handling meter-related operations.
+	 * @param responseGenerator The ResponseGenerator instance used for generating HTTP responses.
+	 */
+	public RetrievingUserMeterDataOperationHandler(MeterController meterController, ResponseGenerator responseGenerator) {
+		this.meterController = meterController;
+		this.responseGenerator = responseGenerator;
+	}
 
 	/**
 	 * Handles the operation of retrieving all user meter data.

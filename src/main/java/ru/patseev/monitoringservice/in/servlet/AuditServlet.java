@@ -4,7 +4,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import ru.patseev.monitoringservice.context.MonitoringApplicationContext;
 import ru.patseev.monitoringservice.in.operation.handler.OperationHandler;
 import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
@@ -13,7 +12,6 @@ import ru.patseev.monitoringservice.in.operation.manager.OperationManager;
  * Servlet for handling audit-related operations.
  */
 @WebServlet("/audits")
-@AllArgsConstructor
 public class AuditServlet extends HttpServlet {
 
 	/**
@@ -26,6 +24,15 @@ public class AuditServlet extends HttpServlet {
 	 */
 	public AuditServlet() {
 		this.operationManager = MonitoringApplicationContext.getContext().getAuditOperationManager();
+	}
+
+	/**
+	 * Constructs an AuditServlet object with the provided OperationManager.
+	 *
+	 * @param operationManager The OperationManager instance to be used by the AuditServlet.
+	 */
+	public AuditServlet(OperationManager operationManager) {
+		this.operationManager = operationManager;
 	}
 
 	/**

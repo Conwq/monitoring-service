@@ -2,7 +2,6 @@ package ru.patseev.monitoringservice.in.operation.handler.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.controller.UserController;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -14,7 +13,6 @@ import ru.patseev.monitoringservice.in.validator.Validator;
 /**
  * The AuthorizationOperationHandler class handles the operation of user authorization.
  */
-@RequiredArgsConstructor
 public class AuthorizationOperationHandler implements OperationHandler {
 
 	/**
@@ -36,6 +34,24 @@ public class AuthorizationOperationHandler implements OperationHandler {
 	 * This class represents is used to validate instances of UserDto objects.
 	 */
 	private final Validator<UserDto> userDtoValidator;
+
+	/**
+	 * Constructs an AuthorizationOperationHandler object with the provided dependencies.
+	 *
+	 * @param responseGenerator The ResponseGenerator instance used for generating HTTP responses.
+	 * @param userController    The UserController instance used for user-related operations.
+	 * @param objectExtractor   The ObjectExtractor instance used for extracting objects from HTTP requests.
+	 * @param userDtoValidator  The Validator instance used for validating UserDto objects.
+	 */
+	public AuthorizationOperationHandler(ResponseGenerator responseGenerator,
+										 UserController userController,
+										 ObjectExtractor objectExtractor,
+										 Validator<UserDto> userDtoValidator) {
+		this.responseGenerator = responseGenerator;
+		this.userController = userController;
+		this.objectExtractor = objectExtractor;
+		this.userDtoValidator = userDtoValidator;
+	}
 
 	/**
 	 * Handles the operation of user authorization.

@@ -60,9 +60,7 @@ class AuditControllerTest {
 
 		assertThat(actionDtoList)
 				.isEqualTo(expected);
-		verify(userController, times(1))
+		verify(userController)
 				.getUser(userDto.username());
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_USERS_ACTION, userDto.userId());
 	}
 }
