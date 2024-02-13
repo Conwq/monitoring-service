@@ -3,10 +3,10 @@ package ru.patseev.monitoringservice.repository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.postgresql.ds.PGSimpleDataSource;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
 
@@ -21,18 +21,15 @@ class MeterTypeRepositoryTest extends AbstractPostgreSQLContainer {
 
 	@BeforeAll
 	static void beforeAll() {
-		ConnectionManager connectionManager = new ConnectionManager(
-				POSTGRES.getJdbcUrl(),
-				POSTGRES.getUsername(),
-				POSTGRES.getPassword()
-		);
+//		PGSimpleDataSource dataSource = new PGSimpleDataSource();
+//		dataSource.setURL(POSTGRES.getJdbcUrl());
+//		dataSource.setUser(POSTGRES.getUsername());
+//		dataSource.setPassword(POSTGRES.getPassword());
+//
+//		new LiquibaseMigration(dataSource)
+//				.performMigration();
 
-		ResourceManager resourceManager = new ResourceManager("application");
-
-		new LiquibaseMigration(connectionManager, resourceManager)
-				.performMigration();
-
-		meterTypeRepository = new MeterTypeRepositoryImpl(connectionManager);
+		meterTypeRepository = new MeterTypeRepositoryImpl(DATA_SOURCE, new ConnectionManager());
 	}
 
 	@Test

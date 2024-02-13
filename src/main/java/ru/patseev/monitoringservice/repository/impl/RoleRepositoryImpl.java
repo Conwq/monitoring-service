@@ -1,10 +1,12 @@
 package ru.patseev.monitoringservice.repository.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,20 +15,23 @@ import java.sql.SQLException;
 /**
  * The RoleRepositoryImpl class provides methods to interact with the database for role-related operations.
  */
+@Repository
 public class RoleRepositoryImpl implements RoleRepository {
 
-	/**
-	 * Provider that provides methods for working with database connections.
-	 */
-	private final ConnectionManager connectionManager;
 
 	/**
-	 * Constructs an RoleRepositoryImpl object with the provided ConnectionManager.
-	 *
-	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 * The data source used for obtaining a database connection.
 	 */
-	public RoleRepositoryImpl(ConnectionManager connectionManager) {
-		this.connectionManager = connectionManager;
+	private final DataSource dataSource;
+
+	/**
+	 * Constructs an AuditRepositoryImpl object with the provided DataSource.
+	 *
+	 * @param dataSource The DataSource instance used for obtaining database connections.
+	 */
+	@Autowired
+	public RoleRepositoryImpl(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 
 	/**
@@ -40,7 +45,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 		final String selectRoleSql = "SELECT * FROM monitoring_service.roles WHERE role_id = ?";
 		Role role = null;
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectRoleSql)) {
 			statement.setInt(1, roleId);
 

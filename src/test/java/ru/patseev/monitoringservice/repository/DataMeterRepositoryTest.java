@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.postgresql.ds.PGSimpleDataSource;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.DataMeterRepositoryImpl;
 
@@ -26,18 +26,7 @@ class DataMeterRepositoryTest extends AbstractPostgreSQLContainer {
 
 	@BeforeAll
 	static void beforeAll() {
-		ConnectionManager connectionManager = new ConnectionManager(
-				POSTGRES.getJdbcUrl(),
-				POSTGRES.getUsername(),
-				POSTGRES.getPassword()
-		);
-
-		ResourceManager resourceManager = new ResourceManager("application");
-
-		new LiquibaseMigration(connectionManager, resourceManager)
-				.performMigration();
-
-		dataMeterRepository = new DataMeterRepositoryImpl(connectionManager);
+		dataMeterRepository = new DataMeterRepositoryImpl(DATA_SOURCE, new ConnectionManager());
 	}
 
 	@BeforeEach

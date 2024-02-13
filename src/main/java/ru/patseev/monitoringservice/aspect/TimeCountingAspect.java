@@ -3,11 +3,13 @@ package ru.patseev.monitoringservice.aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 
 /**
  * Aspect for measuring the execution time of specific methods.
  */
 @Aspect
+@Component
 public class TimeCountingAspect {
 
 	/**

@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.postgresql.ds.PGSimpleDataSource;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.UserRepositoryImpl;
 
@@ -23,18 +23,7 @@ class UserRepositoryTest extends AbstractPostgreSQLContainer {
 
 	@BeforeAll
 	static void beforeAll() {
-		ConnectionManager connectionManager = new ConnectionManager(
-				POSTGRES.getJdbcUrl(),
-				POSTGRES.getUsername(),
-				POSTGRES.getPassword()
-		);
-
-		ResourceManager resourceManager = new ResourceManager("application");
-
-		new LiquibaseMigration(connectionManager, resourceManager)
-				.performMigration();
-
-		userRepository = new UserRepositoryImpl(connectionManager);
+		userRepository = new UserRepositoryImpl(DATA_SOURCE, new ConnectionManager());
 	}
 
 	@BeforeEach

@@ -4,9 +4,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import ru.patseev.monitoringservice.context.MonitoringApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.jwt.JwtService;
+import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.service.AuditService;
 
 import java.util.Arrays;
@@ -15,22 +16,30 @@ import java.util.Arrays;
  * Aspect for logging user actions and authentication/registration activities.
  */
 @Aspect
+@Component
 public class LoggableAspect {
 
 	/**
 	 * Service for JWT operations.
 	 */
-	private final JwtService jwtService = MonitoringApplicationContext.getContext().getJwtService();
+	private final JwtService jwtService;
 
 	/**
 	 * Service for audit operations.
 	 */
-	private final AuditService auditService = MonitoringApplicationContext.getContext().getAuditService();
+	private final AuditService auditService;
 
 	/**
 	 * Manager for handling actions associated with method names.
 	 */
-	private final ActionManager actionManager = new ActionManager();
+	private final ActionManager actionManager;
+
+	@Autowired
+	public LoggableAspect(JwtService jwtService, AuditService auditService, ActionManager actionManager) {
+		this.jwtService = jwtService;
+		this.auditService = auditService;
+		this.actionManager = actionManager;
+	}
 
 	/**
 	 * Pointcut for methods annotated with @Loggable.
@@ -46,9 +55,9 @@ public class LoggableAspect {
 	 * @return The result of the method execution
 	 * @throws Throwable If an error occurs during method execution
 	 */
-	@Around("annotatedByLoggable() && execution(* ru.patseev.monitoringservice.controller.MeterController.*(..)) " +
+	@Around("annotatedByLoggable() && execution(* ru.patseev.monitoringservice.in.controller.MeterController.*(..)) " +
 			"|| " +
-			"annotatedByLoggable() && execution(* ru.patseev.monitoringservice.controller.AuditController.*(..))")
+			"annotatedByLoggable() && execution(* ru.patseev.monitoringservice.in.controller.AuditController.*(..))")
 	public Object loggingUserAction(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		Object result = proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);
@@ -73,7 +82,7 @@ public class LoggableAspect {
 	 * @return The result of the method execution
 	 * @throws Throwable If an error occurs during method execution
 	 */
-	@Around("annotatedByLoggable() && execution(* ru.patseev.monitoringservice.controller.UserController.*(..)) ")
+	@Around("annotatedByLoggable() && execution(* ru.patseev.monitoringservice.in.controller.UserController.*(..)) ")
 	public Object loggingAuthAndRegister(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		Object result = proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);

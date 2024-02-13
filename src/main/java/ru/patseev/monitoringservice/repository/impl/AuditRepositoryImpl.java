@@ -1,10 +1,13 @@
 package ru.patseev.monitoringservice.repository.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,13 @@ import java.util.List;
 /**
  * The AuditRepositoryImpl class is an implementation of the AuditRepository interface.
  */
+@Repository
 public class AuditRepositoryImpl implements AuditRepository {
+
+	/**
+	 * The data source used for obtaining a database connection.
+	 */
+	private final DataSource dataSource;
 
 	/**
 	 * Provider that provides methods for working with database connections.
@@ -20,11 +29,14 @@ public class AuditRepositoryImpl implements AuditRepository {
 	private final ConnectionManager connectionManager;
 
 	/**
-	 * Constructs an AuditRepositoryImpl object with the provided ConnectionManager.
+	 * Constructs an AuditRepositoryImpl object with the provided DataSource and ConnectionManager.
 	 *
-	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 * @param dataSource        The DataSource instance used for obtaining database connections.
+	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
 	 */
-	public AuditRepositoryImpl(ConnectionManager connectionManager) {
+	@Autowired
+	public AuditRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
+		this.dataSource = dataSource;
 		this.connectionManager = connectionManager;
 	}
 
@@ -35,7 +47,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 	public void save(UserAction userAction) {
 		Connection connection = null;
 		try {
-			connection = connectionManager.takeConnection();
+			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 
 			saveUserActionWithTransaction(userAction, connection);
@@ -57,7 +69,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 
 		List<UserAction> userActionList = new ArrayList<>();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectActionsSql)) {
 			statement.setInt(1, userId);
 			try (ResultSet resultSet = statement.executeQuery()) {

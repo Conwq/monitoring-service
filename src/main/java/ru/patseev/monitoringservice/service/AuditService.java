@@ -26,5 +26,5 @@ public interface AuditService {
 	 * @return A list of UserActionDto representing user actions.
 	 * @throws UserNotFoundException If the specified user is not found.
 	 */
-	List<UserActionDto> getUserAction(int userId) throws UserNotFoundException;
+	List<UserActionDto> getUserActions(int userId) throws UserNotFoundException;
 }

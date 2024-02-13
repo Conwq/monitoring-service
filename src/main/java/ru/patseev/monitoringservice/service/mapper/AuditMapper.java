@@ -11,7 +11,7 @@ import ru.patseev.monitoringservice.enums.ActionEnum;
 /**
  * Mapper interface for converting between UserActionDto and UserAction entities.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AuditMapper {
 
 	/**

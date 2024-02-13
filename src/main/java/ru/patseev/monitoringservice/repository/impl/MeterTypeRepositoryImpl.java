@@ -1,10 +1,13 @@
 package ru.patseev.monitoringservice.repository.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,14 @@ import java.util.List;
 /**
  * The MeterTypeRepositoryImpl class is an implementation of the MeterTypeRepository interface.
  */
+@Repository
 public class MeterTypeRepositoryImpl implements MeterTypeRepository {
+
+
+	/**
+	 * The data source used for obtaining a database connection.
+	 */
+	private final DataSource dataSource;
 
 	/**
 	 * Provider that provides methods for working with database connections.
@@ -20,11 +30,14 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	private final ConnectionManager connectionManager;
 
 	/**
-	 * Constructs an MeterTypeRepositoryImpl object with the provided ConnectionManager.
+	 * Constructs an MeterTypeRepositoryImpl object with the provided DataSource and ConnectionManager.
 	 *
-	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 * @param dataSource        The DataSource instance used for obtaining database connections.
+	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
 	 */
-	public MeterTypeRepositoryImpl(ConnectionManager connectionManager) {
+	@Autowired
+	public MeterTypeRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
+		this.dataSource = dataSource;
 		this.connectionManager = connectionManager;
 	}
 
@@ -36,7 +49,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 		final String selectMeterTypes = "SELECT * FROM monitoring_service.meter_types";
 		List<MeterType> meterTypeList = new ArrayList<>();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(selectMeterTypes)) {
 			while (resultSet.next()) {
@@ -56,7 +69,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	public void saveMeterType(MeterType meterType) {
 		Connection connection = null;
 		try {
-			connection = connectionManager.takeConnection();
+			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 
 			saveMeterTypeWithTransaction(connection, meterType);
@@ -77,7 +90,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 		final String selectMeterTypeSql = "SELECT * FROM monitoring_service.meter_types WHERE meter_type_id = ?";
 		MeterType meterType = null;
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectMeterTypeSql)) {
 			statement.setInt(1, meterTypeId);
 
@@ -100,7 +113,7 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	public boolean checkMeterTypeExistence(String typeName) {
 		final String selectMeterTypeSql = "SELECT * FROM monitoring_service.meter_types WHERE type_name = ?";
 		boolean meterTypeExistence = false;
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectMeterTypeSql)) {
 			statement.setString(1, typeName);
 			try (ResultSet resultSet = statement.executeQuery()) {

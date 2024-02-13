@@ -1,11 +1,12 @@
-package ru.patseev.monitoringservice.jwt;
+package ru.patseev.monitoringservice.in.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.manager.ResourceManager;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -15,27 +16,20 @@ import java.util.function.Function;
 /**
  * The JwtService class provides methods for JWT token generation, extraction, and validation.
  */
+@Service
 public class JwtService {
 
 	/**
 	 * The secret key used for JWT token generation and validation.
 	 */
-	private final String secretKey;
+	@Value("${secret.key}")
+	private String secretKey;
 
 	/**
 	 * The expiration time for JWT tokens, specified in milliseconds.
 	 */
-	private final Long expirationData;
-
-	/**
-	 * Constructs a JwtService instance.
-	 *
-	 * @param resourceManager The resource manager for accessing configuration properties.
-	 */
-	public JwtService(ResourceManager resourceManager) {
-		secretKey = resourceManager.getValue("secret.key");
-		expirationData = Long.parseLong(resourceManager.getValue("jwt.expiration"));
-	}
+	@Value("${jwt.expiration}")
+	private String expirationData;
 
 	/**
 	 * Generates a JWT token with the specified extra claims and user information.
@@ -49,7 +43,7 @@ public class JwtService {
 				.claims(extraClaims)
 				.subject(userDto.username())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + expirationData))
+				.expiration(new Date(System.currentTimeMillis() + Long.parseLong(expirationData)))
 				.signWith(generateKey(), Jwts.SIG.HS256)
 				.compact();
 	}
@@ -62,16 +56,6 @@ public class JwtService {
 	private SecretKey generateKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
-	}
-
-	/**
-	 * Extracts the username from the JWT token.
-	 *
-	 * @param jwt The JWT token from which to extractor the username.
-	 * @return The extracted username.
-	 */
-	public String extractUsername(String jwt) {
-		return extractClaim(jwt, Claims::getSubject);
 	}
 
 	/**
@@ -97,9 +81,9 @@ public class JwtService {
 	/**
 	 * Extracts a specific claim from the provided JWT token.
 	 *
-	 * @param jwt           The JWT token from which to extractor the claim.
+	 * @param jwt            The JWT token from which to extractor the claim.
 	 * @param claimsResolver The function to resolve the desired claim from the JWT claims.
-	 * @param <T>           The type of the extracted claim.
+	 * @param <T>            The type of the extracted claim.
 	 * @return The extracted claim.
 	 */
 	private <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {

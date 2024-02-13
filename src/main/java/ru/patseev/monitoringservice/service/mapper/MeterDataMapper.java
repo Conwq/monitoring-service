@@ -11,7 +11,7 @@ import ru.patseev.monitoringservice.dto.DataMeterDto;
 /**
  * The MeterDataMapper interface provides methods for mapping between DataMeter and DataMeterDto objects.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MeterDataMapper {
 
 	/**

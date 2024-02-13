@@ -1,5 +1,7 @@
 package ru.patseev.monitoringservice.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 /**
  * The MeterServiceImpl class is an implementation of the DataMeterService interface.
  */
+@Service
 public class MeterServiceImpl implements MeterService {
 
 	/**
@@ -51,6 +54,7 @@ public class MeterServiceImpl implements MeterService {
 	 * @param meterTypeMapper     The MeterTypeMapper instance responsible for mapping meter type entities.
 	 * @param meterDataMapper     The MeterDataMapper instance responsible for mapping meter data entities.
 	 */
+	@Autowired
 	public MeterServiceImpl(DataMeterRepository dataMeterRepository,
 							MeterTypeRepository meterTypeRepository,
 							MeterTypeMapper meterTypeMapper,

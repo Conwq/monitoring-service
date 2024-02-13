@@ -23,7 +23,6 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 class AuditServiceTest {
@@ -74,7 +73,7 @@ class AuditServiceTest {
 		when(auditRepository.findUserActionsByUserId(userDto.userId()))
 				.thenReturn(userActions);
 
-		List<UserActionDto> actual = auditService.getUserAction(userDto.userId());
+		List<UserActionDto> actual = auditService.getUserActions(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(expected);
@@ -87,7 +86,7 @@ class AuditServiceTest {
 				.thenReturn(null);
 
 		assertThrows(UserNotFoundException.class,
-				() -> auditService.getUserAction(userDto.userId())
+				() -> auditService.getUserActions(userDto.userId())
 		);
 	}
 }

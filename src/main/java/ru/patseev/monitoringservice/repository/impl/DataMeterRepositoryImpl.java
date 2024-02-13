@@ -1,16 +1,25 @@
 package ru.patseev.monitoringservice.repository.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 /**
  * The DataMeterRepositoryImpl class is an implementation of the DataMeterRepository interface.
  */
+@Repository
 public class DataMeterRepositoryImpl implements DataMeterRepository {
+
+	/**
+	 * The data source used for obtaining a database connection.
+	 */
+	private final DataSource dataSource;
 
 	/**
 	 * Provider that provides methods for working with database connections.
@@ -18,11 +27,14 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	private final ConnectionManager connectionManager;
 
 	/**
-	 * Constructs an DataMeterRepositoryImpl object with the provided ConnectionManager.
+	 * Constructs an DataMeterRepositoryImpl object with the provided DataSource and ConnectionManager.
 	 *
-	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 * @param dataSource        The DataSource instance used for obtaining database connections.
+	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
 	 */
-	public DataMeterRepositoryImpl(ConnectionManager connectionManager) {
+	@Autowired
+	public DataMeterRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
+		this.dataSource = dataSource;
 		this.connectionManager = connectionManager;
 	}
 
@@ -35,7 +47,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? ORDER BY meter_data_id DESC LIMIT 1";
 		Optional<DataMeter> optionalDataMeter = Optional.empty();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectLastDataSql)) {
 
 			statement.setInt(1, userId);
@@ -61,7 +73,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 		Connection connection = null;
 
 		try {
-			connection = connectionManager.takeConnection();
+			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 
 			saveDataMeterWithTransaction(connection, dataMeter);
@@ -83,7 +95,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 				"SELECT * FROM monitoring_service.meters_data WHERE user_id = ? AND extract(month from submission_date) = ?";
 		List<DataMeter> dataMeterList = new ArrayList<>();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectMeterDataForMonthSql)) {
 
 			statement.setInt(1, userId);
@@ -108,7 +120,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data WHERE user_id = ?";
 		List<DataMeter> dataMetersList = new ArrayList<>();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(selectAllMeterDataSql)) {
 			statement.setInt(1, userId);
 
@@ -133,7 +145,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 		final String selectAllMeterDataSql = "SELECT * FROM monitoring_service.meters_data";
 		Map<Integer, List<DataMeter>> allMeterData = new HashMap<>();
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement();
 			 ResultSet resultSet = statement.executeQuery(selectAllMeterDataSql)) {
 
@@ -164,7 +176,7 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 
 		boolean dataExists = false;
 
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(checkMonthlyMeterData)) {
 
 			statement.setInt(1, userId);

@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.service.impl;
 
-import ru.patseev.monitoringservice.aspect.annotation.Loggable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -15,6 +16,7 @@ import ru.patseev.monitoringservice.service.mapper.UserMapper;
 /**
  * The UserServiceImpl class is an implementation of the UserService interface.
  */
+@Service
 public class UserServiceImpl implements UserService {
 
 	/**
@@ -39,7 +41,10 @@ public class UserServiceImpl implements UserService {
 	 * @param roleRepository The RoleRepository instance responsible for managing role data.
 	 * @param userMapper     The UserMapper instance responsible for mapping user entities.
 	 */
-	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
+	@Autowired
+	public UserServiceImpl(UserRepository userRepository,
+						   RoleRepository roleRepository,
+						   UserMapper userMapper) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.userMapper = userMapper;
@@ -65,7 +70,6 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Loggable
 	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())

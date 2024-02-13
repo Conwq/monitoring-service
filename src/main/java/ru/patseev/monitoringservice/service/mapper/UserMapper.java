@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -10,7 +11,7 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 /**
  * Mapper interface for mapping between User and UserDto objects.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
 	/**
@@ -34,7 +35,9 @@ public interface UserMapper {
 	 * @param roleEnum The RoleEnum specifying the role of the user.
 	 * @return A UserDto object.
 	 */
-	@Mapping(target = "password", ignore = true)
-	@Mapping(target = "role", source = "roleEnum")
+	@Mappings({
+			@Mapping(target = "password", ignore = true),
+			@Mapping(target = "role", source = "roleEnum")
+	})
 	UserDto toDto(User user, RoleEnum roleEnum);
 }

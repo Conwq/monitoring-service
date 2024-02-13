@@ -8,7 +8,7 @@ import ru.patseev.monitoringservice.dto.MeterTypeDto;
 /**
  * Mapper interface for converting between MeterTypeDto and MeterType entities.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MeterTypeMapper {
 
 	/**
