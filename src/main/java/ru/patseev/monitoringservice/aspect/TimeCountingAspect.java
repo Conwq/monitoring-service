@@ -5,11 +5,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+
 /**
  * Aspect for measuring the execution time of specific methods.
  */
-@Aspect
 @Component
+@Aspect
 public class TimeCountingAspect {
 
 	/**

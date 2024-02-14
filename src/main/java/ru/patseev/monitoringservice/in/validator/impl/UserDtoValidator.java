@@ -1,11 +1,13 @@
 package ru.patseev.monitoringservice.in.validator.impl;
 
+import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.in.validator.Validator;
 
 /**
  * The UserDtoValidator class provides validation for UserDto objects.
  */
+@Component
 public class UserDtoValidator implements Validator<UserDto> {
 
 	/**

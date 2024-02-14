@@ -16,6 +16,8 @@ import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.controller.UserController;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
+import ru.patseev.monitoringservice.in.validator.Validator;
+import ru.patseev.monitoringservice.in.validator.impl.UserDtoValidator;
 import ru.patseev.monitoringservice.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,8 +38,9 @@ class UserControllerTest {
 		userService = mock(UserService.class);
 		jwtService = mock(JwtService.class);
 		responseGenerator = spy(ResponseGenerator.class);
+		Validator<UserDto> userDtoValidator = spy(UserDtoValidator.class);
 
-		UserController userController = new UserController(userService, jwtService, responseGenerator);
+		UserController userController = new UserController(userService, jwtService, responseGenerator, userDtoValidator);
 		mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 	}
 
@@ -49,7 +52,7 @@ class UserControllerTest {
 		when(userService.saveUser(userDto))
 				.thenReturn(savedUser);
 
-		mockMvc.perform(poputJson("/users/register", userDto))
+		mockMvc.perform(putJson("/users/register", userDto))
 				.andExpect(status().isOk());
 	}
 
@@ -60,8 +63,17 @@ class UserControllerTest {
 		when(userService.saveUser(userDto))
 				.thenThrow(new UserAlreadyExistException("User with this username already exists"));
 
-		mockMvc.perform(poputJson("/users/register", userDto))
+		mockMvc.perform(putJson("/users/register", userDto))
 				.andExpect(status().isConflict());
+	}
+
+	@Test
+	@DisplayName("Saving user with invalid data should return HTTP 400 Bad Request")
+	void saveUser_badRequest() throws Exception {
+		UserDto invalidData = new UserDto(null, "", "", null);
+
+		mockMvc.perform(putJson("/users/register", invalidData))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -75,7 +87,7 @@ class UserControllerTest {
 		when(jwtService.generateToken(anyMap(), any(UserDto.class)))
 				.thenReturn("jwtToken");
 
-		mockMvc.perform(poputJson("/users/auth", userDto))
+		mockMvc.perform(putJson("/users/auth", userDto))
 				.andExpect(status().isOk());
 	}
 
@@ -85,7 +97,7 @@ class UserControllerTest {
 		when(userService.authUser(any(UserDto.class)))
 				.thenThrow(UserNotFoundException.class);
 
-		mockMvc.perform(poputJson("/users/auth", new UserDto(null, "1", "1", null)))
+		mockMvc.perform(putJson("/users/auth", new UserDto(null, "1", "1", null)))
 				.andExpect(status().isNotFound());
 	}
 
@@ -100,11 +112,11 @@ class UserControllerTest {
 		when(jwtService.generateToken(anyMap(), any(UserDto.class)))
 				.thenReturn(null);
 
-		mockMvc.perform(poputJson("/users/auth", userDto))
+		mockMvc.perform(putJson("/users/auth", userDto))
 				.andExpect(status().isUnauthorized());
 	}
 
-	public static MockHttpServletRequestBuilder poputJson(String uri, Object body) {
+	public static MockHttpServletRequestBuilder putJson(String uri, Object body) {
 		try {
 			String json = new ObjectMapper().writeValueAsString(body);
 			return post(uri)

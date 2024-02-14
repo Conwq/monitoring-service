@@ -1,14 +1,17 @@
 package ru.patseev.monitoringservice.in.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
+import ru.patseev.monitoringservice.in.validator.Validator;
 import ru.patseev.monitoringservice.service.UserService;
 
 import java.util.HashMap;
@@ -32,22 +35,32 @@ public class UserController {
 	private final JwtService jwtService;
 
 	/**
-	 * The response generator for handling responses.
+	 * Response generator for handling responses.
 	 */
 	private final ResponseGenerator responseGenerator;
 
 	/**
+	 * Validator for UserDto objects.
+	 */
+	private final Validator<UserDto> userDtoValidator;
+
+	/**
 	 * Constructs a new UserController with the specified dependencies.
 	 *
-	 * @param userService       The service for user-related operations
-	 * @param jwtService        The service for JWT operations
-	 * @param responseGenerator The response generator for handling responses
+	 * @param userService       The service for user-related operations.
+	 * @param jwtService        The service for JWT operations.
+	 * @param responseGenerator The response generator for handling responses.
+	 * @param userDtoValidator  Validator for UserDto objects.
 	 */
 	@Autowired
-	public UserController(UserService userService, JwtService jwtService, ResponseGenerator responseGenerator) {
+	public UserController(UserService userService,
+						  JwtService jwtService,
+						  ResponseGenerator responseGenerator,
+						  Validator<UserDto> userDtoValidator) {
 		this.userService = userService;
 		this.jwtService = jwtService;
 		this.responseGenerator = responseGenerator;
+		this.userDtoValidator = userDtoValidator;
 	}
 
 	/**
@@ -56,20 +69,15 @@ public class UserController {
 	 * @param userDto The user data to be saved.
 	 * @return The JWT token generated based on the saved user data.
 	 */
-//	@Loggable
+	@Audit
 	@PostMapping("/register")
 	public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
 		try {
-			//todo Validator
-			//    if (userDtoValidator.validate(userDto)) {
-			//        return responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "The data is not valid");
-			//    }
-
-			//todo Logic in the service
+			if (userDtoValidator.validate(userDto)) {
+				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "The data is not valid");
+			}
 			UserDto savedUserData = userService.saveUser(userDto);
-
 			String jwtToken = jwtService.generateToken(createExtraClaims(savedUserData), savedUserData);
-
 			return responseGenerator.generateResponse(HttpStatus.OK, jwtToken);
 		} catch (UserAlreadyExistException e) {
 			return responseGenerator.generateResponse(HttpStatus.CONFLICT, e.getMessage());
@@ -82,18 +90,12 @@ public class UserController {
 	 * @param userDto The data transfer object containing user authentication information.
 	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-//	@Loggable
+	@Audit
 	@PostMapping("/auth")
 	public ResponseEntity<?> authUser(@RequestBody UserDto userDto) {
 		try {
-			//todo Validator
-			//    if (userDtoValidator.validate(userDto)) {
-			//        responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "The data is not valid");
-			//        return;
-			//    }
 			UserDto userData = userService.authUser(userDto);
 			String jwtToken = jwtService.generateToken(createExtraClaims(userData), userDto);
-
 			if (jwtToken == null || jwtToken.isEmpty()) {
 				return responseGenerator.generateResponse(HttpStatus.UNAUTHORIZED, "Unauthorized");
 			}
@@ -114,6 +116,12 @@ public class UserController {
 		return userService.getUser(username);
 	}
 
+	/**
+	 * Creates extra claims for JWT token based on user data.
+	 *
+	 * @param userData The user data.
+	 * @return A map containing extra claims such as user role and user ID.
+	 */
 	private Map<String, Object> createExtraClaims(UserDto userData) {
 		return new HashMap<>() {{
 			put("role", userData.role());

@@ -12,6 +12,7 @@ import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
+import ru.patseev.monitoringservice.in.validator.Validator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.util.List;
@@ -40,17 +41,35 @@ public class MeterController {
 	private final ResponseGenerator responseGenerator;
 
 	/**
+	 * Validator for DataMeterDto objects.
+	 */
+	private final Validator<DataMeterDto> dataMeterDtoValidator;
+
+	/**
+	 * Validator for MeterTypeDto objects.
+	 */
+	private final Validator<MeterTypeDto> meterTypeDtoValidator;
+
+	/**
 	 * Constructs a new MeterController with the specified dependencies.
 	 *
-	 * @param meterService      The service for meter operations.
-	 * @param jwtService        The service for JWT operations.
-	 * @param responseGenerator The generator for HTTP responses.
+	 * @param meterService          The service for meter operations.
+	 * @param jwtService            The service for JWT operations.
+	 * @param responseGenerator     The generator for HTTP responses.
+	 * @param dataMeterDtoValidator Validator for DataMeterDto objects.
+	 * @param meterTypeDtoValidator Validator for MeterTypeDto objects.
 	 */
 	@Autowired
-	public MeterController(MeterService meterService, JwtService jwtService, ResponseGenerator responseGenerator) {
+	public MeterController(MeterService meterService,
+						   JwtService jwtService,
+						   ResponseGenerator responseGenerator,
+						   Validator<DataMeterDto> dataMeterDtoValidator,
+						   Validator<MeterTypeDto> meterTypeDtoValidator) {
 		this.meterService = meterService;
 		this.jwtService = jwtService;
 		this.responseGenerator = responseGenerator;
+		this.dataMeterDtoValidator = dataMeterDtoValidator;
+		this.meterTypeDtoValidator = meterTypeDtoValidator;
 	}
 
 	/**
@@ -82,11 +101,9 @@ public class MeterController {
 	public ResponseEntity<?> saveMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 										   @RequestBody DataMeterDto dataMeterDto) {
 		try {
-			//todo
-//			if (dataMeterDtoValidator.validate(dataMeterDto)) {
-//				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
-//				return;
-//			}
+			if (dataMeterDtoValidator.validate(dataMeterDto)) {
+				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "Invalid data");
+			}
 			int userId = jwtService.extractPlayerId(jwtToken);
 			meterService.saveDataMeter(userId, dataMeterDto);
 			return responseGenerator.generateResponse(HttpStatus.OK, "Meter reading data sent");
@@ -163,11 +180,9 @@ public class MeterController {
 	public ResponseEntity<?> addNewMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 											 @RequestBody MeterTypeDto meterTypeDto) {
 		try {
-			//todo
-//			if (meterTypeDtoValidator.validate(meterTypeDto)) {
-//				responseGenerator.generateResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid data");
-//				return;
-//			}
+			if (meterTypeDtoValidator.validate(meterTypeDto)) {
+				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "Invalid data");
+			}
 
 			meterService.saveMeterType(meterTypeDto);
 			return responseGenerator.generateResponse(HttpStatus.OK, "New meter type saved");

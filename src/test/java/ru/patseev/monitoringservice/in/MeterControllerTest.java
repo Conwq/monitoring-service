@@ -18,6 +18,9 @@ import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.controller.MeterController;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
+import ru.patseev.monitoringservice.in.validator.Validator;
+import ru.patseev.monitoringservice.in.validator.impl.MeterDataValidator;
+import ru.patseev.monitoringservice.in.validator.impl.MeterTypeValidator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.sql.Timestamp;
@@ -57,8 +60,10 @@ class MeterControllerTest {
 
 		meterService = mock(MeterService.class);
 		jwtService = mock(JwtService.class);
+		Validator<MeterTypeDto> meterTypeDtoValidator = spy(MeterTypeValidator.class);
+		Validator<DataMeterDto> dataMeterDtoValidator = spy(MeterDataValidator.class);
 		ResponseGenerator responseGenerator = spy(ResponseGenerator.class);
-		MeterController meterController = new MeterController(meterService, jwtService, responseGenerator);
+		MeterController meterController = new MeterController(meterService, jwtService, responseGenerator, dataMeterDtoValidator, meterTypeDtoValidator);
 
 		mockMvc = MockMvcBuilders.standaloneSetup(meterController).build();
 	}
@@ -108,6 +113,16 @@ class MeterControllerTest {
 
 		mockMvc.perform(createPostRequest("/meters/save_data", electricityData))
 				.andExpect(status().isConflict());
+	}
+
+	@Test
+	@DisplayName("Saving invalid data should return HTTP 400 Bad Request with the message 'Invalid data'")
+	void saveData_badRequest() throws Exception {
+		DataMeterDto invalidData = new DataMeterDto(now, -1L, 1, electricity);
+
+		mockMvc.perform(createPostRequest("/meters/save_data", invalidData))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$").value("Invalid data"));
 	}
 
 	@Test
@@ -204,13 +219,23 @@ class MeterControllerTest {
 				.andExpect(status().isConflict());
 	}
 
-	public MockHttpServletRequestBuilder createGetRequest(String uri) {
+	@Test
+	@DisplayName("Adding a new counter type with invalid data should return an HTTP 400 Bad Request with the message 'Invalid data'")
+	void addNewMeterType_badReqeust() throws Exception {
+		MeterTypeDto invalidData = new MeterTypeDto(null, "");
+
+		mockMvc.perform(createPostRequest("/meters/save_meter", invalidData))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$").value("Invalid data"));
+	}
+
+	private MockHttpServletRequestBuilder createGetRequest(String uri) {
 		return get(uri)
 				.header(HttpHeaders.AUTHORIZATION, jwtToken)
 				.accept(MediaType.APPLICATION_JSON);
 	}
 
-	public MockHttpServletRequestBuilder createPostRequest(String uri, Object object) {
+	private MockHttpServletRequestBuilder createPostRequest(String uri, Object object) {
 		try {
 			return post(uri)
 					.header(HttpHeaders.AUTHORIZATION, jwtToken)

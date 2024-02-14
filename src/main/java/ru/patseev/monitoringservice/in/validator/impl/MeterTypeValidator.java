@@ -1,11 +1,13 @@
 package ru.patseev.monitoringservice.in.validator.impl;
 
+import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.in.validator.Validator;
 
 /**
  * Validator implementation for validating MeterTypeDto objects.
  */
+@Component
 public class MeterTypeValidator implements Validator<MeterTypeDto> {
 
 	/**
