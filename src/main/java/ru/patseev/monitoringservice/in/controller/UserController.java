@@ -31,7 +31,9 @@ public class UserController {
 	 */
 	private final JwtService jwtService;
 
-	//todo
+	/**
+	 * The response generator for handling responses.
+	 */
 	private final ResponseGenerator responseGenerator;
 
 	/**
@@ -54,8 +56,7 @@ public class UserController {
 	 * @param userDto The user data to be saved.
 	 * @return The JWT token generated based on the saved user data.
 	 */
-	//todo
-	//    @Loggable
+//	@Loggable
 	@PostMapping("/register")
 	public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
 		try {
@@ -67,12 +68,7 @@ public class UserController {
 			//todo Logic in the service
 			UserDto savedUserData = userService.saveUser(userDto);
 
-			Map<String, Object> extraClaims = new HashMap<>() {{
-				put("role", savedUserData.role());
-				put("userId", savedUserData.userId());
-			}};
-
-			String jwtToken = jwtService.generateToken(extraClaims, savedUserData);
+			String jwtToken = jwtService.generateToken(createExtraClaims(savedUserData), savedUserData);
 
 			return responseGenerator.generateResponse(HttpStatus.OK, jwtToken);
 		} catch (UserAlreadyExistException e) {
@@ -86,8 +82,7 @@ public class UserController {
 	 * @param userDto The data transfer object containing user authentication information.
 	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-	//todo
-	//    @Loggable
+//	@Loggable
 	@PostMapping("/auth")
 	public ResponseEntity<?> authUser(@RequestBody UserDto userDto) {
 		try {
@@ -97,18 +92,11 @@ public class UserController {
 			//        return;
 			//    }
 			UserDto userData = userService.authUser(userDto);
-
-			Map<String, Object> extraClaims = new HashMap<>() {{
-				put("role", userData.role());
-				put("userId", userData.userId());
-			}};
-
-			String jwtToken = jwtService.generateToken(extraClaims, userDto);
+			String jwtToken = jwtService.generateToken(createExtraClaims(userData), userDto);
 
 			if (jwtToken == null || jwtToken.isEmpty()) {
 				return responseGenerator.generateResponse(HttpStatus.UNAUTHORIZED, "Unauthorized");
 			}
-
 			return responseGenerator.generateResponse(HttpStatus.OK, jwtToken);
 		} catch (UserNotFoundException e) {
 			return responseGenerator.generateResponse(HttpStatus.NOT_FOUND, e.getMessage());
@@ -124,5 +112,12 @@ public class UserController {
 	@GetMapping
 	public UserDto getUser(@RequestParam("username") String username) {
 		return userService.getUser(username);
+	}
+
+	private Map<String, Object> createExtraClaims(UserDto userData) {
+		return new HashMap<>() {{
+			put("role", userData.role());
+			put("userId", userData.userId());
+		}};
 	}
 }

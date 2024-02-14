@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
@@ -15,8 +16,8 @@ import java.util.Arrays;
 /**
  * Aspect for logging user actions and authentication/registration activities.
  */
-@Aspect
 @Component
+@Aspect
 public class LoggableAspect {
 
 	/**
@@ -34,8 +35,10 @@ public class LoggableAspect {
 	 */
 	private final ActionManager actionManager;
 
-	@Autowired
-	public LoggableAspect(JwtService jwtService, AuditService auditService, ActionManager actionManager) {
+//	@Autowired
+	public LoggableAspect(JwtService jwtService,
+						  AuditService auditService,
+						  ActionManager actionManager) {
 		this.jwtService = jwtService;
 		this.auditService = auditService;
 		this.actionManager = actionManager;
@@ -71,6 +74,8 @@ public class LoggableAspect {
 				.map(jwtService::extractPlayerId)
 				.orElseThrow(() -> new IllegalStateException("Unable to extractor user ID from arguments."));
 
+		System.out.println(userId);
+
 		auditService.saveUserAction(action, userId);
 		return result;
 	}
@@ -84,10 +89,10 @@ public class LoggableAspect {
 	 */
 	@Around("annotatedByLoggable() && execution(* ru.patseev.monitoringservice.in.controller.UserController.*(..)) ")
 	public Object loggingAuthAndRegister(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-		Object result = proceedingJoinPoint.proceed();
+		ResponseEntity<?> result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);
 
-		String jwtToken = (String) result;
+		String jwtToken = result.getBody().toString();
 		int userId = jwtService.extractPlayerId(jwtToken);
 
 		auditService.saveUserAction(action, userId);
@@ -104,5 +109,4 @@ public class LoggableAspect {
 		String methodName = proceedingJoinPoint.getSignature().getName();
 		return actionManager.getActionByMethodName(methodName);
 	}
-
 }

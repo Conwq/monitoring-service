@@ -146,7 +146,7 @@ public class MeterController {
 	 * @return A list of MeterTypeDto representing available meter types.
 	 */
 //	@Loggable
-	@GetMapping("/meters")
+	@GetMapping("/meter_types")
 	public ResponseEntity<?> getAvailableMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		List<MeterTypeDto> availableMeterType = meterService.getAvailableMeterType();
 		return responseGenerator.generateResponse(HttpStatus.OK, availableMeterType);

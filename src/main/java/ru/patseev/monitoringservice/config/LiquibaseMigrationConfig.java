@@ -11,6 +11,9 @@ import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 @Configuration
 public class LiquibaseMigrationConfig {
 
+	/**
+	 * The LiquibaseMigration instance used for database migration.
+	 */
 	private final LiquibaseMigration liquibaseMigration;
 
 	/**

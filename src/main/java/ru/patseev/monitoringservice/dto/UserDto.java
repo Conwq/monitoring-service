@@ -1,5 +1,6 @@
 package ru.patseev.monitoringservice.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 
 /**
@@ -10,6 +11,7 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
  * @param password The password of the user, or null if not applicable.
  * @param role     The role of the user represented by a RoleEnum, or null if not applicable.
  */
+@JsonSerialize
 public record UserDto(Integer userId,
 					  String username,
 					  String password,

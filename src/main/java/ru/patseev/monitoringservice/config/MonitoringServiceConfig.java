@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan("ru.patseev.monitoringservice")
-@PropertySource("classpath:application.properties")
+@PropertySource(value = "classpath:application.yml", factory = YmlProperties.class)
 @EnableAspectJAutoProxy
 public class MonitoringServiceConfig implements WebMvcConfigurer {
 
@@ -39,8 +39,16 @@ public class MonitoringServiceConfig implements WebMvcConfigurer {
 	@Value("${database.password}")
 	public String password;
 
+	/**
+	 * The AuthInterceptor instance for intercepting HTTP requests.
+	 */
 	private final AuthInterceptor authInterceptor;
 
+	/**
+	 * Constructs a MonitoringServiceConfig object with the provided AuthInterceptor.
+	 *
+	 * @param authInterceptor The AuthInterceptor instance for intercepting HTTP requests.
+	 */
 	@Autowired
 	public MonitoringServiceConfig(AuthInterceptor authInterceptor) {
 		this.authInterceptor = authInterceptor;
@@ -60,6 +68,11 @@ public class MonitoringServiceConfig implements WebMvcConfigurer {
 		return dataSource;
 	}
 
+	/**
+	 * Adds the AuthInterceptor to the interceptor registry to intercept HTTP requests.
+	 *
+	 * @param registry The InterceptorRegistry instance for registering interceptors.
+	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(authInterceptor)

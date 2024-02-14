@@ -82,7 +82,7 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) {
+	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataWasSubmittedException {
 		boolean meterDataSubmitted = dataMeterRepository.checkMeterDataForCurrentMonth(userId, dataMeterDto.meterTypeId());
 		if (meterDataSubmitted) {
 			throw new MeterDataWasSubmittedException("Meter data submitted for the current month");
@@ -167,7 +167,7 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveMeterType(MeterTypeDto meterTypeDto) {
+	public void saveMeterType(MeterTypeDto meterTypeDto) throws MeterTypeExistException {
 		if (meterTypeRepository.checkMeterTypeExistence(meterTypeDto.typeName())) {
 			throw new MeterTypeExistException("Meter type exist");
 		}

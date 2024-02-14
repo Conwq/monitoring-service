@@ -36,6 +36,9 @@ public class RouteValidator {
 		put("/meters/save_meter", ADMIN_ROLE);
 	}};
 
+	/**
+	 * The set containing open endpoints (operations available to all users).
+	 */
 	private final Set<String> openEndpoints = new HashSet<>() {{
 		add("/users/*");
 	}};
@@ -47,6 +50,11 @@ public class RouteValidator {
 			request -> openEndpoints.stream()
 					.noneMatch(path -> request.getServletPath().contains(path));
 
+	/**
+	 * Retrieves the map of close endpoints and their associated roles.
+	 *
+	 * @return The map of close endpoints and their associated roles.
+	 */
 	public Map<String, RoleEnum> getCloseEndpoints() {
 		return closeEndpoints;
 	}
