@@ -11,12 +11,15 @@ import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.service.AuditService;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * Aspect for logging user actions and authentication/registration activities.
  */
 @Component
 @Aspect
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class AuditAspect {
 
 	/**
@@ -33,22 +36,6 @@ public class AuditAspect {
 	 * Manager for handling actions associated with method names.
 	 */
 	private final ActionManager actionManager;
-
-	/**
-	 * Constructs a new AuditAspect with the specified dependencies.
-	 *
-	 * @param jwtService    The service for JWT operations.
-	 * @param auditService  The service for audit operations.
-	 * @param actionManager The manager for handling actions associated with method names.
-	 */
-	public AuditAspect(JwtService jwtService,
-					   AuditService auditService,
-					   ActionManager actionManager) {
-		this.jwtService = jwtService;
-		this.auditService = auditService;
-		this.actionManager = actionManager;
-
-	}
 
 	/**
 	 * Pointcut for methods annotated with @Loggable.
@@ -87,24 +74,26 @@ public class AuditAspect {
 	 * @return The result of the method execution
 	 * @throws Throwable If an error occurs during method execution
 	 */
-//	@Around("(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.MeterController.*(..))) " +
-//			"|| " +
-//			"(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.AuditController.*(..)))")
-//	public Object auditUserAction(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-//		Object result = proceedingJoinPoint.proceed();
-//		ActionEnum action = getAction(proceedingJoinPoint);
-//
-//		int userId = Arrays
-//				.stream(proceedingJoinPoint.getArgs())
-//				.filter(o -> o instanceof String)
-//				.map(Object::toString)
-//				.filter(str -> str.split("\\.").length == 3)
-//				.findFirst()
-//				.map(jwtService::extractPlayerId)
-//				.orElseThrow(() -> new IllegalStateException("Unable to extractor user ID from arguments."));
-//		auditService.saveUserAction(action, userId);
-//		return result;
-//	}
+	@Around("(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.MeterController.*(..))) || " +
+			"(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.AuditController.*(..)))")
+	public Object auditUserAction(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+		Object result = proceedingJoinPoint.proceed();
+		ActionEnum action = getAction(proceedingJoinPoint);
+
+		Optional<String> optionalJwtToken = Arrays
+				.stream(proceedingJoinPoint.getArgs())
+				.filter(o -> o instanceof String)
+				.map(Object::toString)
+				.filter(str -> str.split("\\.").length == 3)
+				.findFirst();
+		if (optionalJwtToken.isPresent()) {
+			int userId = optionalJwtToken
+					.map(jwtService::extractPlayerId)
+					.orElseThrow(() -> new IllegalStateException("Unable to extractor user ID from arguments."));
+			auditService.saveUserAction(action, userId);
+		}
+		return result;
+	}
 
 	/**
 	 * Retrieves the action associated with the method being executed.

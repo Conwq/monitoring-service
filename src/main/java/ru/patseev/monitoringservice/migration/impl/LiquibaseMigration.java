@@ -1,12 +1,12 @@
 package ru.patseev.monitoringservice.migration.impl;
 
+import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.migration.Migration;
@@ -33,7 +33,7 @@ public class LiquibaseMigration implements Migration {
 	 * The path to the Liquibase changelog XML file containing migration instructions.
 	 */
 	@Value("${changelog.liquibase.file}")
-	private String pathChangelog;
+	private String pathChangelog = "db/changelog/changelog.xml";
 
 	/**
 	 * The default schema name to be used during the migration process.
@@ -60,10 +60,9 @@ public class LiquibaseMigration implements Migration {
 					.findCorrectDatabaseImplementation(new JdbcConnection(connection));
 			database.setLiquibaseSchemaName(schemaName);
 
-			Liquibase liquibase = new Liquibase(pathChangelog,
-					new ClassLoaderResourceAccessor(), database);
+			Liquibase liquibase = new Liquibase(pathChangelog, new ClassLoaderResourceAccessor(), database);
 			liquibase.getDatabase().setDefaultSchemaName(defaultSchema);
-			liquibase.update();
+			liquibase.update(new Contexts());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

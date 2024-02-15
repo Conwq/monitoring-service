@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -47,7 +48,7 @@ public class AuditController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A ResponseEntity with a list of UserActionDto representing user actions.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Get list of user actions")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved list of user actions"),

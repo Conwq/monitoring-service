@@ -82,7 +82,7 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return The current data meter reading as a DataMeterDto object.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Retrieve the current data meter reading for the specified user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved current data meter reading"),
@@ -105,7 +105,7 @@ public class MeterController {
 	 * @param jwtToken     The JWT token for user authentication.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Save the data meter reading for the specified user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Meter reading data saved successfully"),
@@ -134,7 +134,7 @@ public class MeterController {
 	 * @param month    The month for which the data meter reading is requested.
 	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Retrieve the data meter reading for the specified user and month")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved data meter readings for the specified month"),
@@ -155,7 +155,7 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A list of data meter readings as DataMeterDto objects.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Retrieve all data meter readings for the specified user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved all data meter readings"),
@@ -173,7 +173,7 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A map containing username as the key and DataMeterDto as the value.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Retrieve data from all meter users")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved data from all meter users")
@@ -190,7 +190,7 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A list of MeterTypeDto representing available meter types.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Retrieve a list of available meter types")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved available meter types")
@@ -207,7 +207,7 @@ public class MeterController {
 	 * @param jwtToken     The JWT token for user authentication.
 	 * @param meterTypeDto An object containing the data of the new meter.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Save a new type meter")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "New meter type saved successfully"),

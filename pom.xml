@@ -23,7 +23,7 @@
         <testcontainers.version>1.19.3</testcontainers.version>
         <jackson.version>2.15.3</jackson.version>
         <json.web.token.version>0.12.5</json.web.token.version>
-        <aspectj.version>1.9.20.1</aspectj.version>
+        <aspectj.version>1.9.21</aspectj.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <plugin.aspectj.version>1.14.0</plugin.aspectj.version>
         <plugin.maven.compiler.version>3.11.0</plugin.maven.compiler.version>
@@ -80,6 +80,16 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
         <dependency>
@@ -206,8 +216,8 @@
                     <sources/>
                     <aspectLibraries>
                         <aspectLibrary>
-                            <groupId>you.own.aspect.libary</groupId>
-                            <artifactId>your-library</artifactId>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjrt</artifactId>-->
                         </aspectLibrary>
                     </aspectLibraries>
 
@@ -215,7 +225,7 @@
                 <executions>
                     <execution>
                         <id>default-compile</id>
-                        <phase>process-classes</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
@@ -235,64 +245,11 @@
                             <weaveDirectories>
                                 <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>
                             </weaveDirectories>
-                            <skip>true</skip>
+<!--                            <skip>true</skip>-->
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
-
-<!--            -->
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>aspectj-maven-plugin</artifactId>-->
-<!--                <version>${plugin.aspectj.version}</version>-->
-<!--                <configuration>-->
-<!--                    <complianceLevel>16</complianceLevel>-->
-<!--                    <source>16</source>-->
-<!--                    <target>16</target>-->
-<!--                    <showWeaveInfo>true</showWeaveInfo>-->
-<!--                    <Xlint>ignore</Xlint>-->
-<!--                    <encoding>UTF-8</encoding>-->
-<!--                    <verbose>false</verbose>-->
-<!--                    <verbose>true</verbose>-->
-<!--                    <forceAjcCompile>true</forceAjcCompile>-->
-<!--                    <sources/>-->
-<!--                    <weaveDirectories>-->
-<!--                        <weaveDirectory>${project.build.directory}/classes</weaveDirectory>-->
-<!--                    </weaveDirectories>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>class</id>-->
-<!--                        <phase>process-classes</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>compile</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>test</id>-->
-<!--                        <goals>-->
-<!--                            <goal>test-compile</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <skip>true</skip>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.aspectj</groupId>-->
-<!--                        <artifactId>aspectjtools</artifactId>-->
-<!--                        <version>${aspectj.version}</version>-->
-<!--                    </dependency>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.aspectj</groupId>-->
-<!--                        <artifactId>aspectjrt</artifactId>-->
-<!--                        <version>${aspectj.version}</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -55,7 +56,7 @@ public class UserController {
 	 * @param userDto The user data to be saved.
 	 * @return The JWT token generated based on the saved user data.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Register a new user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully registered user and generated JWT token"),
@@ -82,7 +83,7 @@ public class UserController {
 	 * @param userDto The data transfer object containing user authentication information.
 	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-	//@Audit
+	@Audit
 	@Operation(summary = "Authenticate user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully authenticated user and generated JWT token"),
