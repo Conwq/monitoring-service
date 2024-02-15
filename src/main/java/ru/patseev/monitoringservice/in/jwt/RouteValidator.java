@@ -32,7 +32,7 @@ public class RouteValidator {
 		put("/meters/specified_month", USER_ROLE);
 		put("/meters/data", USER_ROLE);
 		put("/meters/all_data", ADMIN_ROLE);
-		put("/meters/meters", USER_ROLE);
+		put("/meters/meter_types", USER_ROLE);
 		put("/meters/save_meter", ADMIN_ROLE);
 	}};
 

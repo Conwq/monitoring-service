@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
@@ -14,6 +14,7 @@ import java.util.Optional;
  * The UserRepositoryImpl class is an implementation of the UserRepository interface.
  */
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 	/**
 	 * The data source used for obtaining a database connection.
@@ -24,18 +25,6 @@ public class UserRepositoryImpl implements UserRepository {
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
-
-	/**
-	 * Constructs an UserRepositoryImpl object with the provided DataSource and ConnectionManager.
-	 *
-	 * @param dataSource        The DataSource instance used for obtaining database connections.
-	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
-	 */
-	@Autowired
-	public UserRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
-		this.dataSource = dataSource;
-		this.connectionManager = connectionManager;
-	}
 
 	/**
 	 * {@inheritDoc}

@@ -4,7 +4,7 @@
 		"name": "monitoring service request URL",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "26591604",
-		"_collection_link": "https://dark-shuttle-468541.postman.co/workspace/13f0589d-a376-40bb-8eb0-7bdacfe65655/collection/26591604-7ec92663-d4b8-4f6b-954e-94e593cd3339?action=share&source=collection_link&creator=26591604"
+		"_collection_link": "https://dark-shuttle-468541.postman.co/workspace/Team-Workspace~13f0589d-a376-40bb-8eb0-7bdacfe65655/collection/26591604-7ec92663-d4b8-4f6b-954e-94e593cd3339?action=share&source=collection_link&creator=26591604"
 	},
 	"item": [
 		{
@@ -17,31 +17,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"3\",\r\n    \"password\" : \"3\"\r\n}",
+							"raw": "{\r\n    \"username\" : \"6\",\r\n    \"password\" : \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/users?operation=registration",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"users"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "registration"
-								}
-							]
-						}
+						"url": "http://localhost:8080/users/register"
 					},
 					"response": []
 				},
@@ -49,34 +32,24 @@
 					"name": "Аутентификация пользователя",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "dsf",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"1\",\r\n    \"password\" : \"1\"\r\n}",
+							"raw": "{\r\n    \"username\" : \"2\",\r\n    \"password\" : \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/users?operation=auth",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"users"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "auth"
-								}
-							]
-						}
+						"url": "http://localhost:8080/users/auth"
 					},
 					"response": []
 				}
@@ -92,37 +65,20 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6NCwic3ViIjoiMyIsImlhdCI6MTcwNzUwMzM5MCwiZXhwIjoxNzA3NTEyMDMwfQ.14En9uqjUbvGe-hKx5nRv0zXoIeKNwRejImv50R3imU",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6Miwic3ViIjoiMiIsImlhdCI6MTcwNzkxMDEwNSwiZXhwIjoxNzA3OTE4NzQ1fQ.DPyIwj5_JHGMgMbakObp849N4XG-r2WUXLhZpAtsQwM",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"value\" : 2020422,\r\n    \"meterTypeId\" : 1\r\n}",
+							"raw": "{\r\n    \"value\" : -1,\r\n    \"meterTypeId\" : 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=save_data",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "save_data"
-								}
-							]
-						}
+						"url": "http://localhost:8080/meters/save_data"
 					},
 					"response": []
 				},
@@ -133,37 +89,20 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc1MDM1MTAsImV4cCI6MTcwNzUxMjE1MH0.XzVVzGcijE23FatQkHriJf4XN4LRqJGRHoRsX62Lidk",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc5MTAxNTAsImV4cCI6MTcwNzkxODc5MH0.tiolaX_NI2ARwC9k9UQHDEocEEffA1g4nRTQcLww8DE",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"typeName\" : \"new meter type\"\r\n}",
+							"raw": "{\r\n    \"typeName\" : \"w222w\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=add_meter_type",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "add_meter_type"
-								}
-							]
-						}
+						"url": "http://localhost:8080/meters/save_meter"
 					},
 					"response": []
 				},
@@ -174,28 +113,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6NCwic3ViIjoiMyIsImlhdCI6MTcwNzUwMzM5MCwiZXhwIjoxNzA3NTEyMDMwfQ.14En9uqjUbvGe-hKx5nRv0zXoIeKNwRejImv50R3imU",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6Mywic3ViIjoiMiIsImlhdCI6MTcwNzUxMTIxNywiZXhwIjoxNzA3NTE5ODU3fQ.-D-ANbFI-BTTuRds3Wki7VouAtIFcsr1SdOLfnyCPsQ",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=last_data",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "last_data"
-								}
-							]
-						}
+						"url": "http://localhost:8080/meters/last_data"
 					},
 					"response": []
 				},
@@ -206,31 +128,22 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6NCwic3ViIjoiMyIsImlhdCI6MTcwNzUwMzM5MCwiZXhwIjoxNzA3NTEyMDMwfQ.14En9uqjUbvGe-hKx5nRv0zXoIeKNwRejImv50R3imU",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6Mywic3ViIjoiMiIsImlhdCI6MTcwNzUxMTIxNywiZXhwIjoxNzA3NTE5ODU3fQ.-D-ANbFI-BTTuRds3Wki7VouAtIFcsr1SdOLfnyCPsQ",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=specified_month_data&month=2",
+							"raw": "http://localhost:8080/meters/specified_month?month=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"monitoring_service",
-								"meters"
+								"meters",
+								"specified_month"
 							],
 							"query": [
-								{
-									"key": "operation",
-									"value": "specified_month_data"
-								},
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								},
 								{
 									"key": "month",
 									"value": "2"
@@ -247,28 +160,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6NCwic3ViIjoiMyIsImlhdCI6MTcwNzUwMzM5MCwiZXhwIjoxNzA3NTEyMDMwfQ.14En9uqjUbvGe-hKx5nRv0zXoIeKNwRejImv50R3imU",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6Mywic3ViIjoiMiIsImlhdCI6MTcwNzUxMTIxNywiZXhwIjoxNzA3NTE5ODU3fQ.-D-ANbFI-BTTuRds3Wki7VouAtIFcsr1SdOLfnyCPsQ",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=user_data",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "user_data"
-								}
-							]
-						}
+						"url": "http://localhost:8080/meters/data"
 					},
 					"response": []
 				},
@@ -279,28 +175,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc1MDM1MTAsImV4cCI6MTcwNzUxMjE1MH0.XzVVzGcijE23FatQkHriJf4XN4LRqJGRHoRsX62Lidk",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc4MTM0MjYsImV4cCI6MTcwNzgyMjA2Nn0.QFkVssJHCCA7hV57nHPqPKjZyThL5Ykxml_4feUXkvE",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=all_data",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "all_data"
-								}
-							]
-						}
+						"url": "http://localhost:8080/meters/all_data"
 					},
 					"response": []
 				},
@@ -311,28 +190,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6NCwic3ViIjoiMyIsImlhdCI6MTcwNzUwMzM5MCwiZXhwIjoxNzA3NTEyMDMwfQ.14En9uqjUbvGe-hKx5nRv0zXoIeKNwRejImv50R3imU",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6Miwic3ViIjoiMiIsImlhdCI6MTcwNzgyMzQwNiwiZXhwIjoxNzA3ODMyMDQ2fQ.F-12G28caFKdTYJpB33MVBuptEIiPnlRnAfCfx8XSWQ",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/meters?operation=all_meter_types",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"meters"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "all_meter_types"
-								}
-							]
-						}
+						"url": "http://localhost:8080/monitoring_service/meters/meter_types"
 					},
 					"response": []
 				}
@@ -348,32 +210,11 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc1MDM1MTAsImV4cCI6MTcwNzUxMjE1MH0.XzVVzGcijE23FatQkHriJf4XN4LRqJGRHoRsX62Lidk",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjEsInN1YiI6IjEiLCJpYXQiOjE3MDc1MDc4NTYsImV4cCI6MTcwNzUxNjQ5Nn0.mPyxo9MP1u-siIgbWaR-Q6AsO3o6peWdOsdjxhzAOJU",
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "http://localhost:8080/monitoring_service/audits?operation=get_audit&username=2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"monitoring_service",
-								"audits"
-							],
-							"query": [
-								{
-									"key": "operation",
-									"value": "get_audit"
-								},
-								{
-									"key": "username",
-									"value": "2"
-								}
-							]
-						}
+						"url": "http://localhost:8080/audits"
 					},
 					"response": []
 				}

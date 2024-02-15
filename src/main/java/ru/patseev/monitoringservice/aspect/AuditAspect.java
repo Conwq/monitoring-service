@@ -1,10 +1,10 @@
 package ru.patseev.monitoringservice.aspect;
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.enums.ActionEnum;
@@ -16,6 +16,7 @@ import ru.patseev.monitoringservice.service.AuditService;
  */
 @Component
 @Aspect
+//@RequiredArgsConstructor
 public class AuditAspect {
 
 	/**
@@ -36,17 +37,17 @@ public class AuditAspect {
 	/**
 	 * Constructs a new AuditAspect with the specified dependencies.
 	 *
-	 * @param jwtService     The service for JWT operations.
-	 * @param auditService   The service for audit operations.
-	 * @param actionManager  The manager for handling actions associated with method names.
+	 * @param jwtService    The service for JWT operations.
+	 * @param auditService  The service for audit operations.
+	 * @param actionManager The manager for handling actions associated with method names.
 	 */
-	@Autowired
 	public AuditAspect(JwtService jwtService,
 					   AuditService auditService,
 					   ActionManager actionManager) {
 		this.jwtService = jwtService;
 		this.auditService = auditService;
 		this.actionManager = actionManager;
+
 	}
 
 	/**
@@ -69,22 +70,26 @@ public class AuditAspect {
 		ActionEnum action = getAction(proceedingJoinPoint);
 		Object body = result.getBody();
 		assert body != null;
-		String jwtToken = body.toString();
-		int userId = jwtService.extractPlayerId(jwtToken);
-		auditService.saveUserAction(action, userId);
+		String stringBody = body.toString();
+		String jwtToken;
+		if (stringBody.split("\\.").length == 3) {
+			jwtToken = stringBody;
+			int userId = jwtService.extractPlayerId(jwtToken);
+			auditService.saveUserAction(action, userId);
+		}
 		return result;
 	}
 
-//	/**
-//	 * Advice for logging user actions in MeterController and AuditController.
-//	 *
-//	 * @param proceedingJoinPoint The proceeding join point
-//	 * @return The result of the method execution
-//	 * @throws Throwable If an error occurs during method execution
-//	 */
-//	@Around("annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.MeterController.*(..)) " +
+	/**
+	 * Advice for logging user actions in MeterController and AuditController.
+	 *
+	 * @param proceedingJoinPoint The proceeding join point
+	 * @return The result of the method execution
+	 * @throws Throwable If an error occurs during method execution
+	 */
+//	@Around("(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.MeterController.*(..))) " +
 //			"|| " +
-//			"annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.AuditController.*(..))")
+//			"(annotatedByAudit() && execution(* ru.patseev.monitoringservice.in.controller.AuditController.*(..)))")
 //	public Object auditUserAction(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 //		Object result = proceedingJoinPoint.proceed();
 //		ActionEnum action = getAction(proceedingJoinPoint);
@@ -93,13 +98,10 @@ public class AuditAspect {
 //				.stream(proceedingJoinPoint.getArgs())
 //				.filter(o -> o instanceof String)
 //				.map(Object::toString)
-//				.filter(str -> str.length() > 40)
+//				.filter(str -> str.split("\\.").length == 3)
 //				.findFirst()
 //				.map(jwtService::extractPlayerId)
 //				.orElseThrow(() -> new IllegalStateException("Unable to extractor user ID from arguments."));
-//
-//		System.out.println(userId);
-//
 //		auditService.saveUserAction(action, userId);
 //		return result;
 //	}

@@ -1,10 +1,14 @@
 package ru.patseev.monitoringservice.in.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
@@ -78,7 +82,12 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return The current data meter reading as a DataMeterDto object.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Retrieve the current data meter reading for the specified user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved current data meter reading"),
+			@ApiResponse(responseCode = "404", description = "Data meter reading not found")
+	})
 	@GetMapping("/last_data")
 	public ResponseEntity<?> getLatestMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		try {
@@ -96,7 +105,13 @@ public class MeterController {
 	 * @param jwtToken     The JWT token for user authentication.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Save the data meter reading for the specified user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Meter reading data saved successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid data provided"),
+			@ApiResponse(responseCode = "409", description = "Meter data was already submitted")
+	})
 	@PostMapping("/save_data")
 	public ResponseEntity<?> saveMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 										   @RequestBody DataMeterDto dataMeterDto) {
@@ -119,7 +134,12 @@ public class MeterController {
 	 * @param month    The month for which the data meter reading is requested.
 	 * @return Returns a list of all data for the specified month or an empty list.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Retrieve the data meter reading for the specified user and month")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved data meter readings for the specified month"),
+			@ApiResponse(responseCode = "404", description = "User not found or no data available for the specified month")
+	})
 	@GetMapping("/specified_month")
 	public ResponseEntity<?> getMeterDataForSpecifiedMonth(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 														   @RequestParam("month") String month) {
@@ -135,7 +155,11 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A list of data meter readings as DataMeterDto objects.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Retrieve all data meter readings for the specified user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved all data meter readings"),
+	})
 	@GetMapping("/data")
 	public ResponseEntity<?> getMeterDataForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		int userId = jwtService.extractPlayerId(jwtToken);
@@ -149,7 +173,11 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A map containing username as the key and DataMeterDto as the value.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Retrieve data from all meter users")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved data from all meter users")
+	})
 	@GetMapping("/all_data")
 	public ResponseEntity<?> getDataFromAllMeterUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = meterService.getDataFromAllMeterUsers();
@@ -162,7 +190,11 @@ public class MeterController {
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A list of MeterTypeDto representing available meter types.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Retrieve a list of available meter types")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved available meter types")
+	})
 	@GetMapping("/meter_types")
 	public ResponseEntity<?> getAvailableMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		List<MeterTypeDto> availableMeterType = meterService.getAvailableMeterType();
@@ -175,7 +207,13 @@ public class MeterController {
 	 * @param jwtToken     The JWT token for user authentication.
 	 * @param meterTypeDto An object containing the data of the new meter.
 	 */
-//	@Loggable
+	//@Audit
+	@Operation(summary = "Save a new type meter")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "New meter type saved successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid data provided"),
+			@ApiResponse(responseCode = "409", description = "Meter type already exists")
+	})
 	@PostMapping("/save_meter")
 	public ResponseEntity<?> addNewMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 											 @RequestBody MeterTypeDto meterTypeDto) {

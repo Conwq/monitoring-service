@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.enums.ActionEnum;
@@ -16,6 +16,7 @@ import java.util.List;
  * The AuditRepositoryImpl class is an implementation of the AuditRepository interface.
  */
 @Repository
+@RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {
 
 	/**
@@ -27,18 +28,6 @@ public class AuditRepositoryImpl implements AuditRepository {
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
-
-	/**
-	 * Constructs an AuditRepositoryImpl object with the provided DataSource and ConnectionManager.
-	 *
-	 * @param dataSource        The DataSource instance used for obtaining database connections.
-	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
-	 */
-	@Autowired
-	public AuditRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
-		this.dataSource = dataSource;
-		this.connectionManager = connectionManager;
-	}
 
 	/**
 	 * {@inheritDoc}

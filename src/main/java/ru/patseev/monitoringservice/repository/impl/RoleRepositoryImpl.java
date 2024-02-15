@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
@@ -16,23 +16,13 @@ import java.sql.SQLException;
  * The RoleRepositoryImpl class provides methods to interact with the database for role-related operations.
  */
 @Repository
+@RequiredArgsConstructor
 public class RoleRepositoryImpl implements RoleRepository {
-
 
 	/**
 	 * The data source used for obtaining a database connection.
 	 */
 	private final DataSource dataSource;
-
-	/**
-	 * Constructs an AuditRepositoryImpl object with the provided DataSource.
-	 *
-	 * @param dataSource The DataSource instance used for obtaining database connections.
-	 */
-	@Autowired
-	public RoleRepositoryImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
 	/**
 	 * Retrieves a role by its unique identifier.
@@ -51,7 +41,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
 			try (ResultSet resultSet = statement.executeQuery()) {
 				if (!resultSet.next()) {
-					throw new RoleNotExistsException("Роль не найдена");
+					throw new RoleNotExistsException("Role not found");
 				}
 				role = extractRole(resultSet);
 			}

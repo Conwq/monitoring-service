@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
@@ -14,6 +14,7 @@ import java.util.*;
  * The DataMeterRepositoryImpl class is an implementation of the DataMeterRepository interface.
  */
 @Repository
+@RequiredArgsConstructor
 public class DataMeterRepositoryImpl implements DataMeterRepository {
 
 	/**
@@ -25,18 +26,6 @@ public class DataMeterRepositoryImpl implements DataMeterRepository {
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
-
-	/**
-	 * Constructs an DataMeterRepositoryImpl object with the provided DataSource and ConnectionManager.
-	 *
-	 * @param dataSource        The DataSource instance used for obtaining database connections.
-	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
-	 */
-	@Autowired
-	public DataMeterRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
-		this.dataSource = dataSource;
-		this.connectionManager = connectionManager;
-	}
 
 	/**
 	 * {@inheritDoc}

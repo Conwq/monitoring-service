@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
@@ -16,8 +16,8 @@ import java.util.List;
  * The MeterTypeRepositoryImpl class is an implementation of the MeterTypeRepository interface.
  */
 @Repository
+@RequiredArgsConstructor
 public class MeterTypeRepositoryImpl implements MeterTypeRepository {
-
 
 	/**
 	 * The data source used for obtaining a database connection.
@@ -28,18 +28,6 @@ public class MeterTypeRepositoryImpl implements MeterTypeRepository {
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
-
-	/**
-	 * Constructs an MeterTypeRepositoryImpl object with the provided DataSource and ConnectionManager.
-	 *
-	 * @param dataSource        The DataSource instance used for obtaining database connections.
-	 * @param connectionManager The ConnectionManager instance providing methods for working with connections.
-	 */
-	@Autowired
-	public MeterTypeRepositoryImpl(DataSource dataSource, ConnectionManager connectionManager) {
-		this.dataSource = dataSource;
-		this.connectionManager = connectionManager;
-	}
 
 	/**
 	 * {@inheritDoc}

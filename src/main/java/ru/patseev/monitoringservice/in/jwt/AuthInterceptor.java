@@ -2,6 +2,7 @@ package ru.patseev.monitoringservice.in.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
@@ -18,6 +19,7 @@ import java.io.IOException;
  * the requested resource.
  */
 @Component
+@RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
 	/**
@@ -29,18 +31,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 	 * The RouteValidator instance for validating routes and roles.
 	 */
 	private final RouteValidator routeValidator;
-
-	/**
-	 * Constructs an AuthInterceptor object with the provided JwtService and RouteValidator.
-	 *
-	 * @param jwtService     The JwtService instance for JWT-related operations.
-	 * @param routeValidator The RouteValidator instance for validating routes and roles.
-	 */
-	@Autowired
-	public AuthInterceptor(JwtService jwtService, RouteValidator routeValidator) {
-		this.jwtService = jwtService;
-		this.routeValidator = routeValidator;
-	}
 
 	/**
 	 * Intercepts the incoming HTTP request to authenticate and authorize access to resources.

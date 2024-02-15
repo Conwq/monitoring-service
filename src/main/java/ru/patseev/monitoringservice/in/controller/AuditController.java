@@ -1,6 +1,10 @@
 package ru.patseev.monitoringservice.in.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/audits")
+@RequiredArgsConstructor
 public class AuditController {
 
 	/**
@@ -36,28 +41,21 @@ public class AuditController {
 	private final ResponseGenerator responseGenerator;
 
 	/**
-	 * Constructs a new AuditController with the specified dependencies.
-	 *
-	 * @param auditService     The service for audit operations.
-	 * @param userController   The controller for user-related operations.
-	 * @param responseGenerator The generator for HTTP responses.
-	 */
-	@Autowired
-	public AuditController(AuditService auditService, UserController userController, ResponseGenerator responseGenerator) {
-		this.auditService = auditService;
-		this.userController = userController;
-		this.responseGenerator = responseGenerator;
-	}
-
-	/**
 	 * Retrieves a list of user actions based on the provided username.
 	 *
 	 * @param username The username for which user actions are to be retrieved.
 	 * @param jwtToken The JWT token for user authentication.
 	 * @return A ResponseEntity with a list of UserActionDto representing user actions.
 	 */
+	//@Audit
+	@Operation(summary = "Get list of user actions")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved list of user actions"),
+			@ApiResponse(responseCode = "404", description = "User not found")
+	})
 	@GetMapping
-	public ResponseEntity<?> getListOfUserActions(@RequestParam("username") String username,
+	public ResponseEntity<?> getListOfUserActions(@Parameter(description = "The username of the user whose actions are being retrieved")
+												  @RequestParam("username") String username,
 												  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		try {
 			UserDto searchedUser = userController.getUser(username);

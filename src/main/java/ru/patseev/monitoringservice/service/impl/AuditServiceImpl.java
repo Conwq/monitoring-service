@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
@@ -16,6 +16,7 @@ import java.util.List;
  * The AuditServiceImpl class is an implementation of the AuditService interface.
  */
 @Service
+@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
 	/**
@@ -27,18 +28,6 @@ public class AuditServiceImpl implements AuditService {
 	 * The mapper for converting between ActionEnum objects and UserAction objects.
 	 */
 	private final AuditMapper auditMapper;
-
-	/**
-	 * Constructs an AuditServiceImpl object with the provided AuditRepository and AuditMapper.
-	 *
-	 * @param auditRepository The AuditRepository instance responsible for data access.
-	 * @param auditMapper     The AuditMapper instance responsible for mapping audit entities.
-	 */
-	@Autowired
-	public AuditServiceImpl(AuditRepository auditRepository, AuditMapper auditMapper) {
-		this.auditRepository = auditRepository;
-		this.auditMapper = auditMapper;
-	}
 
 	/**
 	 * {@inheritDoc}

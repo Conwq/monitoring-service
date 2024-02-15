@@ -1,6 +1,6 @@
 package ru.patseev.monitoringservice.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * The MeterServiceImpl class is an implementation of the DataMeterService interface.
  */
 @Service
+@RequiredArgsConstructor
 public class MeterServiceImpl implements MeterService {
 
 	/**
@@ -45,25 +46,6 @@ public class MeterServiceImpl implements MeterService {
 	 * The MeterDataMapper is responsible for mapping between DataMeter entities and DataMeterDto DTOs.
 	 */
 	private final MeterDataMapper meterDataMapper;
-
-	/**
-	 * Constructs a MeterServiceImpl object with the provided repositories and mappers.
-	 *
-	 * @param dataMeterRepository The DataMeterRepository instance responsible for managing metered data.
-	 * @param meterTypeRepository The MeterTypeRepository instance responsible for managing meter types.
-	 * @param meterTypeMapper     The MeterTypeMapper instance responsible for mapping meter type entities.
-	 * @param meterDataMapper     The MeterDataMapper instance responsible for mapping meter data entities.
-	 */
-	@Autowired
-	public MeterServiceImpl(DataMeterRepository dataMeterRepository,
-							MeterTypeRepository meterTypeRepository,
-							MeterTypeMapper meterTypeMapper,
-							MeterDataMapper meterDataMapper) {
-		this.dataMeterRepository = dataMeterRepository;
-		this.meterTypeRepository = meterTypeRepository;
-		this.meterTypeMapper = meterTypeMapper;
-		this.meterDataMapper = meterDataMapper;
-	}
 
 	/**
 	 * {@inheritDoc}

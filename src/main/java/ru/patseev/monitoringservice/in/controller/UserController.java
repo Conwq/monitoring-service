@@ -1,11 +1,15 @@
 package ru.patseev.monitoringservice.in.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -22,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
 	/**
@@ -45,31 +50,18 @@ public class UserController {
 	private final Validator<UserDto> userDtoValidator;
 
 	/**
-	 * Constructs a new UserController with the specified dependencies.
-	 *
-	 * @param userService       The service for user-related operations.
-	 * @param jwtService        The service for JWT operations.
-	 * @param responseGenerator The response generator for handling responses.
-	 * @param userDtoValidator  Validator for UserDto objects.
-	 */
-	@Autowired
-	public UserController(UserService userService,
-						  JwtService jwtService,
-						  ResponseGenerator responseGenerator,
-						  Validator<UserDto> userDtoValidator) {
-		this.userService = userService;
-		this.jwtService = jwtService;
-		this.responseGenerator = responseGenerator;
-		this.userDtoValidator = userDtoValidator;
-	}
-
-	/**
 	 * Saves user data and generates a JWT token based on the saved user data.
 	 *
 	 * @param userDto The user data to be saved.
 	 * @return The JWT token generated based on the saved user data.
 	 */
-	@Audit
+	//@Audit
+	@Operation(summary = "Register a new user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully registered user and generated JWT token"),
+			@ApiResponse(responseCode = "400", description = "Invalid data provided for registration"),
+			@ApiResponse(responseCode = "409", description = "User already exists")
+	})
 	@PostMapping("/register")
 	public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
 		try {
@@ -90,7 +82,13 @@ public class UserController {
 	 * @param userDto The data transfer object containing user authentication information.
 	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-	@Audit
+	//@Audit
+	@Operation(summary = "Authenticate user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully authenticated user and generated JWT token"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "User not found")
+	})
 	@PostMapping("/auth")
 	public ResponseEntity<?> authUser(@RequestBody UserDto userDto) {
 		try {
@@ -111,8 +109,16 @@ public class UserController {
 	 * @param username The username of the user to retrieve.
 	 * @return A UserDto object representing the user with the specified username, or null if the user is not found.
 	 */
+	@Operation(summary = "Get user by username")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved user",
+					content = {@Content(mediaType = "application/json",
+							schema = @Schema(implementation = UserDto.class))}),
+			@ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+	})
 	@GetMapping
-	public UserDto getUser(@RequestParam("username") String username) {
+	public UserDto getUser(@Parameter(description = "The username of the user to retrieve")
+						   @RequestParam("username") String username) {
 		return userService.getUser(username);
 	}
 

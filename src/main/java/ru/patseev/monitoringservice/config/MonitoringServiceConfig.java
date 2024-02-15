@@ -1,5 +1,6 @@
 package ru.patseev.monitoringservice.config;
 
+import lombok.RequiredArgsConstructor;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
 @ComponentScan("ru.patseev.monitoringservice")
 @PropertySource(value = "classpath:application.yml", factory = YmlProperties.class)
 @EnableAspectJAutoProxy
+@RequiredArgsConstructor
 public class MonitoringServiceConfig implements WebMvcConfigurer {
 
 	/**
@@ -43,16 +45,6 @@ public class MonitoringServiceConfig implements WebMvcConfigurer {
 	 * The AuthInterceptor instance for intercepting HTTP requests.
 	 */
 	private final AuthInterceptor authInterceptor;
-
-	/**
-	 * Constructs a MonitoringServiceConfig object with the provided AuthInterceptor.
-	 *
-	 * @param authInterceptor The AuthInterceptor instance for intercepting HTTP requests.
-	 */
-	@Autowired
-	public MonitoringServiceConfig(AuthInterceptor authInterceptor) {
-		this.authInterceptor = authInterceptor;
-	}
 
 	/**
 	 * Creates and configures a data source (DataSource) for connecting to the database.

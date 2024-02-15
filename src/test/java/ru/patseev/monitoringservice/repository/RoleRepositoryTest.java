@@ -3,12 +3,9 @@ package ru.patseev.monitoringservice.repository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.postgresql.ds.PGSimpleDataSource;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.RoleRepositoryImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

@@ -5,6 +5,7 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.sql.Statement;
  * designed for executing Liquibase-based database migrations.
  */
 @Component
+@RequiredArgsConstructor
 public class LiquibaseMigration implements Migration {
 
 	/**
@@ -39,17 +41,10 @@ public class LiquibaseMigration implements Migration {
 	@Value("${default.schema}")
 	private String defaultSchema;
 
-	private final DataSource dataSource;
-
 	/**
-	 * Constructs a LiquibaseMigration object with the provided ConnectionManager and ResourceManager.
-	 *
-	 * @param dataSource The data source used for obtaining a database connection.
+	 * The data source used for obtaining a database connection.
 	 */
-	@Autowired
-	public LiquibaseMigration(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	private final DataSource dataSource;
 
 	/**
 	 * Performs the Liquibase-based database migration, creating the necessary schema and applying
