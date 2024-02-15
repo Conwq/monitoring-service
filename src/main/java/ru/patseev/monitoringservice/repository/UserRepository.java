@@ -24,4 +24,12 @@ public interface UserRepository {
 	 * @return An Optional containing the found user, or empty if not found.
 	 */
 	Optional<User> findUserByUsername(String username);
+
+	/**
+	 * Checks if a user with the specified username exists in the repository.
+	 *
+	 * @param username The username to check for existence.
+	 * @return true if the user exists, otherwise false.
+	 */
+	boolean existUserByUsername(String username);
 }

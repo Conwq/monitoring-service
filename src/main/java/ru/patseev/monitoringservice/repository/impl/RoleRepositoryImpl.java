@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.repository.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
@@ -14,13 +13,21 @@ import java.sql.SQLException;
 /**
  * The RoleRepositoryImpl class provides methods to interact with the database for role-related operations.
  */
-@RequiredArgsConstructor
 public class RoleRepositoryImpl implements RoleRepository {
 
 	/**
 	 * Provider that provides methods for working with database connections.
 	 */
 	private final ConnectionManager connectionManager;
+
+	/**
+	 * Constructs an RoleRepositoryImpl object with the provided ConnectionManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 */
+	public RoleRepositoryImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
 
 	/**
 	 * Retrieves a role by its unique identifier.

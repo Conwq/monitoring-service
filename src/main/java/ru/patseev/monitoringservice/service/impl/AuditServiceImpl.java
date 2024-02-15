@@ -1,22 +1,18 @@
 package ru.patseev.monitoringservice.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.service.AuditService;
-import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 /**
  * The AuditServiceImpl class is an implementation of the AuditService interface.
  */
-@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
 	/**
@@ -25,16 +21,28 @@ public class AuditServiceImpl implements AuditService {
 	private final AuditRepository auditRepository;
 
 	/**
+	 * The mapper for converting between ActionEnum objects and UserAction objects.
+	 */
+	private final AuditMapper auditMapper;
+
+	/**
+	 * Constructs an AuditServiceImpl object with the provided AuditRepository and AuditMapper.
+	 *
+	 * @param auditRepository The AuditRepository instance responsible for data access.
+	 * @param auditMapper     The AuditMapper instance responsible for mapping audit entities.
+	 */
+	public AuditServiceImpl(AuditRepository auditRepository, AuditMapper auditMapper) {
+		this.auditRepository = auditRepository;
+		this.auditMapper = auditMapper;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveUserAction(ActionEnum action, UserDto userDto) {
-		UserAction userAction = UserAction.builder()
-				.actionAt(Timestamp.from(Instant.now()))
-				.action(action)
-				.build();
-
-		auditRepository.save(userDto.userId(), userAction);
+	public void saveUserAction(ActionEnum action, int userId) {
+		UserAction userAction = auditMapper.toEntity(action, userId);
+		auditRepository.save(userAction);
 	}
 
 	/**
@@ -46,22 +54,12 @@ public class AuditServiceImpl implements AuditService {
 				.findUserActionsByUserId(userId);
 
 		if (userAction == null) {
-			throw new UserNotFoundException("\nПользователь не найден.");
+			throw new UserNotFoundException("User is not found");
 		}
 
 		return userAction
 				.stream()
-				.map(this::toDto)
+				.map(auditMapper::toDto)
 				.toList();
-	}
-
-	/**
-	 * Converts a UserAction object to a UserActionDto.
-	 *
-	 * @param userAction The UserAction object to be converted.
-	 * @return A UserActionDto representing the converted data.
-	 */
-	private UserActionDto toDto(UserAction userAction) {
-		return new UserActionDto(userAction.getActionAt().toLocalDateTime(), userAction.getAction());
 	}
 }

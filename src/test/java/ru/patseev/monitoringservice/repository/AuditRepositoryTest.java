@@ -41,18 +41,12 @@ class AuditRepositoryTest extends AbstractPostgreSQLContainer {
 		int userId = 1; //такой пользователь у меня уже будет на моменте миграции бд.
 		Timestamp currentTime = Timestamp.valueOf("2000-01-01 00:00:00");
 
-		UserAction registrationAction = UserAction.builder()
-				.actionAt(currentTime)
-				.action(ActionEnum.REGISTRATION)
-				.userId(userId).build();
+		UserAction registrationAction = new UserAction(null, currentTime, ActionEnum.REGISTRATION, userId);
 
-		UserAction logInAction = UserAction.builder()
-				.actionAt(currentTime)
-				.action(ActionEnum.LOG_IN)
-				.userId(userId).build();
+		UserAction logInAction = new UserAction(null, currentTime, ActionEnum.AUTHORIZATION, userId);
 
-		auditRepository.save(userId, registrationAction);
-		auditRepository.save(userId, logInAction);
+		auditRepository.save(registrationAction);
+		auditRepository.save(logInAction);
 
 		List<UserAction> actual = auditRepository.findUserActionsByUserId(userId);
 

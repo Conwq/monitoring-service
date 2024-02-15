@@ -9,8 +9,9 @@
     <preConditions>
         <dbms type="postgresql"/>
     </preConditions>
-    <include file="create-schema.xml" relativeToChangelogFile="true"/>
-    <include file="create-sequence.xml" relativeToChangelogFile="true"/>
-    <include file="create-tables.xml" relativeToChangelogFile="true"/>
-    <include file="insert-data.xml" relativeToChangelogFile="true"/>
+
+    <include file="V1_create-schema.xml" relativeToChangelogFile="true"/>
+    <include file="V2_create-sequence.xml" relativeToChangelogFile="true"/>
+    <include file="V3_create-tables.xml" relativeToChangelogFile="true"/>
+    <include file="V4_insert-data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

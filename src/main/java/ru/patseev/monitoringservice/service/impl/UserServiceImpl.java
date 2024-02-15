@@ -1,22 +1,20 @@
 package ru.patseev.monitoringservice.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import ru.patseev.monitoringservice.aspect.annotation.Loggable;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
-import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
 import ru.patseev.monitoringservice.service.UserService;
-
-import java.util.Optional;
+import ru.patseev.monitoringservice.service.mapper.UserMapper;
 
 /**
  * The UserServiceImpl class is an implementation of the UserService interface.
  */
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
 	/**
@@ -30,43 +28,57 @@ public class UserServiceImpl implements UserService {
 	private final RoleRepository roleRepository;
 
 	/**
-	 * {@inheritDoc}
+	 * The mapper for converting User entities to UserDto objects and vice versa.
 	 */
-	@Override
-	public UserDto saveUser(UserDto userDto) {
-		Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
+	private final UserMapper userMapper;
 
-		if (optionalUser.isPresent()) {
-			throw new UserAlreadyExistException("Такой пользователь уже существует.");
-		}
-
-		User user = User.builder()
-				.username(userDto.username())
-				.password(userDto.password())
-				.roleId(RoleEnum.USER.getRoleId())
-				.build();
-
-		int generatedKey = userRepository.saveUser(user);
-
-		return new UserDto(generatedKey, userDto.username(), null, RoleEnum.USER);
+	/**
+	 * Constructs a UserServiceImpl object with the provided UserRepository, RoleRepository, and UserMapper.
+	 *
+	 * @param userRepository The UserRepository instance responsible for managing user data.
+	 * @param roleRepository The RoleRepository instance responsible for managing role data.
+	 * @param userMapper     The UserMapper instance responsible for mapping user entities.
+	 */
+	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.userMapper = userMapper;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+	public UserDto saveUser(UserDto userDto) {
+		if (userRepository.existUserByUsername(userDto.username())) {
+			throw new UserAlreadyExistException("User with this username already exists");
+		}
+
+		User user = userMapper.toEntity(userDto);
+
+		int generatedKey = userRepository.saveUser(user);
+		user.setUserId(generatedKey);
+
+		return userMapper.toDto(user, RoleEnum.USER);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Loggable
+	@Override
 	public UserDto authUser(UserDto userDto) {
 		User user = userRepository.findUserByUsername(userDto.username())
-				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
+				.orElseThrow(() -> new UserNotFoundException("User is not found"));
 
 		if (!user.getPassword().equals(userDto.password())) {
-			throw new UserNotFoundException("Пользователь не найден.");
+			throw new UserNotFoundException("User is not found");
 		}
 
 		Role role = roleRepository.getRoleById(user.getRoleId());
 		RoleEnum roleEnum = RoleEnum.valueOf(role.getRoleName());
 
-		return toDto(user, roleEnum);
+		return userMapper.toDto(user, roleEnum);
 	}
 
 	/**
@@ -82,24 +94,8 @@ public class UserServiceImpl implements UserService {
 				.map(user -> {
 					Role role = roleRepository.getRoleById(user.getRoleId());
 					RoleEnum roleEnum = RoleEnum.valueOf(role.getRoleName());
-					return toDto(user, roleEnum);
+					return userMapper.toDto(user, roleEnum);
 				})
-				.orElseThrow(() -> new UserNotFoundException("Пользователь не найден."));
-	}
-
-	/**
-	 * Converts a User object to a code UserDto object.
-	 *
-	 * @param user     The User object to be converted.
-	 * @param roleEnum The code RoleEnum associated with the user.
-	 * @return A UserDto object representing the converted user.
-	 */
-	private UserDto toDto(User user, RoleEnum roleEnum) {
-		return new UserDto(
-				user.getUserId(),
-				user.getUsername(),
-				null,
-				roleEnum
-		);
+				.orElseThrow(() -> new UserNotFoundException("User is not found"));
 	}
 }

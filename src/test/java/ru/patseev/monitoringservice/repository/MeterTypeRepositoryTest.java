@@ -41,10 +41,8 @@ class MeterTypeRepositoryTest extends AbstractPostgreSQLContainer {
 		String electricity = "electricity";
 		String coldWater = "cold water";
 
-		MeterType typeElectricity = MeterType.builder()
-				.typeName(electricity).build();
-		MeterType typeColdWater = MeterType.builder()
-				.typeName(coldWater).build();
+		MeterType typeElectricity = new MeterType(null, electricity);
+		MeterType typeColdWater = new MeterType(null, coldWater);
 
 		meterTypeRepository.saveMeterType(typeElectricity);
 		meterTypeRepository.saveMeterType(typeColdWater);

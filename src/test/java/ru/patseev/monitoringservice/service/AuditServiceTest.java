@@ -13,6 +13,7 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.AuditRepository;
 import ru.patseev.monitoringservice.service.impl.AuditServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -35,7 +36,9 @@ class AuditServiceTest {
 	@BeforeAll
 	static void setUp() {
 		auditRepository = mock(AuditRepository.class);
-		auditService = new AuditServiceImpl(auditRepository);
+		AuditMapper auditMapper = AuditMapper.instance;
+
+		auditService = new AuditServiceImpl(auditRepository, auditMapper);
 	}
 
 	@BeforeEach
@@ -46,10 +49,10 @@ class AuditServiceTest {
 	@Test
 	@DisplayName("saveUserAction should save user")
 	void saveUserAction_shouldSaveUser() {
-		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
+		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto.userId());
 
 		verify(auditRepository, times(1))
-				.save(anyInt(), any(UserAction.class));
+				.save(any(UserAction.class));
 	}
 
 	@Test
@@ -60,12 +63,12 @@ class AuditServiceTest {
 
 		List<UserAction> userActions = new ArrayList<>() {{
 			add(new UserAction(1, registrationAt, ActionEnum.REGISTRATION, userDto.userId()));
-			add(new UserAction(2, logInAt, ActionEnum.LOG_IN, userDto.userId()));
+			add(new UserAction(2, logInAt, ActionEnum.AUTHORIZATION, userDto.userId()));
 		}};
 
 		List<UserActionDto> expected = new ArrayList<>() {{
-			add(new UserActionDto(registrationAt.toLocalDateTime(), ActionEnum.REGISTRATION));
-			add(new UserActionDto(logInAt.toLocalDateTime(), ActionEnum.LOG_IN));
+			add(new UserActionDto(registrationAt, ActionEnum.REGISTRATION));
+			add(new UserActionDto(logInAt, ActionEnum.AUTHORIZATION));
 		}};
 
 		when(auditRepository.findUserActionsByUserId(userDto.userId()))

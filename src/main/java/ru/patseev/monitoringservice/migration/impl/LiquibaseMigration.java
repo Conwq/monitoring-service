@@ -5,7 +5,6 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import lombok.RequiredArgsConstructor;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
 import ru.patseev.monitoringservice.manager.ResourceManager;
 import ru.patseev.monitoringservice.migration.Migration;
@@ -17,7 +16,7 @@ import java.sql.Statement;
  * The LiquibaseMigration class implements the Migration interface and is specifically
  * designed for executing Liquibase-based database migrations.
  */
-@RequiredArgsConstructor
+
 public class LiquibaseMigration implements Migration {
 
 	/**
@@ -29,6 +28,17 @@ public class LiquibaseMigration implements Migration {
 	 * The resource manager used for retrieving database connection details.
 	 */
 	private final ResourceManager resourceManager;
+
+	/**
+	 * Constructs a LiquibaseMigration object with the provided ConnectionManager and ResourceManager.
+	 *
+	 * @param connectionManager The ConnectionManager instance to be used for database connections.
+	 * @param resourceManager   The ResourceManager instance to be used for accessing migration resources.
+	 */
+	public LiquibaseMigration(ConnectionManager connectionManager, ResourceManager resourceManager) {
+		this.connectionManager = connectionManager;
+		this.resourceManager = resourceManager;
+	}
 
 	/**
 	 * Performs the Liquibase-based database migration, creating the necessary schema and applying

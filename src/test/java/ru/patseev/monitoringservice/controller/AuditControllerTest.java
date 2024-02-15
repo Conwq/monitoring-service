@@ -8,9 +8,11 @@ import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.jwt.JwtService;
 import ru.patseev.monitoringservice.service.AuditService;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ class AuditControllerTest {
 
 	private static AuditService auditService;
 	private static AuditController auditController;
+	private static JwtService jwtService;
 	private static UserController userController;
 
 	private UserDto userDto;
@@ -30,33 +33,34 @@ class AuditControllerTest {
 	static void setUp() {
 		auditService = mock(AuditService.class);
 		userController = mock(UserController.class);
-		auditController = new AuditController(auditService, userController);
+		jwtService = mock(JwtService.class);
+		auditController = new AuditController(auditService, userController, jwtService);
 	}
 
 	@BeforeEach
 	void createData() {
 		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
 		actionDtoList = new ArrayList<>() {{
-			add(new UserActionDto(LocalDateTime.now(), ActionEnum.REGISTRATION));
-			add(new UserActionDto(LocalDateTime.now(), ActionEnum.LOG_IN));
+			add(new UserActionDto(Timestamp.from(Instant.now()), ActionEnum.REGISTRATION));
+			add(new UserActionDto(Timestamp.from(Instant.now()), ActionEnum.AUTHORIZATION));
 		}};
 	}
 
 	@Test
 	@DisplayName("getListUserActions should return list of UserActions")
 	void getListOfUserActions_shouldReturnListUserActions() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(userController.getUser(userDto.username()))
 				.thenReturn(userDto);
 		when(auditService.getUserAction(userDto.userId()))
 				.thenReturn(actionDtoList);
 
-		List<UserActionDto> expected = auditController.getListOfUserActions("test", userDto);
+		List<UserActionDto> expected = auditController.getListOfUserActions("test", "jwt_token");
 
 		assertThat(actionDtoList)
 				.isEqualTo(expected);
-		verify(userController, times(1))
+		verify(userController)
 				.getUser(userDto.username());
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_USERS_ACTION, userDto);
 	}
 }

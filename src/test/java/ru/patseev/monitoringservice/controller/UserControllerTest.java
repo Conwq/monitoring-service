@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.jwt.JwtService;
 import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.service.UserService;
 
@@ -15,18 +16,18 @@ import static org.mockito.Mockito.*;
 
 class UserControllerTest {
 
-	private static AuditService auditService;
 	private static UserService userService;
+	private static JwtService jwtService;
 	private static UserController userController;
 
 	private UserDto userDto;
 
 	@BeforeAll
 	public static void setUp() {
-		auditService = mock(AuditService.class);
 		userService = mock(UserService.class);
+		jwtService = mock(JwtService.class);
 
-		userController = new UserController(userService, auditService);
+		userController = new UserController(userService, jwtService);
 	}
 
 	@BeforeEach
@@ -42,24 +43,23 @@ class UserControllerTest {
 
 		userController.saveUser(userDto);
 
-		verify(userService, times(1))
+		verify(userService)
 				.saveUser(userDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.REGISTRATION, userDto);
 	}
 
 	@Test
 	@DisplayName("authUser should return UserDto")
 	void authUser_shouldReturnUserDto() {
+		String jwtToken = "jwtToken";
 		when(userService.authUser(userDto))
 				.thenReturn(userDto);
+		when(jwtService.generateToken(anyMap(), any(UserDto.class)))
+				.thenReturn(jwtToken);
 
-		UserDto userData = userController.authUser(userDto);
+		String actual = userController.authUser(userDto);
 
-		assertThat(userData)
-				.isEqualTo(userDto);
-		verify(auditService)
-				.saveUserAction(ActionEnum.LOG_IN, userDto);
+		assertThat(actual)
+				.isEqualTo(jwtToken);
 	}
 
 	@Test

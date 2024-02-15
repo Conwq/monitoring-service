@@ -1,15 +1,16 @@
 package ru.patseev.monitoringservice.controller;
 
-import lombok.RequiredArgsConstructor;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.aspect.annotation.Loggable;
 import ru.patseev.monitoringservice.dto.UserDto;
+import ru.patseev.monitoringservice.jwt.JwtService;
 import ru.patseev.monitoringservice.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller class for handling user-related operations.
  */
-@RequiredArgsConstructor
 public class UserController {
 
 	/**
@@ -18,30 +19,55 @@ public class UserController {
 	private final UserService userService;
 
 	/**
-	 * The service responsible for auditing user actions.
+	 * Service responsible for generating and parsing JSON Web Tokens (JWT).
 	 */
-	private final AuditService auditService;
+	private final JwtService jwtService;
 
 	/**
-	 * Saves a user using the UserService.
+	 * Constructs a new UserController with the specified dependencies.
 	 *
-	 * @param userDto The data transfer object containing user information.
+	 * @param userService The service for user-related operations
+	 * @param jwtService  The service for JWT operations
 	 */
-	public void saveUser(UserDto userDto) {
-		userDto = userService.saveUser(userDto);
-		auditService.saveUserAction(ActionEnum.REGISTRATION, userDto);
+	public UserController(UserService userService, JwtService jwtService) {
+		this.userService = userService;
+		this.jwtService = jwtService;
 	}
 
 	/**
-	 * Authenticates a user using the UserService.
+	 * Saves user data and generates a JWT token based on the saved user data.
+	 *
+	 * @param userDto The user data to be saved.
+	 * @return The JWT token generated based on the saved user data.
+	 */
+	@Loggable
+	public String saveUser(UserDto userDto) {
+		UserDto savedUserData = userService.saveUser(userDto);
+
+		Map<String, Object> extraClaims = new HashMap<>() {{
+			put("role", savedUserData.role());
+			put("userId", savedUserData.userId());
+		}};
+
+		return jwtService.generateToken(extraClaims, savedUserData);
+	}
+
+	/**
+	 * Authenticates a user using the UserService and generates a JWT token with extra claims.
 	 *
 	 * @param userDto The data transfer object containing user authentication information.
-	 * @return A dto object that stores authenticated user data.
+	 * @return A JWT token containing extra claims such as user role and user ID.
 	 */
-	public UserDto authUser(UserDto userDto) {
+	@Loggable
+	public String authUser(UserDto userDto) {
 		UserDto userData = userService.authUser(userDto);
-		auditService.saveUserAction(ActionEnum.LOG_IN, userData);
-		return userData;
+
+		Map<String, Object> extraClaims = new HashMap<>() {{
+			put("role", userData.role());
+			put("userId", userData.userId());
+		}};
+
+		return jwtService.generateToken(extraClaims, userDto);
 	}
 
 	/**

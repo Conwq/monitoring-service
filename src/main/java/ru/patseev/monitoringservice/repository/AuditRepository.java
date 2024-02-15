@@ -12,10 +12,9 @@ public interface AuditRepository {
 	/**
 	 * Saves a user action to the audit log.
 	 *
-	 * @param userId     The user ID associated with the user who performed the action.
 	 * @param userAction The UserAction object representing the action performed by the user.
 	 */
-	void save(int userId, UserAction userAction);
+	void save(UserAction userAction);
 
 	/**
 	 * Retrieves a list of user actions for a specific user from the audit log.

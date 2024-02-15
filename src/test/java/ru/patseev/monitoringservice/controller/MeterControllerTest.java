@@ -9,10 +9,12 @@ import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
+import ru.patseev.monitoringservice.jwt.JwtService;
 import ru.patseev.monitoringservice.service.AuditService;
 import ru.patseev.monitoringservice.service.MeterService;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,7 @@ import static org.mockito.Mockito.*;
 class MeterControllerTest {
 
 	private static MeterService dataMeterService;
-	private static AuditService auditService;
+	private static JwtService jwtService;
 	private static MeterController dataMeterController;
 
 	private UserDto userDto;
@@ -35,14 +37,14 @@ class MeterControllerTest {
 	@BeforeAll
 	static void setUp() {
 		dataMeterService = mock(MeterService.class);
-		auditService = mock(AuditService.class);
-		dataMeterController = new MeterController(dataMeterService, auditService);
+		jwtService = mock(JwtService.class);
+		dataMeterController = new MeterController(dataMeterService, jwtService);
 	}
 
 	@BeforeEach
 	void createData() {
 		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
-		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
+		dataMeterDto = new DataMeterDto(Timestamp.from(Instant.now()), 1L, 1, "Hot water.");
 		dataMeterDtoList = new ArrayList<>() {{
 			add(dataMeterDto);
 			add(dataMeterDto);
@@ -53,54 +55,52 @@ class MeterControllerTest {
 	@Test
 	@DisplayName("getCurrentMetricData should return last submit Meter Data")
 	void getCurrentMeterData_shouldReturnData() {
-		when(dataMeterService.getCurrentDataMeter(userDto))
+		when(dataMeterService.getCurrentDataMeter(userDto.userId()))
 				.thenReturn(dataMeterDto);
 
-		DataMeterDto actual = dataMeterController.getCurrentMeterData(userDto);
+		DataMeterDto actual = dataMeterController.getLatestMeterData("auth_token");
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_CURRENT_METER_DATA, userDto);
 	}
 
 	@Test
 	@DisplayName("saveMeterData should save MeterData")
 	void saveMeterData_shouldSaveMeterData() {
-		dataMeterController.saveMeterData(userDto, dataMeterDto);
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
+		dataMeterController.saveMeterData("auth_token", dataMeterDto);
 
-		verify(dataMeterService, times(1))
-				.saveDataMeter(userDto, dataMeterDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.SEND_METER_DATA, userDto);
+		verify(dataMeterService)
+				.saveDataMeter(userDto.userId(), dataMeterDto);
 	}
 
 	@Test
 	@DisplayName("getMeterDataForSpecifiedMonth should return users MeterData for specified month")
 	void getMeterDataForSpecifiedMonth_shouldReturnDataForSpecifiedMonth() {
-		when(dataMeterService.getMeterDataForSpecifiedMonth(userDto, 1))
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
+		when(dataMeterService.getMeterDataForSpecifiedMonth(userDto.userId(), 1))
 				.thenReturn(dataMeterDtoList);
 
-		List<DataMeterDto> actual = dataMeterController.getMeterDataForSpecifiedMonth(userDto, 1);
+		List<DataMeterDto> actual = dataMeterController.getMeterDataForSpecifiedMonth("auth_token", "1");
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDtoList);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_METER_DATA_FOR_SPECIFIED_MONTH, userDto);
 	}
 
 	@Test
 	@DisplayName("getMeterDataForUser should return list MeterData for specified user")
 	void getMeterDataForUser_shouldReturnData() {
-		when(dataMeterService.getAllMeterData(userDto))
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
+		when(dataMeterService.getUserMeterData(userDto.userId()))
 				.thenReturn(dataMeterDtoList);
 
-		List<DataMeterDto> actual = dataMeterController.getMeterDataForUser(userDto);
+		List<DataMeterDto> actual = dataMeterController.getMeterDataForUser("auth_token");
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDtoList);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_METER_DATA_FOR_USER, userDto);
 	}
 
 	@Test
@@ -109,39 +109,40 @@ class MeterControllerTest {
 		Map<String, List<DataMeterDto>> expected = new HashMap<>() {{
 			put(userDto.username(), dataMeterDtoList);
 		}};
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getDataFromAllMeterUsers())
 				.thenReturn(expected);
 
-		Map<String, List<DataMeterDto>> actual = dataMeterController.getDataFromAllMeterUsers(userDto);
+		Map<String, List<DataMeterDto>> actual = dataMeterController.getDataFromAllMeterUsers("auth_token");
 
 		assertThat(actual)
 				.isEqualTo(expected);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_ALL_METER_DATA, userDto);
 	}
 
 	@Test
 	@DisplayName("getAvailableMeterType should return MeterType")
 	void getAvailableMeterType_shouldReturnAvailableMeterType() {
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 		when(dataMeterService.getAvailableMeterType())
 				.thenReturn(List.of(meterTypeDto));
 
-		List<MeterTypeDto> actual = dataMeterController.getAvailableMeterType(userDto);
+		List<MeterTypeDto> actual = dataMeterController.getAvailableMeterType("auth_token");
 
 		assertThat(actual)
 				.isEqualTo(List.of(meterTypeDto));
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.GET_ACTUAL_METER_TYPE, userDto);
 	}
 
 	@Test
 	@DisplayName("addNewMeterType should save MeterType")
 	void addNewMeterType_shouldSaveNewMeterType() {
-		dataMeterController.addNewMeterType(userDto, meterTypeDto);
+		when(jwtService.extractPlayerId(anyString()))
+				.thenReturn(userDto.userId());
 
-		verify(dataMeterService, times(1))
+		dataMeterController.addNewMeterType("token", meterTypeDto);
+
+		verify(dataMeterService)
 				.saveMeterType(meterTypeDto);
-		verify(auditService, times(1))
-				.saveUserAction(ActionEnum.ADD_NEW_METER_TYPE, userDto);
 	}
 }

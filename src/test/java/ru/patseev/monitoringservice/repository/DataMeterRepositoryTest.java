@@ -46,12 +46,7 @@ class DataMeterRepositoryTest extends AbstractPostgreSQLContainer {
 		Timestamp submissionDate = Timestamp.valueOf(String.format("%s-%s-01 00:00:00", now.getYear(), now.getMonth().getValue()));
 
 		userId = 1;
-		hotWaterData = DataMeter.builder()
-				.meterDataId(1)
-				.submissionDate(submissionDate)
-				.value(1L)
-				.meterTypeId(1)
-				.userId(userId).build();
+		hotWaterData = new DataMeter(1, submissionDate, 1L, 1, userId);
 	}
 
 	@Test

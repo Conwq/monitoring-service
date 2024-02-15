@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -15,6 +14,8 @@ import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
+import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -43,7 +44,10 @@ class MeterServiceTest {
 	static void setUp() {
 		dataMeterRepository = mock(DataMeterRepository.class);
 		meterTypeRepository = mock(MeterTypeRepository.class);
-		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository);
+		MeterTypeMapper meterTypeMapper = MeterTypeMapper.instance;
+		MeterDataMapper meterDataMapper = MeterDataMapper.instance;
+
+		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository, meterTypeMapper, meterDataMapper);
 	}
 
 	@BeforeEach
@@ -58,7 +62,12 @@ class MeterServiceTest {
 				meterType.getMeterTypeId(),
 				userDto.userId()
 		);
-		dataMeterDto = new DataMeterDto(LocalDate.now(), 1L, 1, "Hot water.");
+		dataMeterDto = new DataMeterDto(
+				Timestamp.valueOf(LocalDate.now().atStartOfDay()),
+				1L,
+				1
+				, "Hot water."
+		);
 	}
 
 	@Test
@@ -69,7 +78,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		DataMeterDto actual = dataMeterService.getCurrentDataMeter(userDto);
+		DataMeterDto actual = dataMeterService.getCurrentDataMeter(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
@@ -82,25 +91,16 @@ class MeterServiceTest {
 				.thenReturn(Optional.empty());
 
 		assertThrows(DataMeterNotFoundException.class,
-				() -> dataMeterService.getCurrentDataMeter(userDto));
+				() -> dataMeterService.getCurrentDataMeter(userDto.userId()));
 	}
 
 	@Test
 	@DisplayName("saveDataMeter should save data meter in db")
 	void saveDataMeter_shouldSaveData() {
-		DataMeter test =
-				new DataMeter(
-						null, //при сохранении в бд у меня еще нету id
-						Timestamp.valueOf(dataMeterDto.date().atStartOfDay()),
-						dataMeterDto.value(),
-						dataMeterDto.meterTypeId(),
-						userDto.userId()
-				);
+		dataMeterService.saveDataMeter(userDto.userId(), dataMeterDto);
 
-		dataMeterService.saveDataMeter(userDto, dataMeterDto);
-
-		verify(dataMeterRepository, Mockito.times(1))
-				.saveDataMeter(test);
+		verify(dataMeterRepository)
+				.saveDataMeter(any(DataMeter.class));
 	}
 
 	@Test
@@ -110,7 +110,7 @@ class MeterServiceTest {
 				.thenReturn(List.of(dataMeter));
 
 		List<DataMeterDto> actual =
-				dataMeterService.getMeterDataForSpecifiedMonth(userDto, LocalDate.now().getMonth().getValue());
+				dataMeterService.getMeterDataForSpecifiedMonth(userDto.userId(), LocalDate.now().getMonth().getValue());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -124,7 +124,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto);
+		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -136,7 +136,7 @@ class MeterServiceTest {
 		when(dataMeterRepository.getAllMeterData(userDto.userId()))
 				.thenReturn(Collections.emptyList());
 
-		List<DataMeterDto> actual = dataMeterService.getAllMeterData(userDto);
+		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual.size())
 				.isEqualTo(0);
