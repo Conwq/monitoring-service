@@ -3,7 +3,6 @@ package ru.patseev.monitoringservice.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -13,11 +12,6 @@ import ru.patseev.monitoringservice.dto.DataMeterDto;
  */
 @Mapper(componentModel = "spring")
 public interface MeterDataMapper {
-
-	/**
-	 * Instance of the MeterDataMapper interface.
-	 */
-	MeterDataMapper instance = Mappers.getMapper(MeterDataMapper.class);
 
 	/**
 	 * Maps the given userId and DataMeterDto to a DataMeter entity.

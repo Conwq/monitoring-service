@@ -3,7 +3,6 @@ package ru.patseev.monitoringservice.dto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  * Represents a dto for user actions, containing information such as the timestamp of the action and the type of action.

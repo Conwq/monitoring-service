@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.migration.impl;
 
-import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -62,7 +61,7 @@ public class LiquibaseMigration implements Migration {
 
 			Liquibase liquibase = new Liquibase(pathChangelog, new ClassLoaderResourceAccessor(), database);
 			liquibase.getDatabase().setDefaultSchemaName(defaultSchema);
-			liquibase.update(new Contexts());
+			liquibase.update();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

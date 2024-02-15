@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.controller.MeterController;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
@@ -108,7 +108,7 @@ class MeterControllerTest {
 	@DisplayName("Test handling of 'MeterDataWasSubmittedException' when saving meter data")
 	void saveData_conflict() throws Exception {
 		when(jwtService.extractPlayerId(jwtToken)).thenReturn(userId);
-		doThrow(MeterDataWasSubmittedException.class)
+		doThrow(MeterDataConflictException.class)
 				.when(meterService).saveDataMeter(userId, electricityData);
 
 		mockMvc.perform(createPostRequest("/meters/save_data", electricityData))

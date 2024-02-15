@@ -3,7 +3,6 @@ package ru.patseev.monitoringservice.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
@@ -13,11 +12,6 @@ import ru.patseev.monitoringservice.enums.ActionEnum;
  */
 @Mapper(componentModel = "spring")
 public interface AuditMapper {
-
-	/**
-	 * An instance of the AuditMapper interface for mapping operations.
-	 */
-	AuditMapper instance = Mappers.getMapper(AuditMapper.class);
 
 	/**
 	 * Converts ActionEnum and userId to a UserAction entity.

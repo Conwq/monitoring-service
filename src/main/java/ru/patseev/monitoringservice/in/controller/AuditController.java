@@ -57,6 +57,7 @@ public class AuditController {
 	@GetMapping
 	public ResponseEntity<?> getListOfUserActions(@Parameter(description = "The username of the user whose actions are being retrieved")
 												  @RequestParam("username") String username,
+												  @SuppressWarnings("unused")
 												  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		try {
 			UserDto searchedUser = userController.getUser(username);

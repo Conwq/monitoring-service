@@ -1,6 +1,7 @@
 package ru.patseev.monitoringservice.in.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 
@@ -25,6 +26,7 @@ public class RouteValidator {
 	/**
 	 * The map containing close endpoints (operations requiring specific roles).
 	 */
+	@Getter
 	private final Map<String, RoleEnum> closeEndpoints = new HashMap<>() {{
 		put("/audits", ADMIN_ROLE);
 		put("/meters/last_data", USER_ROLE);
@@ -49,13 +51,4 @@ public class RouteValidator {
 	public final Predicate<HttpServletRequest> isSecured =
 			request -> openEndpoints.stream()
 					.noneMatch(path -> request.getServletPath().contains(path));
-
-	/**
-	 * Retrieves the map of close endpoints and their associated roles.
-	 *
-	 * @return The map of close endpoints and their associated roles.
-	 */
-	public Map<String, RoleEnum> getCloseEndpoints() {
-		return closeEndpoints;
-	}
 }

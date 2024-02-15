@@ -12,7 +12,7 @@ import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
@@ -122,7 +122,7 @@ public class MeterController {
 			int userId = jwtService.extractPlayerId(jwtToken);
 			meterService.saveDataMeter(userId, dataMeterDto);
 			return responseGenerator.generateResponse(HttpStatus.OK, "Meter reading data sent");
-		} catch (MeterDataWasSubmittedException e) {
+		} catch (MeterDataConflictException e) {
 			return responseGenerator.generateResponse(HttpStatus.CONFLICT, e.getMessage());
 		}
 	}
@@ -179,7 +179,8 @@ public class MeterController {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved data from all meter users")
 	})
 	@GetMapping("/all_data")
-	public ResponseEntity<?> getDataFromAllMeterUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
+	public ResponseEntity<?> getDataFromAllMeterUsers(@SuppressWarnings("unused")
+													  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = meterService.getDataFromAllMeterUsers();
 		return responseGenerator.generateResponse(HttpStatus.OK, dataFromAllMeterUsers);
 	}
@@ -196,7 +197,8 @@ public class MeterController {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved available meter types")
 	})
 	@GetMapping("/meter_types")
-	public ResponseEntity<?> getAvailableMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
+	public ResponseEntity<?> getAvailableMeterType(@SuppressWarnings("unused")
+												   @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		List<MeterTypeDto> availableMeterType = meterService.getAvailableMeterType();
 		return responseGenerator.generateResponse(HttpStatus.OK, availableMeterType);
 	}
@@ -215,7 +217,8 @@ public class MeterController {
 			@ApiResponse(responseCode = "409", description = "Meter type already exists")
 	})
 	@PostMapping("/save_meter")
-	public ResponseEntity<?> addNewMeterType(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
+	public ResponseEntity<?> addNewMeterType(@SuppressWarnings("unused")
+											 @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 											 @RequestBody MeterTypeDto meterTypeDto) {
 		try {
 			if (meterTypeDtoValidator.validate(meterTypeDto)) {

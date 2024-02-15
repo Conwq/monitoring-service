@@ -7,7 +7,7 @@ import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
@@ -64,10 +64,10 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataWasSubmittedException {
+	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataConflictException {
 		boolean meterDataSubmitted = dataMeterRepository.checkMeterDataForCurrentMonth(userId, dataMeterDto.meterTypeId());
 		if (meterDataSubmitted) {
-			throw new MeterDataWasSubmittedException("Meter data submitted for the current month");
+			throw new MeterDataConflictException("Meter data submitted for the current month");
 		}
 
 		DataMeter dataMeter = meterDataMapper.toEntity(userId, dataMeterDto);

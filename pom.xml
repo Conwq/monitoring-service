@@ -32,6 +32,7 @@
         <json.path.version>2.9.0</json.path.version>
         <swagger.version>3.0.0</swagger.version>
         <openapi.version>2.2.0</openapi.version>
+        <aspectj.maven.plugin.version>1.11</aspectj.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -199,7 +200,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.11</version>
+                <version>${aspectj.maven.plugin.version}</version>
 
                 <configuration>
                     <complianceLevel>16</complianceLevel>

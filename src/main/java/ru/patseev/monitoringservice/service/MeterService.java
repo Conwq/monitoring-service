@@ -2,7 +2,7 @@ package ru.patseev.monitoringservice.service;
 
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public interface MeterService {
 	 * @param userId       The ID of the user for whom the data meter reading is saved.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-	void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataWasSubmittedException;
+	void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataConflictException;
 
 	/**
 	 * Retrieves the data meter reading for the specified user and month.
