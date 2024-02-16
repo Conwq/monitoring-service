@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
@@ -19,7 +18,7 @@ import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.ErrorValidationExtractor;
+import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
 import ru.patseev.monitoringservice.in.validator.UserValidator;
 import ru.patseev.monitoringservice.service.UserService;
 
@@ -30,7 +29,6 @@ import java.util.Set;
 /**
  * Controller class for handling user-related operations.
  */
-@Validated
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -46,10 +44,21 @@ public class UserController {
 	 */
 	private final JwtService jwtService;
 
+	/**
+	 * Validator for validating user input.
+	 */
 	private final UserValidator userValidator;
 
-	private final ErrorValidationExtractor errorValidationExtractor;
+	/**
+	 * Utility component for extracting error messages from BindingResult.
+	 */
+	private final ValidationErrorExtractor errorExtractor;
 
+	/**
+	 * Initializes the WebDataBinder with the userValidator.
+	 *
+	 * @param binder the WebDataBinder to initialize
+	 */
 	@InitBinder(value = "userDto")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(userValidator);
@@ -58,8 +67,9 @@ public class UserController {
 	/**
 	 * Saves user data and generates a JWT token based on the saved user data.
 	 *
-	 * @param userDto The user data to be saved.
-	 * @return The JWT token generated based on the saved user data.
+	 * @param userDto       The user data to be saved.
+	 * @param bindingResult The BindingResult for validation errors.
+	 * @return ResponseEntity containing the JWT token or validation errors.
 	 */
 	@Audit
 	@Operation(summary = "Register a new user")
@@ -72,7 +82,7 @@ public class UserController {
 	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 		try {
 			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorValidationExtractor.getErrorsFromBindingResult(bindingResult);
+				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
 				return ResponseEntity.badRequest().body(setErrors);
 			}
 			UserDto savedUserData = userService.saveUser(userDto);
@@ -86,13 +96,15 @@ public class UserController {
 	/**
 	 * Authenticates a user using the UserService and generates a JWT token with extra claims.
 	 *
-	 * @param userDto The data transfer object containing user authentication information.
-	 * @return A JWT token containing extra claims such as user role and user ID.
+	 * @param userDto       The data transfer object containing user authentication information.
+	 * @param bindingResult The BindingResult for validation errors.
+	 * @return ResponseEntity containing the JWT token or validation errors.
 	 */
 	@Audit
 	@Operation(summary = "Authenticate user")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully authenticated user and generated JWT token"),
+			@ApiResponse(responseCode = "400", description = "Invalid data provided for authorization"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "404", description = "User not found")
 	})
@@ -100,7 +112,7 @@ public class UserController {
 	public ResponseEntity<?> authUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 		try {
 			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorValidationExtractor.getErrorsFromBindingResult(bindingResult);
+				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
 				return ResponseEntity.badRequest().body(setErrors);
 			}
 			UserDto userData = userService.authUser(userDto);

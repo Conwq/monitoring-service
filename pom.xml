@@ -33,6 +33,7 @@
         <swagger.version>3.0.0</swagger.version>
         <openapi.version>2.2.0</openapi.version>
         <aspectj.maven.plugin.version>1.11</aspectj.maven.plugin.version>
+        <jakarta.validation.version>3.0.2</jakarta.validation.version>
     </properties>
 
     <dependencies>
@@ -139,7 +140,7 @@
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.2</version>
+            <version>${jakarta.validation.version}</version>
         </dependency>
 
 

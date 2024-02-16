@@ -16,7 +16,6 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.controller.AuditController;
 import ru.patseev.monitoringservice.in.controller.UserController;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.service.AuditService;
 
 import java.sql.Timestamp;
@@ -24,7 +23,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,15 +33,13 @@ class AuditControllerTest {
 	MockMvc mockMvc;
 	AuditService auditService;
 	UserController userController;
-	ResponseGenerator responseGenerator;
 
 	@BeforeEach
 	void setUp() {
 		auditService = mock(AuditService.class);
 		userController = mock(UserController.class);
-		responseGenerator = spy(ResponseGenerator.class);
 
-		AuditController auditController = new AuditController(auditService, userController, responseGenerator);
+		AuditController auditController = new AuditController(auditService, userController);
 		mockMvc = MockMvcBuilders.standaloneSetup(auditController).build();
 	}
 

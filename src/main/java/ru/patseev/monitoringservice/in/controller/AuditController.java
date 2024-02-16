@@ -13,7 +13,6 @@ import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.service.AuditService;
 
 import java.util.List;
@@ -37,11 +36,6 @@ public class AuditController {
 	private final UserController userController;
 
 	/**
-	 * The ResponseGenerator used by the controller to generate responses.
-	 */
-	private final ResponseGenerator responseGenerator;
-
-	/**
 	 * Retrieves a list of user actions based on the provided username.
 	 *
 	 * @param username The username for which user actions are to be retrieved.
@@ -62,9 +56,9 @@ public class AuditController {
 		try {
 			UserDto searchedUser = userController.getUser(username);
 			List<UserActionDto> userActions = auditService.getUserActions(searchedUser.userId());
-			return responseGenerator.generateResponse(HttpStatus.OK, userActions);
+			return ResponseEntity.ok(userActions);
 		} catch (UserNotFoundException e) {
-			return responseGenerator.generateResponse(HttpStatus.NOT_FOUND, e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
 }

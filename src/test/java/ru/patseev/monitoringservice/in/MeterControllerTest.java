@@ -16,11 +16,10 @@ import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.controller.MeterController;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.Validator;
-import ru.patseev.monitoringservice.in.validator.impl.MeterDataValidator;
-import ru.patseev.monitoringservice.in.validator.impl.MeterTypeValidator;
+import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
+import ru.patseev.monitoringservice.in.validator.MeterDataValidator;
+import ru.patseev.monitoringservice.in.validator.MeterTypeValidator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.sql.Timestamp;
@@ -60,10 +59,10 @@ class MeterControllerTest {
 
 		meterService = mock(MeterService.class);
 		jwtService = mock(JwtService.class);
-		Validator<MeterTypeDto> meterTypeDtoValidator = spy(MeterTypeValidator.class);
-		Validator<DataMeterDto> dataMeterDtoValidator = spy(MeterDataValidator.class);
-		ResponseGenerator responseGenerator = spy(ResponseGenerator.class);
-		MeterController meterController = new MeterController(meterService, jwtService, responseGenerator, dataMeterDtoValidator, meterTypeDtoValidator);
+		MeterTypeValidator meterTypeValidator = new MeterTypeValidator();
+		MeterDataValidator meterDataValidator = new MeterDataValidator();
+		ValidationErrorExtractor extractor = new ValidationErrorExtractor();
+		MeterController meterController = new MeterController(meterService, jwtService, extractor, meterTypeValidator, meterDataValidator);
 
 		mockMvc = MockMvcBuilders.standaloneSetup(meterController).build();
 	}
@@ -122,7 +121,7 @@ class MeterControllerTest {
 
 		mockMvc.perform(createPostRequest("/meters/save_data", invalidData))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$").value("Invalid data"));
+				.andExpect(jsonPath("$").value("The supplied value is too small"));
 	}
 
 	@Test
@@ -202,7 +201,7 @@ class MeterControllerTest {
 	@DisplayName("Test successful addition of new meter type")
 	void addNewMeterType_successful() throws Exception {
 		mockMvc.perform(createPostRequest("/meters/save_meter", hotWaterType))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$").value("New meter type saved"));
 
 		verify(meterService)
@@ -221,8 +220,8 @@ class MeterControllerTest {
 
 	@Test
 	@DisplayName("Adding a new counter type with invalid data should return an HTTP 400 Bad Request with the message 'Invalid data'")
-	void addNewMeterType_badReqeust() throws Exception {
-		MeterTypeDto invalidData = new MeterTypeDto(null, "");
+	void addNewMeterType_badRequest() throws Exception {
+		MeterTypeDto invalidData = new MeterTypeDto(null, "...");
 
 		mockMvc.perform(createPostRequest("/meters/save_meter", invalidData))
 				.andExpect(status().isBadRequest())

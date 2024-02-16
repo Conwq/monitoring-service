@@ -3,10 +3,13 @@ package ru.patseev.monitoringservice.in.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -14,13 +17,15 @@ import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.Validator;
+import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
+import ru.patseev.monitoringservice.in.validator.MeterDataValidator;
+import ru.patseev.monitoringservice.in.validator.MeterTypeValidator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The MeterController class serves as a controller for managing data meter operations.
@@ -29,7 +34,6 @@ import java.util.Map;
 @RequestMapping("/meters")
 @RequiredArgsConstructor
 public class MeterController {
-
 	/**
 	 * The service responsible for data meter-related business logic.
 	 */
@@ -41,19 +45,39 @@ public class MeterController {
 	private final JwtService jwtService;
 
 	/**
-	 * The ResponseGenerator used by the controller to generate responses.
+	 * The ErrorValidationExtractor used to extract validation errors.
 	 */
-	private final ResponseGenerator responseGenerator;
+	private final ValidationErrorExtractor errorExtractor;
 
 	/**
-	 * Validator for DataMeterDto objects.
+	 * The MeterTypeValidator used to validate MeterTypeDto objects.
 	 */
-	private final Validator<DataMeterDto> dataMeterDtoValidator;
+	private final MeterTypeValidator meterTypeValidator;
 
 	/**
-	 * Validator for MeterTypeDto objects.
+	 * The MeterDataValidator used to validate DataMeterDto objects.
 	 */
-	private final Validator<MeterTypeDto> meterTypeDtoValidator;
+	private final MeterDataValidator meterDataValidator;
+
+	/**
+	 * Initializes the WebDataBinder for MeterTypeDto validation.
+	 *
+	 * @param binder the WebDataBinder instance
+	 */
+	@InitBinder(value = "meterTypeDto")
+	protected void initMeterTypeBinder(WebDataBinder binder) {
+		binder.setValidator(meterTypeValidator);
+	}
+
+	/**
+	 * Initializes the WebDataBinder for DataMeterDto validation.
+	 *
+	 * @param binder the WebDataBinder instance
+	 */
+	@InitBinder(value = "dataMeterDto")
+	protected void initMeterDataBinder(WebDataBinder binder) {
+		binder.setValidator(meterDataValidator);
+	}
 
 	/**
 	 * Retrieves the current data meter reading for the specified user.
@@ -72,9 +96,9 @@ public class MeterController {
 		try {
 			int userId = jwtService.extractPlayerId(jwtToken);
 			DataMeterDto currentDataMeter = meterService.getCurrentDataMeter(userId);
-			return responseGenerator.generateResponse(HttpStatus.OK, currentDataMeter);
+			return ResponseEntity.ok(currentDataMeter);
 		} catch (DataMeterNotFoundException e) {
-			return responseGenerator.generateResponse(HttpStatus.NOT_FOUND, e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
 
@@ -93,16 +117,18 @@ public class MeterController {
 	})
 	@PostMapping("/save_data")
 	public ResponseEntity<?> saveMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
-										   @RequestBody DataMeterDto dataMeterDto) {
+										   @Valid @RequestBody DataMeterDto dataMeterDto,
+										   BindingResult bindingResult) {
 		try {
-			if (dataMeterDtoValidator.validate(dataMeterDto)) {
-				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "Invalid data");
+			if (bindingResult.hasErrors()) {
+				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+				return ResponseEntity.badRequest().body(setErrors);
 			}
 			int userId = jwtService.extractPlayerId(jwtToken);
 			meterService.saveDataMeter(userId, dataMeterDto);
-			return responseGenerator.generateResponse(HttpStatus.OK, "Meter reading data sent");
+			return ResponseEntity.ok("Meter reading data sent");
 		} catch (MeterDataConflictException e) {
-			return responseGenerator.generateResponse(HttpStatus.CONFLICT, e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 
@@ -125,7 +151,7 @@ public class MeterController {
 		int userId = jwtService.extractPlayerId(jwtToken);
 		int monthNumber = Integer.parseInt(month);
 		List<DataMeterDto> meterDataForSpecifiedMonth = meterService.getMeterDataForSpecifiedMonth(userId, monthNumber);
-		return responseGenerator.generateResponse(HttpStatus.OK, meterDataForSpecifiedMonth);
+		return ResponseEntity.ok(meterDataForSpecifiedMonth);
 	}
 
 	/**
@@ -143,7 +169,7 @@ public class MeterController {
 	public ResponseEntity<?> getMeterDataForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		int userId = jwtService.extractPlayerId(jwtToken);
 		List<DataMeterDto> userMeterData = meterService.getUserMeterData(userId);
-		return responseGenerator.generateResponse(HttpStatus.OK, userMeterData);
+		return ResponseEntity.ok(userMeterData);
 	}
 
 	/**
@@ -161,7 +187,7 @@ public class MeterController {
 	public ResponseEntity<?> getDataFromAllMeterUsers(@SuppressWarnings("unused")
 													  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		Map<String, List<DataMeterDto>> dataFromAllMeterUsers = meterService.getDataFromAllMeterUsers();
-		return responseGenerator.generateResponse(HttpStatus.OK, dataFromAllMeterUsers);
+		return ResponseEntity.ok(dataFromAllMeterUsers);
 	}
 
 	/**
@@ -179,7 +205,7 @@ public class MeterController {
 	public ResponseEntity<?> getAvailableMeterType(@SuppressWarnings("unused")
 												   @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		List<MeterTypeDto> availableMeterType = meterService.getAvailableMeterType();
-		return responseGenerator.generateResponse(HttpStatus.OK, availableMeterType);
+		return ResponseEntity.ok(availableMeterType);
 	}
 
 	/**
@@ -191,23 +217,24 @@ public class MeterController {
 	@Audit
 	@Operation(summary = "Save a new type meter")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "New meter type saved successfully"),
+			@ApiResponse(responseCode = "201", description = "New meter type saved successfully"),
 			@ApiResponse(responseCode = "400", description = "Invalid data provided"),
 			@ApiResponse(responseCode = "409", description = "Meter type already exists")
 	})
 	@PostMapping("/save_meter")
 	public ResponseEntity<?> addNewMeterType(@SuppressWarnings("unused")
 											 @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
-											 @RequestBody MeterTypeDto meterTypeDto) {
+											 @Valid @RequestBody MeterTypeDto meterTypeDto,
+											 BindingResult bindingResult) {
 		try {
-			if (meterTypeDtoValidator.validate(meterTypeDto)) {
-				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "Invalid data");
+			if (bindingResult.hasErrors()) {
+				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+				return ResponseEntity.badRequest().body(setErrors);
 			}
-
 			meterService.saveMeterType(meterTypeDto);
-			return responseGenerator.generateResponse(HttpStatus.OK, "New meter type saved");
+			return ResponseEntity.status(HttpStatus.CREATED).body("New meter type saved");
 		} catch (MeterTypeExistException e) {
-			return responseGenerator.generateResponse(HttpStatus.CONFLICT, e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 }

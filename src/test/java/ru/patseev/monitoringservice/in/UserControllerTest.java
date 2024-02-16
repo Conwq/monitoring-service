@@ -14,10 +14,9 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.controller.UserController;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.ErrorValidationExtractor;
 import ru.patseev.monitoringservice.in.validator.UserValidator;
+import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
 import ru.patseev.monitoringservice.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -31,15 +30,13 @@ class UserControllerTest {
 	MockMvc mockMvc;
 	UserService userService;
 	JwtService jwtService;
-	ResponseGenerator responseGenerator;
 
 	@BeforeEach
 	void setUp() {
 		userService = mock(UserService.class);
 		jwtService = mock(JwtService.class);
-		responseGenerator = spy(ResponseGenerator.class);
 		UserValidator userValidator = spy(UserValidator.class);
-		ErrorValidationExtractor extractor = spy(ErrorValidationExtractor.class);
+		ValidationErrorExtractor extractor = spy(ValidationErrorExtractor.class);
 
 		UserController userController = new UserController(userService, jwtService, userValidator, extractor);
 		mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
@@ -98,7 +95,7 @@ class UserControllerTest {
 		when(userService.authUser(any(UserDto.class)))
 				.thenThrow(UserNotFoundException.class);
 
-		mockMvc.perform(putJson("/users/auth", new UserDto(null, "1", "1", null)))
+		mockMvc.perform(putJson("/users/auth", new UserDto(null, "not_exist_username", "not_exist_password", null)))
 				.andExpect(status().isNotFound());
 	}
 

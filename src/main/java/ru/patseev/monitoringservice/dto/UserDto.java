@@ -1,6 +1,8 @@
 package ru.patseev.monitoringservice.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 
 /**
@@ -13,7 +15,11 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
  */
 @JsonSerialize
 public record UserDto(Integer userId,
+					  @NotBlank
+					  @Size(min = 6, max = 32)
 					  String username,
+					  @NotBlank
+					  @Size(min = 3, max = 32)
 					  String password,
 					  RoleEnum role) {
 }
