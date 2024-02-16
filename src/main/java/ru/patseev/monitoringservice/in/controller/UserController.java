@@ -6,25 +6,31 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.Validator;
+import ru.patseev.monitoringservice.in.validator.ErrorValidationExtractor;
+import ru.patseev.monitoringservice.in.validator.UserValidator;
 import ru.patseev.monitoringservice.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller class for handling user-related operations.
  */
+@Validated
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -40,15 +46,14 @@ public class UserController {
 	 */
 	private final JwtService jwtService;
 
-	/**
-	 * Response generator for handling responses.
-	 */
-	private final ResponseGenerator responseGenerator;
+	private final UserValidator userValidator;
 
-	/**
-	 * Validator for UserDto objects.
-	 */
-	private final Validator<UserDto> userDtoValidator;
+	private final ErrorValidationExtractor errorValidationExtractor;
+
+	@InitBinder(value = "userDto")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(userValidator);
+	}
 
 	/**
 	 * Saves user data and generates a JWT token based on the saved user data.
@@ -64,16 +69,17 @@ public class UserController {
 			@ApiResponse(responseCode = "409", description = "User already exists")
 	})
 	@PostMapping("/register")
-	public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 		try {
-			if (userDtoValidator.validate(userDto)) {
-				return responseGenerator.generateResponse(HttpStatus.BAD_REQUEST, "The data is not valid");
+			if (bindingResult.hasErrors()) {
+				Set<String> setErrors = errorValidationExtractor.getErrorsFromBindingResult(bindingResult);
+				return ResponseEntity.badRequest().body(setErrors);
 			}
 			UserDto savedUserData = userService.saveUser(userDto);
 			String jwtToken = jwtService.generateToken(createExtraClaims(savedUserData), savedUserData);
-			return responseGenerator.generateResponse(HttpStatus.OK, jwtToken);
+			return ResponseEntity.ok(jwtToken);
 		} catch (UserAlreadyExistException e) {
-			return responseGenerator.generateResponse(HttpStatus.CONFLICT, e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 
@@ -91,16 +97,20 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "User not found")
 	})
 	@PostMapping("/auth")
-	public ResponseEntity<?> authUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<?> authUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 		try {
+			if (bindingResult.hasErrors()) {
+				Set<String> setErrors = errorValidationExtractor.getErrorsFromBindingResult(bindingResult);
+				return ResponseEntity.badRequest().body(setErrors);
+			}
 			UserDto userData = userService.authUser(userDto);
 			String jwtToken = jwtService.generateToken(createExtraClaims(userData), userDto);
 			if (jwtToken == null || jwtToken.isEmpty()) {
-				return responseGenerator.generateResponse(HttpStatus.UNAUTHORIZED, "Unauthorized");
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 			}
-			return responseGenerator.generateResponse(HttpStatus.OK, jwtToken);
+			return ResponseEntity.ok(jwtToken);
 		} catch (UserNotFoundException e) {
-			return responseGenerator.generateResponse(HttpStatus.NOT_FOUND, e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
 

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -13,6 +14,7 @@ import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
 import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 import ru.patseev.monitoringservice.service.mapper.UserMapper;
 
 import java.util.Optional;
@@ -36,7 +38,7 @@ class UserServiceTest {
 		userRepository = mock(UserRepository.class);
 		roleRepository = mock(RoleRepository.class);
 
-		UserMapper userMapper = UserMapper.instance;
+		UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 		userService = new UserServiceImpl(userRepository, roleRepository, userMapper);
 	}

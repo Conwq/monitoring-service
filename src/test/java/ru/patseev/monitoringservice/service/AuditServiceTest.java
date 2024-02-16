@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
@@ -35,7 +36,7 @@ class AuditServiceTest {
 	@BeforeAll
 	static void setUp() {
 		auditRepository = mock(AuditRepository.class);
-		AuditMapper auditMapper = AuditMapper.instance;
+		AuditMapper auditMapper = Mappers.getMapper(AuditMapper.class);
 
 		auditService = new AuditServiceImpl(auditRepository, auditMapper);
 	}

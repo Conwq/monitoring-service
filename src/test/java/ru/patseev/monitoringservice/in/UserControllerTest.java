@@ -16,8 +16,8 @@ import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.controller.UserController;
 import ru.patseev.monitoringservice.in.generator.ResponseGenerator;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.Validator;
-import ru.patseev.monitoringservice.in.validator.impl.UserDtoValidator;
+import ru.patseev.monitoringservice.in.validator.ErrorValidationExtractor;
+import ru.patseev.monitoringservice.in.validator.UserValidator;
 import ru.patseev.monitoringservice.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -38,9 +38,10 @@ class UserControllerTest {
 		userService = mock(UserService.class);
 		jwtService = mock(JwtService.class);
 		responseGenerator = spy(ResponseGenerator.class);
-		Validator<UserDto> userDtoValidator = spy(UserDtoValidator.class);
+		UserValidator userValidator = spy(UserValidator.class);
+		ErrorValidationExtractor extractor = spy(ErrorValidationExtractor.class);
 
-		UserController userController = new UserController(userService, jwtService, responseGenerator, userDtoValidator);
+		UserController userController = new UserController(userService, jwtService, userValidator, extractor);
 		mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 	}
 

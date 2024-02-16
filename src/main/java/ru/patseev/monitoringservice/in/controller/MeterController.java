@@ -3,7 +3,7 @@ package ru.patseev.monitoringservice.in.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/meters")
+@RequiredArgsConstructor
 public class MeterController {
 
 	/**
@@ -53,28 +54,6 @@ public class MeterController {
 	 * Validator for MeterTypeDto objects.
 	 */
 	private final Validator<MeterTypeDto> meterTypeDtoValidator;
-
-	/**
-	 * Constructs a new MeterController with the specified dependencies.
-	 *
-	 * @param meterService          The service for meter operations.
-	 * @param jwtService            The service for JWT operations.
-	 * @param responseGenerator     The generator for HTTP responses.
-	 * @param dataMeterDtoValidator Validator for DataMeterDto objects.
-	 * @param meterTypeDtoValidator Validator for MeterTypeDto objects.
-	 */
-	@Autowired
-	public MeterController(MeterService meterService,
-						   JwtService jwtService,
-						   ResponseGenerator responseGenerator,
-						   Validator<DataMeterDto> dataMeterDtoValidator,
-						   Validator<MeterTypeDto> meterTypeDtoValidator) {
-		this.meterService = meterService;
-		this.jwtService = jwtService;
-		this.responseGenerator = responseGenerator;
-		this.dataMeterDtoValidator = dataMeterDtoValidator;
-		this.meterTypeDtoValidator = meterTypeDtoValidator;
-	}
 
 	/**
 	 * Retrieves the current data meter reading for the specified user.
