@@ -6,13 +6,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.service.AuditService;
 
 import java.util.List;
@@ -53,12 +51,8 @@ public class AuditController {
 												  @RequestParam("username") String username,
 												  @SuppressWarnings("unused")
 												  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
-		try {
-			UserDto searchedUser = userController.getUser(username);
-			List<UserActionDto> userActions = auditService.getUserActions(searchedUser.userId());
-			return ResponseEntity.ok(userActions);
-		} catch (UserNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+		UserDto searchedUser = userController.getUser(username);
+		List<UserActionDto> userActions = auditService.getUserActions(searchedUser.userId());
+		return ResponseEntity.ok(userActions);
 	}
 }

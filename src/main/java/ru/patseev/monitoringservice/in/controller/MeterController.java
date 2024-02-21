@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
-import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.exception.MeterDataConflictException;
-import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
 import ru.patseev.monitoringservice.service.MeterService;
@@ -60,13 +57,9 @@ public class MeterController {
 	})
 	@GetMapping("/last_data")
 	public ResponseEntity<?> getLatestMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
-		try {
-			int userId = jwtService.extractPlayerId(jwtToken);
-			DataMeterDto currentDataMeter = meterService.getCurrentDataMeter(userId);
-			return ResponseEntity.ok(currentDataMeter);
-		} catch (DataMeterNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+		int userId = jwtService.extractPlayerId(jwtToken);
+		DataMeterDto currentDataMeter = meterService.getCurrentDataMeter(userId);
+		return ResponseEntity.ok(currentDataMeter);
 	}
 
 	/**
@@ -86,17 +79,13 @@ public class MeterController {
 	public ResponseEntity<?> saveMeterData(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 										   @Valid @RequestBody DataMeterDto dataMeterDto,
 										   BindingResult bindingResult) {
-		try {
-			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
-				return ResponseEntity.badRequest().body(setErrors);
-			}
-			int userId = jwtService.extractPlayerId(jwtToken);
-			meterService.saveDataMeter(userId, dataMeterDto);
-			return ResponseEntity.ok("Meter reading data sent");
-		} catch (MeterDataConflictException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		if (bindingResult.hasErrors()) {
+			Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+			return ResponseEntity.badRequest().body(setErrors);
 		}
+		int userId = jwtService.extractPlayerId(jwtToken);
+		meterService.saveDataMeter(userId, dataMeterDto);
+		return ResponseEntity.ok("Meter reading data sent");
 	}
 
 	/**
@@ -193,15 +182,11 @@ public class MeterController {
 											 @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken,
 											 @Valid @RequestBody MeterTypeDto meterTypeDto,
 											 BindingResult bindingResult) {
-		try {
-			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
-				return ResponseEntity.badRequest().body(setErrors);
-			}
-			meterService.saveMeterType(meterTypeDto);
-			return ResponseEntity.status(HttpStatus.CREATED).body("New meter type saved");
-		} catch (MeterTypeExistException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		if (bindingResult.hasErrors()) {
+			Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+			return ResponseEntity.badRequest().body(setErrors);
 		}
+		meterService.saveMeterType(meterTypeDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body("New meter type saved");
 	}
 }

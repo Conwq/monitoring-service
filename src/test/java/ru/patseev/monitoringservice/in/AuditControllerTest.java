@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.in;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.in.controller.AuditController;
 import ru.patseev.monitoringservice.in.controller.UserController;
 import ru.patseev.monitoringservice.service.AuditService;
 
@@ -27,7 +24,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,15 +41,6 @@ class AuditControllerTest {
 	@Autowired
 	public AuditControllerTest(MockMvc mockMvc) {
 		this.mockMvc = mockMvc;
-	}
-
-	@BeforeEach
-	void setUp() {
-		auditService = mock(AuditService.class);
-		userController = mock(UserController.class);
-
-		AuditController auditController = new AuditController(auditService, userController);
-		mockMvc = MockMvcBuilders.standaloneSetup(auditController).build();
 	}
 
 	@Test

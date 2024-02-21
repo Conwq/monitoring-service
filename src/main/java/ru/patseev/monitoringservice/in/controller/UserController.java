@@ -14,8 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
 import ru.patseev.monitoringservice.service.UserService;
@@ -63,17 +61,13 @@ public class UserController {
 	})
 	@PostMapping("/register")
 	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
-		try {
-			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
-				return ResponseEntity.badRequest().body(setErrors);
-			}
-			UserDto savedUserData = userService.saveUser(userDto);
-			String jwtToken = jwtService.generateToken(createExtraClaims(savedUserData), savedUserData);
-			return ResponseEntity.ok(jwtToken);
-		} catch (UserAlreadyExistException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		if (bindingResult.hasErrors()) {
+			Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+			return ResponseEntity.badRequest().body(setErrors);
 		}
+		UserDto savedUserData = userService.saveUser(userDto);
+		String jwtToken = jwtService.generateToken(createExtraClaims(savedUserData), savedUserData);
+		return ResponseEntity.ok(jwtToken);
 	}
 
 	/**
@@ -93,20 +87,16 @@ public class UserController {
 	})
 	@PostMapping("/auth")
 	public ResponseEntity<?> authUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
-		try {
-			if (bindingResult.hasErrors()) {
-				Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
-				return ResponseEntity.badRequest().body(setErrors);
-			}
-			UserDto userData = userService.authUser(userDto);
-			String jwtToken = jwtService.generateToken(createExtraClaims(userData), userDto);
-			if (jwtToken == null || jwtToken.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-			}
-			return ResponseEntity.ok(jwtToken);
-		} catch (UserNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		if (bindingResult.hasErrors()) {
+			Set<String> setErrors = errorExtractor.getErrorsFromBindingResult(bindingResult);
+			return ResponseEntity.badRequest().body(setErrors);
 		}
+		UserDto userData = userService.authUser(userDto);
+		String jwtToken = jwtService.generateToken(createExtraClaims(userData), userDto);
+		if (jwtToken == null || jwtToken.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+		}
+		return ResponseEntity.ok(jwtToken);
 	}
 
 	/**
