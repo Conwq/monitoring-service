@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -14,6 +15,7 @@ import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
 import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
+import ru.patseev.monitoringservice.service.mapper.AuditMapper;
 import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
 import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
@@ -44,8 +46,8 @@ class MeterServiceTest {
 	static void setUp() {
 		dataMeterRepository = mock(DataMeterRepository.class);
 		meterTypeRepository = mock(MeterTypeRepository.class);
-		MeterTypeMapper meterTypeMapper = MeterTypeMapper.instance;
-		MeterDataMapper meterDataMapper = MeterDataMapper.instance;
+		MeterTypeMapper meterTypeMapper = Mappers.getMapper(MeterTypeMapper.class);
+		MeterDataMapper meterDataMapper = Mappers.getMapper(MeterDataMapper.class);
 
 		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository, meterTypeMapper, meterDataMapper);
 	}

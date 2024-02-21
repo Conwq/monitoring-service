@@ -2,6 +2,8 @@ package ru.patseev.monitoringservice.service;
 
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
+import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ public interface MeterService {
 	 * @param userId       The ID of the user for whom the data meter reading is saved.
 	 * @param dataMeterDto The data meter reading to be saved.
 	 */
-	void saveDataMeter(int userId, DataMeterDto dataMeterDto);
+	void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataConflictException;
 
 	/**
 	 * Retrieves the data meter reading for the specified user and month.
@@ -63,5 +65,5 @@ public interface MeterService {
 	 *
 	 * @param meterTypeDto An object containing the data of the new meter.
 	 */
-	void saveMeterType(MeterTypeDto meterTypeDto);
+	void saveMeterType(MeterTypeDto meterTypeDto) throws MeterTypeExistException;
 }

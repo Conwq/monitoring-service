@@ -1,76 +1,16 @@
 package ru.patseev.monitoringservice.manager;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
  * The connectionManager class is responsible for managing database connections.
  * It provides methods to obtain a connection, and close connections, statements, and result sets.
  */
+@Component
 public class ConnectionManager {
-
-	/**
-	 * Static block that loads the PostgreSQL JDBC driver when the class is initialized.
-	 *
-	 * @throws RuntimeException If the PostgreSQL driver class is not found.
-	 */
-	static {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * The JDBC URL for connecting to the database.
-	 */
-	private final String url;
-
-	/**
-	 * The username used for authentication when connecting to the database.
-	 */
-	private final String username;
-
-	/**
-	 * The password used for authentication when connecting to the database.
-	 */
-	private final String password;
-
-	/**
-	 * Constructs a connectionManager object using resourceManager to obtain connection details.
-	 *
-	 * @param resourceManager The ResourceManager providing access to configuration properties.
-	 */
-	public ConnectionManager(ResourceManager resourceManager) {
-		url = resourceManager.getValue("url");
-		username = resourceManager.getValue("username");
-		password = resourceManager.getValue("password");
-	}
-
-	/**
-	 * Constructs a connectionManager object with specified connection details.
-	 *
-	 * @param url      The JDBC URL for connecting to the database.
-	 * @param username The username used for authentication.
-	 * @param password The password used for authentication.
-	 */
-	public ConnectionManager(String url, String username, String password) {
-		this.url = url;
-		this.username = username;
-		this.password = password;
-	}
-
-	/**
-	 * Takes a connection to the database using the configured connection details.
-	 *
-	 * @return A Connection object representing the database connection.
-	 * @throws SQLException If a database access error occurs.
-	 */
-	public Connection takeConnection() throws SQLException {
-		return DriverManager.getConnection(url, username, password);
-	}
 
 	/**
 	 * Closes the provided database connection using the connection provider.

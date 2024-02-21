@@ -1,20 +1,14 @@
 package ru.patseev.monitoringservice.service.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 
 /**
  * Mapper interface for converting between MeterTypeDto and MeterType entities.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MeterTypeMapper {
-
-	/**
-	 * Instance of the MeterTypeMapper interface
-	 */
-	MeterTypeMapper instance = Mappers.getMapper(MeterTypeMapper.class);
 
 	/**
 	 * Converts a MeterTypeDto to a MeterType entity.

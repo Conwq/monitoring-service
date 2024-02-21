@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
@@ -23,7 +24,6 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 class AuditServiceTest {
@@ -36,7 +36,7 @@ class AuditServiceTest {
 	@BeforeAll
 	static void setUp() {
 		auditRepository = mock(AuditRepository.class);
-		AuditMapper auditMapper = AuditMapper.instance;
+		AuditMapper auditMapper = Mappers.getMapper(AuditMapper.class);
 
 		auditService = new AuditServiceImpl(auditRepository, auditMapper);
 	}
@@ -74,7 +74,7 @@ class AuditServiceTest {
 		when(auditRepository.findUserActionsByUserId(userDto.userId()))
 				.thenReturn(userActions);
 
-		List<UserActionDto> actual = auditService.getUserAction(userDto.userId());
+		List<UserActionDto> actual = auditService.getUserActions(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(expected);
@@ -87,7 +87,7 @@ class AuditServiceTest {
 				.thenReturn(null);
 
 		assertThrows(UserNotFoundException.class,
-				() -> auditService.getUserAction(userDto.userId())
+				() -> auditService.getUserActions(userDto.userId())
 		);
 	}
 }

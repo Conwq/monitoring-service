@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
-import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.RoleRepositoryImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -20,18 +17,7 @@ class RoleRepositoryTest extends AbstractPostgreSQLContainer {
 
 	@BeforeAll
 	static void beforeAll() {
-		ConnectionManager connectionManager = new ConnectionManager(
-				POSTGRES.getJdbcUrl(),
-				POSTGRES.getUsername(),
-				POSTGRES.getPassword()
-		);
-
-		ResourceManager resourceManager = new ResourceManager("application");
-
-		new LiquibaseMigration(connectionManager, resourceManager)
-				.performMigration();
-
-		roleRepository = new RoleRepositoryImpl(connectionManager);
+		roleRepository = new RoleRepositoryImpl(DATA_SOURCE);
 	}
 
 	@Test

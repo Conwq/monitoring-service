@@ -5,10 +5,12 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.migration.Migration;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -16,29 +18,32 @@ import java.sql.Statement;
  * The LiquibaseMigration class implements the Migration interface and is specifically
  * designed for executing Liquibase-based database migrations.
  */
-
+@Component
+@RequiredArgsConstructor
 public class LiquibaseMigration implements Migration {
 
 	/**
-	 * The connectionManager used to obtain the database connection for the migration.
+	 * The name of the schema used by Liquibase for database migrations.
 	 */
-	private final ConnectionManager connectionManager;
+	@Value("${liquibase.schema}")
+	private String schemaName;
 
 	/**
-	 * The resource manager used for retrieving database connection details.
+	 * The path to the Liquibase changelog XML file containing migration instructions.
 	 */
-	private final ResourceManager resourceManager;
+	@Value("${changelog.liquibase.file}")
+	private String pathChangelog = "db/changelog/changelog.xml";
 
 	/**
-	 * Constructs a LiquibaseMigration object with the provided ConnectionManager and ResourceManager.
-	 *
-	 * @param connectionManager The ConnectionManager instance to be used for database connections.
-	 * @param resourceManager   The ResourceManager instance to be used for accessing migration resources.
+	 * The default schema name to be used during the migration process.
 	 */
-	public LiquibaseMigration(ConnectionManager connectionManager, ResourceManager resourceManager) {
-		this.connectionManager = connectionManager;
-		this.resourceManager = resourceManager;
-	}
+	@Value("${default.schema}")
+	private String defaultSchema;
+
+	/**
+	 * The data source used for obtaining a database connection.
+	 */
+	private final DataSource dataSource;
 
 	/**
 	 * Performs the Liquibase-based database migration, creating the necessary schema and applying
@@ -46,17 +51,16 @@ public class LiquibaseMigration implements Migration {
 	 */
 	@Override
 	public void performMigration() {
-		try (Connection connection = connectionManager.takeConnection();
+		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement()) {
 			statement.executeUpdate("CREATE SCHEMA IF NOT EXISTS migration");
 
 			Database database = DatabaseFactory.getInstance()
 					.findCorrectDatabaseImplementation(new JdbcConnection(connection));
-			database.setLiquibaseSchemaName(resourceManager.getValue("liquibase.schema"));
+			database.setLiquibaseSchemaName(schemaName);
 
-			Liquibase liquibase = new Liquibase(resourceManager.getValue("changelog.liquibase.file"),
-					new ClassLoaderResourceAccessor(), database);
-			liquibase.getDatabase().setDefaultSchemaName(resourceManager.getValue("default.schema"));
+			Liquibase liquibase = new Liquibase(pathChangelog, new ClassLoaderResourceAccessor(), database);
+			liquibase.getDatabase().setDefaultSchemaName(defaultSchema);
 			liquibase.update();
 		} catch (Exception e) {
 			e.printStackTrace();

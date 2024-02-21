@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
 import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.manager.ResourceManager;
-import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
 
 import java.util.List;
@@ -17,22 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MeterTypeRepositoryTest extends AbstractPostgreSQLContainer {
 
-	private static MeterTypeRepository meterTypeRepository;
+	static MeterTypeRepository meterTypeRepository;
 
 	@BeforeAll
 	static void beforeAll() {
-		ConnectionManager connectionManager = new ConnectionManager(
-				POSTGRES.getJdbcUrl(),
-				POSTGRES.getUsername(),
-				POSTGRES.getPassword()
-		);
-
-		ResourceManager resourceManager = new ResourceManager("application");
-
-		new LiquibaseMigration(connectionManager, resourceManager)
-				.performMigration();
-
-		meterTypeRepository = new MeterTypeRepositoryImpl(connectionManager);
+		meterTypeRepository = new MeterTypeRepositoryImpl(DATA_SOURCE, new ConnectionManager());
 	}
 
 	@Test

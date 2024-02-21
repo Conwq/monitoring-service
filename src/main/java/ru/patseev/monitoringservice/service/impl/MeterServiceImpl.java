@@ -1,11 +1,13 @@
 package ru.patseev.monitoringservice.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
-import ru.patseev.monitoringservice.exception.MeterDataWasSubmittedException;
+import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 /**
  * The MeterServiceImpl class is an implementation of the DataMeterService interface.
  */
+@Service
+@RequiredArgsConstructor
 public class MeterServiceImpl implements MeterService {
 
 	/**
@@ -44,24 +48,6 @@ public class MeterServiceImpl implements MeterService {
 	private final MeterDataMapper meterDataMapper;
 
 	/**
-	 * Constructs a MeterServiceImpl object with the provided repositories and mappers.
-	 *
-	 * @param dataMeterRepository The DataMeterRepository instance responsible for managing metered data.
-	 * @param meterTypeRepository The MeterTypeRepository instance responsible for managing meter types.
-	 * @param meterTypeMapper     The MeterTypeMapper instance responsible for mapping meter type entities.
-	 * @param meterDataMapper     The MeterDataMapper instance responsible for mapping meter data entities.
-	 */
-	public MeterServiceImpl(DataMeterRepository dataMeterRepository,
-							MeterTypeRepository meterTypeRepository,
-							MeterTypeMapper meterTypeMapper,
-							MeterDataMapper meterDataMapper) {
-		this.dataMeterRepository = dataMeterRepository;
-		this.meterTypeRepository = meterTypeRepository;
-		this.meterTypeMapper = meterTypeMapper;
-		this.meterDataMapper = meterDataMapper;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -78,10 +64,10 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) {
+	public void saveDataMeter(int userId, DataMeterDto dataMeterDto) throws MeterDataConflictException {
 		boolean meterDataSubmitted = dataMeterRepository.checkMeterDataForCurrentMonth(userId, dataMeterDto.meterTypeId());
 		if (meterDataSubmitted) {
-			throw new MeterDataWasSubmittedException("Meter data submitted for the current month");
+			throw new MeterDataConflictException("Meter data submitted for the current month");
 		}
 
 		DataMeter dataMeter = meterDataMapper.toEntity(userId, dataMeterDto);
@@ -163,7 +149,7 @@ public class MeterServiceImpl implements MeterService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void saveMeterType(MeterTypeDto meterTypeDto) {
+	public void saveMeterType(MeterTypeDto meterTypeDto) throws MeterTypeExistException {
 		if (meterTypeRepository.checkMeterTypeExistence(meterTypeDto.typeName())) {
 			throw new MeterTypeExistException("Meter type exist");
 		}

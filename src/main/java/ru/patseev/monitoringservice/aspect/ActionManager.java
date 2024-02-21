@@ -1,5 +1,6 @@
 package ru.patseev.monitoringservice.aspect;
 
+import org.springframework.stereotype.Component;
 import ru.patseev.monitoringservice.enums.ActionEnum;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 /**
  * Manages actions associated with method names.
  */
+@Component
 public class ActionManager {
 
 	/**
