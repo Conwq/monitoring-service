@@ -2,44 +2,41 @@ package ru.patseev.monitoringservice.in;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.in.controller.UserController;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.UserValidator;
-import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
 import ru.patseev.monitoringservice.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
 
-	MockMvc mockMvc;
+	@MockBean
 	UserService userService;
+	@MockBean
 	JwtService jwtService;
+	MockMvc mockMvc;
 
-	@BeforeEach
-	void setUp() {
-		userService = mock(UserService.class);
-		jwtService = mock(JwtService.class);
-		UserValidator userValidator = spy(UserValidator.class);
-		ValidationErrorExtractor extractor = spy(ValidationErrorExtractor.class);
-
-		UserController userController = new UserController(userService, jwtService, userValidator, extractor);
-		mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+	@Autowired
+	public UserControllerTest(MockMvc mockMvc) {
+		this.mockMvc = mockMvc;
 	}
 
 	@Test

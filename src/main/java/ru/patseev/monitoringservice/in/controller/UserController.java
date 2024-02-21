@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -19,7 +18,6 @@ import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
-import ru.patseev.monitoringservice.in.validator.UserValidator;
 import ru.patseev.monitoringservice.service.UserService;
 
 import java.util.HashMap;
@@ -45,24 +43,9 @@ public class UserController {
 	private final JwtService jwtService;
 
 	/**
-	 * Validator for validating user input.
-	 */
-	private final UserValidator userValidator;
-
-	/**
 	 * Utility component for extracting error messages from BindingResult.
 	 */
 	private final ValidationErrorExtractor errorExtractor;
-
-	/**
-	 * Initializes the WebDataBinder with the userValidator.
-	 *
-	 * @param binder the WebDataBinder to initialize
-	 */
-	@InitBinder(value = "userDto")
-	protected void initBinder(WebDataBinder binder) {
-		binder.setValidator(userValidator);
-	}
 
 	/**
 	 * Saves user data and generates a JWT token based on the saved user data.

@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.patseev.monitoringservice.aspect.annotation.Audit;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -19,8 +18,6 @@ import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
-import ru.patseev.monitoringservice.in.validator.MeterDataValidator;
-import ru.patseev.monitoringservice.in.validator.MeterTypeValidator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.util.List;
@@ -48,36 +45,6 @@ public class MeterController {
 	 * The ErrorValidationExtractor used to extract validation errors.
 	 */
 	private final ValidationErrorExtractor errorExtractor;
-
-	/**
-	 * The MeterTypeValidator used to validate MeterTypeDto objects.
-	 */
-	private final MeterTypeValidator meterTypeValidator;
-
-	/**
-	 * The MeterDataValidator used to validate DataMeterDto objects.
-	 */
-	private final MeterDataValidator meterDataValidator;
-
-	/**
-	 * Initializes the WebDataBinder for MeterTypeDto validation.
-	 *
-	 * @param binder the WebDataBinder instance
-	 */
-	@InitBinder(value = "meterTypeDto")
-	protected void initMeterTypeBinder(WebDataBinder binder) {
-		binder.setValidator(meterTypeValidator);
-	}
-
-	/**
-	 * Initializes the WebDataBinder for DataMeterDto validation.
-	 *
-	 * @param binder the WebDataBinder instance
-	 */
-	@InitBinder(value = "dataMeterDto")
-	protected void initMeterDataBinder(WebDataBinder binder) {
-		binder.setValidator(meterDataValidator);
-	}
 
 	/**
 	 * Retrieves the current data meter reading for the specified user.

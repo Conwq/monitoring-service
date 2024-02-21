@@ -1,7 +1,6 @@
 package ru.patseev.monitoringservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
 
 import java.sql.Timestamp;
 
@@ -14,8 +13,7 @@ import java.sql.Timestamp;
  * @param meterTypeName  The name of the meter type associated with the data.
  */
 public record DataMeterDto(Timestamp submissionDate,
-						   @NotBlank
-						   @Size(min = 1)
+						   @Min(value = 1, message = "The supplied value is too small")
 						   Long value,
 						   Integer meterTypeId,
 						   String meterTypeName) {

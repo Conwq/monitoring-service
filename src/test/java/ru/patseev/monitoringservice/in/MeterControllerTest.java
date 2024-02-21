@@ -2,29 +2,25 @@ package ru.patseev.monitoringservice.in;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
 import ru.patseev.monitoringservice.dto.MeterTypeDto;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.exception.MeterDataConflictException;
 import ru.patseev.monitoringservice.exception.MeterTypeExistException;
-import ru.patseev.monitoringservice.in.controller.MeterController;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;
-import ru.patseev.monitoringservice.in.validator.MeterDataValidator;
-import ru.patseev.monitoringservice.in.validator.MeterTypeValidator;
 import ru.patseev.monitoringservice.service.MeterService;
 
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class MeterControllerTest {
 
 	String jwtToken = "jwtToken";
@@ -48,23 +46,15 @@ class MeterControllerTest {
 	MeterTypeDto hotWaterType = new MeterTypeDto(2, hotWater);
 	DataMeterDto electricityData = new DataMeterDto(now, 120L, electricityType.meterTypeId(), electricityType.typeName());
 	DataMeterDto hotWaterData = new DataMeterDto(now, 182L, hotWaterType.meterTypeId(), hotWaterType.typeName());
-	MockMvc mockMvc;
+	@MockBean
 	MeterService meterService;
+	@MockBean
 	JwtService jwtService;
+	MockMvc mockMvc;
 
-	@BeforeEach
-	void setUp() {
-		now = Timestamp.from(Instant.now());
-		month = LocalDate.now().getMonth().getValue();
-
-		meterService = mock(MeterService.class);
-		jwtService = mock(JwtService.class);
-		MeterTypeValidator meterTypeValidator = new MeterTypeValidator();
-		MeterDataValidator meterDataValidator = new MeterDataValidator();
-		ValidationErrorExtractor extractor = new ValidationErrorExtractor();
-		MeterController meterController = new MeterController(meterService, jwtService, extractor, meterTypeValidator, meterDataValidator);
-
-		mockMvc = MockMvcBuilders.standaloneSetup(meterController).build();
+	@Autowired
+	public MeterControllerTest(MockMvc mockMvc) {
+		this.mockMvc = mockMvc;
 	}
 
 	@Test
@@ -225,7 +215,7 @@ class MeterControllerTest {
 
 		mockMvc.perform(createPostRequest("/meters/save_meter", invalidData))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$").value("Invalid data"));
+				.andExpect(jsonPath("$").value("Type name must be at least 4 characters long"));
 	}
 
 	private MockHttpServletRequestBuilder createGetRequest(String uri) {

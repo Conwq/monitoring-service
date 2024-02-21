@@ -1,9 +1,7 @@
 package ru.patseev.monitoringservice.repository;
 
 import org.postgresql.ds.PGSimpleDataSource;
-import org.springframework.context.annotation.PropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import ru.patseev.monitoringservice.config.YmlProperties;
 import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
 
 public class AbstractPostgreSQLContainer {

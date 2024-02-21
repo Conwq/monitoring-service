@@ -42,7 +42,9 @@ public class RouteValidator {
 	 * The set containing open endpoints (operations available to all users).
 	 */
 	private final Set<String> openEndpoints = new HashSet<>() {{
-		add("/users/*");
+		add("/users");
+		add("/api-docs");
+		add("/swagger-ui");
 	}};
 
 	/**

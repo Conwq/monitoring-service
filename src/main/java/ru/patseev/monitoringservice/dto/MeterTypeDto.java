@@ -1,6 +1,5 @@
 package ru.patseev.monitoringservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -10,7 +9,6 @@ import jakarta.validation.constraints.Size;
  * @param typeName    The name of the meter type.
  */
 public record MeterTypeDto(Integer meterTypeId,
-						   @NotBlank
-						   @Size(min = 4, max = 20)
+						   @Size(min = 4, message = "Type name must be at least 4 characters long")
 						   String typeName) {
 }

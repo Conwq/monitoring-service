@@ -1,10 +1,11 @@
 package ru.patseev.monitoringservice.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.patseev.monitoringservice.domain.DataMeter;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.dto.DataMeterDto;
@@ -14,10 +15,6 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.DataMeterNotFoundException;
 import ru.patseev.monitoringservice.repository.DataMeterRepository;
 import ru.patseev.monitoringservice.repository.MeterTypeRepository;
-import ru.patseev.monitoringservice.service.impl.MeterServiceImpl;
-import ru.patseev.monitoringservice.service.mapper.AuditMapper;
-import ru.patseev.monitoringservice.service.mapper.MeterDataMapper;
-import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -30,32 +27,29 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class MeterServiceTest {
 
-	private static DataMeterRepository dataMeterRepository;
-	private static MeterTypeRepository meterTypeRepository;
-	private static MeterService dataMeterService;
+	@MockBean
+	DataMeterRepository dataMeterRepository;
+	@MockBean
+	MeterTypeRepository meterTypeRepository;
+	MeterService meterService;
+	UserDto userDto;
+	DataMeter dataMeter;
+	DataMeterDto dataMeterDto;
+	MeterType meterType;
+	MeterTypeDto meterTypeDto;
 
-	private UserDto userDto;
-	private DataMeter dataMeter;
-	private DataMeterDto dataMeterDto;
-	private MeterType meterType;
-	private MeterTypeDto meterTypeDto;
-
-	@BeforeAll
-	static void setUp() {
-		dataMeterRepository = mock(DataMeterRepository.class);
-		meterTypeRepository = mock(MeterTypeRepository.class);
-		MeterTypeMapper meterTypeMapper = Mappers.getMapper(MeterTypeMapper.class);
-		MeterDataMapper meterDataMapper = Mappers.getMapper(MeterDataMapper.class);
-
-		dataMeterService = new MeterServiceImpl(dataMeterRepository, meterTypeRepository, meterTypeMapper, meterDataMapper);
+	@Autowired
+	public MeterServiceTest(MeterService meterService) {
+		this.meterService = meterService;
 	}
 
 	@BeforeEach
 	void createData() {
 		userDto = new UserDto(1, "test", "test", RoleEnum.USER);
-		meterType = new MeterType(1, "Hot water.");
+		meterType = new MeterType(1, "hot water");
 		meterTypeDto = new MeterTypeDto(meterType.getMeterTypeId(), meterType.getTypeName());
 		dataMeter = new DataMeter(
 				1,
@@ -67,8 +61,8 @@ class MeterServiceTest {
 		dataMeterDto = new DataMeterDto(
 				Timestamp.valueOf(LocalDate.now().atStartOfDay()),
 				1L,
-				1
-				, "Hot water."
+				1,
+				meterType.getTypeName()
 		);
 	}
 
@@ -80,7 +74,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		DataMeterDto actual = dataMeterService.getCurrentDataMeter(userDto.userId());
+		DataMeterDto actual = meterService.getCurrentDataMeter(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(dataMeterDto);
@@ -93,13 +87,13 @@ class MeterServiceTest {
 				.thenReturn(Optional.empty());
 
 		assertThrows(DataMeterNotFoundException.class,
-				() -> dataMeterService.getCurrentDataMeter(userDto.userId()));
+				() -> meterService.getCurrentDataMeter(userDto.userId()));
 	}
 
 	@Test
 	@DisplayName("saveDataMeter should save data meter in db")
 	void saveDataMeter_shouldSaveData() {
-		dataMeterService.saveDataMeter(userDto.userId(), dataMeterDto);
+		meterService.saveDataMeter(userDto.userId(), dataMeterDto);
 
 		verify(dataMeterRepository)
 				.saveDataMeter(any(DataMeter.class));
@@ -110,9 +104,13 @@ class MeterServiceTest {
 	void getMeterDataForSpecifiedMonth_shouldReturnData() {
 		when(dataMeterRepository.getMeterDataForSpecifiedMonth(userDto.userId(), LocalDate.now().getMonth().getValue()))
 				.thenReturn(List.of(dataMeter));
+		when(meterTypeRepository.getMeterTypeById(meterType.getMeterTypeId()))
+				.thenReturn(meterType);
 
 		List<DataMeterDto> actual =
-				dataMeterService.getMeterDataForSpecifiedMonth(userDto.userId(), LocalDate.now().getMonth().getValue());
+				meterService.getMeterDataForSpecifiedMonth(userDto.userId(), LocalDate.now().getMonth().getValue());
+
+		System.out.println(actual);
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -126,7 +124,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
+		List<DataMeterDto> actual = meterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual)
 				.isEqualTo(List.of(dataMeterDto));
@@ -138,7 +136,7 @@ class MeterServiceTest {
 		when(dataMeterRepository.getAllMeterData(userDto.userId()))
 				.thenReturn(Collections.emptyList());
 
-		List<DataMeterDto> actual = dataMeterService.getUserMeterData(userDto.userId());
+		List<DataMeterDto> actual = meterService.getUserMeterData(userDto.userId());
 
 		assertThat(actual.size())
 				.isEqualTo(0);
@@ -152,7 +150,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.getMeterTypeById(dataMeter.getMeterTypeId()))
 				.thenReturn(meterType);
 
-		Map<String, List<DataMeterDto>> actual = dataMeterService.getDataFromAllMeterUsers();
+		Map<String, List<DataMeterDto>> actual = meterService.getDataFromAllMeterUsers();
 
 		assertThat(actual)
 				.isEqualTo(Map.of(userDto.userId().toString(), List.of(dataMeterDto)));
@@ -164,7 +162,7 @@ class MeterServiceTest {
 		when(dataMeterRepository.getDataFromAllMeterUsers())
 				.thenReturn(Collections.emptyMap());
 
-		Map<String, List<DataMeterDto>> actual = dataMeterService.getDataFromAllMeterUsers();
+		Map<String, List<DataMeterDto>> actual = meterService.getDataFromAllMeterUsers();
 
 		assertThat(actual.size())
 				.isEqualTo(0);
@@ -176,7 +174,7 @@ class MeterServiceTest {
 		when(meterTypeRepository.findAllMeterType())
 				.thenReturn(List.of(meterType));
 
-		List<MeterTypeDto> actual = dataMeterService.getAvailableMeterType();
+		List<MeterTypeDto> actual = meterService.getAvailableMeterType();
 
 		assertThat(actual.size())
 				.isEqualTo(1);
@@ -187,7 +185,7 @@ class MeterServiceTest {
 	@Test
 	@DisplayName("getAvailableMeterType should save the new meter type")
 	void saveMeterType_shouldSaveMeterType() {
-		dataMeterService.saveMeterType(meterTypeDto);
+		meterService.saveMeterType(meterTypeDto);
 
 		verify(meterTypeRepository, times(1))
 				.saveMeterType(meterType);

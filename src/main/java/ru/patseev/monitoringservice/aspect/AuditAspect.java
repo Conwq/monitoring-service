@@ -56,13 +56,14 @@ public class AuditAspect {
 		ResponseEntity<?> result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);
 		Object body = result.getBody();
-		assert body != null;
-		String stringBody = body.toString();
-		String jwtToken;
-		if (stringBody.split("\\.").length == 3) {
-			jwtToken = stringBody;
-			int userId = jwtService.extractPlayerId(jwtToken);
-			auditService.saveUserAction(action, userId);
+		if (body != null) {
+			String stringBody = body.toString();
+			String jwtToken;
+			if (stringBody.split("\\.").length == 3) {
+				jwtToken = stringBody;
+				int userId = jwtService.extractPlayerId(jwtToken);
+				auditService.saveUserAction(action, userId);
+			}
 		}
 		return result;
 	}

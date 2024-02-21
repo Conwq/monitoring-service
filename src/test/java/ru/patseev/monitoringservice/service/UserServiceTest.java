@@ -1,10 +1,11 @@
 package ru.patseev.monitoringservice.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -13,35 +14,31 @@ import ru.patseev.monitoringservice.exception.UserAlreadyExistException;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.repository.RoleRepository;
 import ru.patseev.monitoringservice.repository.UserRepository;
-import ru.patseev.monitoringservice.service.impl.UserServiceImpl;
-import ru.patseev.monitoringservice.service.mapper.MeterTypeMapper;
-import ru.patseev.monitoringservice.service.mapper.UserMapper;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
+@SpringBootTest
 class UserServiceTest {
 
-	private static UserRepository userRepository;
-	private static RoleRepository roleRepository;
-	private static UserService userService;
+	@MockBean
+	UserRepository userRepository;
+	@MockBean
+	RoleRepository roleRepository;
+	UserService userService;
 
-	private UserDto userDto;
-	private User user;
-	private Role role;
-
-	@BeforeAll
-	public static void setUp() {
-		userRepository = mock(UserRepository.class);
-		roleRepository = mock(RoleRepository.class);
-
-		UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-		userService = new UserServiceImpl(userRepository, roleRepository, userMapper);
+	@Autowired
+	public UserServiceTest(UserService userService) {
+		this.userService = userService;
 	}
+
+	UserDto userDto;
+	User user;
+	Role role;
 
 	@BeforeEach
 	public void createUser() {

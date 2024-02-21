@@ -7,7 +7,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import ru.patseev.monitoringservice.migration.Migration;
 
 import javax.sql.DataSource;
@@ -18,26 +20,26 @@ import java.sql.Statement;
  * The LiquibaseMigration class implements the Migration interface and is specifically
  * designed for executing Liquibase-based database migrations.
  */
-@Component
+@Configuration
 @RequiredArgsConstructor
 public class LiquibaseMigration implements Migration {
 
 	/**
 	 * The name of the schema used by Liquibase for database migrations.
 	 */
-	@Value("${liquibase.schema}")
-	private String schemaName;
+	@Value("${spring.liquibase.liquibase-schema}")
+	private String liquibaseMigrationSchema;
 
 	/**
 	 * The path to the Liquibase changelog XML file containing migration instructions.
 	 */
-	@Value("${changelog.liquibase.file}")
-	private String pathChangelog = "db/changelog/changelog.xml";
+	@Value("${spring.liquibase.change-log}")
+	private String pathChangelog;
 
 	/**
 	 * The default schema name to be used during the migration process.
 	 */
-	@Value("${default.schema}")
+	@Value("${spring.liquibase.default-schema}")
 	private String defaultSchema;
 
 	/**
@@ -50,6 +52,7 @@ public class LiquibaseMigration implements Migration {
 	 * changelogs as defined in the specified XML file.
 	 */
 	@Override
+	@EventListener(ApplicationReadyEvent.class)
 	public void performMigration() {
 		try (Connection connection = dataSource.getConnection();
 			 Statement statement = connection.createStatement()) {
@@ -57,7 +60,7 @@ public class LiquibaseMigration implements Migration {
 
 			Database database = DatabaseFactory.getInstance()
 					.findCorrectDatabaseImplementation(new JdbcConnection(connection));
-			database.setLiquibaseSchemaName(schemaName);
+			database.setLiquibaseSchemaName(liquibaseMigrationSchema);
 
 			Liquibase liquibase = new Liquibase(pathChangelog, new ClassLoaderResourceAccessor(), database);
 			liquibase.getDatabase().setDefaultSchemaName(defaultSchema);

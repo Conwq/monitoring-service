@@ -15,11 +15,11 @@ import ru.patseev.monitoringservice.enums.RoleEnum;
  */
 @JsonSerialize
 public record UserDto(Integer userId,
-					  @NotBlank
-					  @Size(min = 6, max = 32)
+					  @NotBlank(message = "Username must not be empty")
+					  @Size(min = 6, max = 32, message = "Username must be at least 6 characters long")
 					  String username,
-					  @NotBlank
-					  @Size(min = 3, max = 32)
+					  @NotBlank(message = "Password must not be empty")
+					  @Size(min = 3, max = 32, message = "Password must be at least 3 characters long")
 					  String password,
 					  RoleEnum role) {
 }

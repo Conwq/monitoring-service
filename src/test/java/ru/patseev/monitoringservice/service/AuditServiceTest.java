@@ -6,6 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.patseev.monitoringservice.domain.UserAction;
 import ru.patseev.monitoringservice.dto.UserActionDto;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -26,19 +29,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class AuditServiceTest {
 
-	private static AuditRepository auditRepository;
-	private static AuditService auditService;
+	@MockBean
+	AuditRepository auditRepository;
+	AuditService auditService;
+	UserDto userDto;
 
-	private UserDto userDto;
-
-	@BeforeAll
-	static void setUp() {
-		auditRepository = mock(AuditRepository.class);
-		AuditMapper auditMapper = Mappers.getMapper(AuditMapper.class);
-
-		auditService = new AuditServiceImpl(auditRepository, auditMapper);
+	@Autowired
+	public AuditServiceTest(AuditService auditService) {
+		this.auditService = auditService;
 	}
 
 	@BeforeEach
