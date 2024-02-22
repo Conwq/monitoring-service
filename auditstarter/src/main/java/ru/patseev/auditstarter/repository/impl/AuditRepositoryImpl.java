@@ -1,11 +1,9 @@
-package ru.patseev.monitoringservice.repository.impl;
+package ru.patseev.auditstarter.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import ru.patseev.monitoringservice.domain.UserAction;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.repository.AuditRepository;
+import ru.patseev.auditstarter.domain.UserAction;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
+import ru.patseev.auditstarter.repository.AuditRepository;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -15,7 +13,6 @@ import java.util.List;
 /**
  * The AuditRepositoryImpl class is an implementation of the AuditRepository interface.
  */
-@Repository
 @RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {
 
@@ -23,11 +20,6 @@ public class AuditRepositoryImpl implements AuditRepository {
 	 * The data source used for obtaining a database connection.
 	 */
 	private final DataSource dataSource;
-
-	/**
-	 * Provider that provides methods for working with database connections.
-	 */
-	private final ConnectionManager connectionManager;
 
 	/**
 	 * {@inheritDoc}
@@ -43,9 +35,21 @@ public class AuditRepositoryImpl implements AuditRepository {
 
 			connection.commit();
 		} catch (SQLException e) {
-			connectionManager.rollbackTransaction(connection);
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException ex) {
+				System.err.println("Error closing database connection: " + ex.getMessage());
+			}
 		} finally {
-			connectionManager.closeConnection(connection);
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				System.err.println("Error during rollback: " + e.getMessage());
+			}
 		}
 	}
 

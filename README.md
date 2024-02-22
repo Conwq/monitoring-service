@@ -41,14 +41,13 @@ Endpoints для получения документации ( swagger ):
     - JDBC
     - postgreSQL
     - docker container ( для работы postgres и testcontainer )
-    - liquibase
-    - jackson
-    - JSON Web Token
+    - liquibasen
+    - JSON Web Toke
     - mapstruct
-    - aspectj
     - postman
+    - custom starter
     - swagger + swagger ui
-    - spring ( webMvc, AOP, context )
+    - spring boot
 
     ### Testing ###
     - testcontainer
@@ -56,4 +55,4 @@ Endpoints для получения документации ( swagger ):
     - assertJ
     - mockito
     - mockMvc
-    - spring test
+    - spring boot test

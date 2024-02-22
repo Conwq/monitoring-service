@@ -1,7 +1,6 @@
-package ru.patseev.monitoringservice.aspect;
+package ru.patseev.auditstarter.manager;
 
-import org.springframework.stereotype.Component;
-import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Map;
 /**
  * Manages actions associated with method names.
  */
-@Component
 public class ActionManager {
 
 	/**
@@ -36,6 +34,7 @@ public class ActionManager {
 
 	/**
 	 * Initialize the action map
+	 *
 	 * @return Returns a map with values
 	 */
 	private Map<String, ActionEnum> initMap() {

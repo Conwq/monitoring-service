@@ -1,11 +1,11 @@
-package ru.patseev.monitoringservice.service.mapper;
+package ru.patseev.auditstarter.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import ru.patseev.monitoringservice.domain.UserAction;
-import ru.patseev.monitoringservice.dto.UserActionDto;
-import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.auditstarter.domain.UserAction;
+import ru.patseev.auditstarter.dto.UserActionDto;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
 
 /**
  * Mapper interface for converting between UserActionDto and UserAction entities.

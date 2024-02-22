@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.patseev.monitoringservice.aspect.annotation.Audit;
+import ru.patseev.auditstarter.annotation.Audit;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.in.jwt.JwtService;
 import ru.patseev.monitoringservice.in.validator.ValidationErrorExtractor;

@@ -1,21 +1,18 @@
-package ru.patseev.monitoringservice.service.impl;
+package ru.patseev.auditstarter.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.patseev.monitoringservice.domain.UserAction;
-import ru.patseev.monitoringservice.dto.UserActionDto;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
-import ru.patseev.monitoringservice.repository.AuditRepository;
-import ru.patseev.monitoringservice.service.AuditService;
-import ru.patseev.monitoringservice.service.mapper.AuditMapper;
+import ru.patseev.auditstarter.domain.UserAction;
+import ru.patseev.auditstarter.dto.UserActionDto;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
+import ru.patseev.auditstarter.repository.AuditRepository;
+import ru.patseev.auditstarter.service.AuditService;
+import ru.patseev.auditstarter.service.mapper.AuditMapper;
 
 import java.util.List;
 
 /**
  * The AuditServiceImpl class is an implementation of the AuditService interface.
  */
-@Service
 @RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
@@ -47,7 +44,7 @@ public class AuditServiceImpl implements AuditService {
 				.findUserActionsByUserId(userId);
 
 		if (userAction == null) {
-			throw new UserNotFoundException("User is not found");
+			return null;
 		}
 
 		return userAction

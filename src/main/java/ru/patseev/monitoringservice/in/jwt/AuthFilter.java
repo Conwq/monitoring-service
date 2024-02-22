@@ -9,6 +9,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 
@@ -20,7 +21,7 @@ import java.io.IOException;
  * and checking whether the user is authenticated and authorized to access
  * the requested resource.
  */
-//@Component
+@Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {

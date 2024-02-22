@@ -1,6 +1,7 @@
-package ru.patseev.monitoringservice.repository;
+package ru.patseev.auditstarter.repository;
 
-import ru.patseev.monitoringservice.domain.UserAction;
+
+import ru.patseev.auditstarter.domain.UserAction;
 
 import java.util.List;
 

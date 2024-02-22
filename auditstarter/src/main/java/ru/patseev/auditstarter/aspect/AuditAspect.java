@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.aspect;
+package ru.patseev.auditstarter.aspect;
 
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -6,10 +6,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.in.jwt.JwtService;
-import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
+import ru.patseev.auditstarter.manager.ActionManager;
+import ru.patseev.auditstarter.service.AuditService;
+import ru.patseev.auditstarter.service.JwtAspectService;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -17,7 +17,6 @@ import java.util.Optional;
 /**
  * Aspect for logging user actions and authentication/registration activities.
  */
-@Component
 @Aspect
 @RequiredArgsConstructor
 public class AuditAspect {
@@ -25,7 +24,7 @@ public class AuditAspect {
 	/**
 	 * Service for JWT operations.
 	 */
-	private final JwtService jwtService;
+	private final JwtAspectService jwtService;
 
 	/**
 	 * Service for audit operations.
@@ -40,12 +39,12 @@ public class AuditAspect {
 	/**
 	 * Pointcut for methods annotated with @Loggable.
 	 */
-	@Pointcut("@annotation(ru.patseev.monitoringservice.aspect.annotation.Audit)")
+	@Pointcut("@annotation(ru.patseev.auditstarter.annotation.Audit)")
 	public void annotatedByAudit() {
 	}
 
 	/**
-	 * Advice for logging authentication or registration activities in UserController.
+	 * Advice for audit authentication or registration activities in UserController.
 	 *
 	 * @param proceedingJoinPoint The proceeding join point
 	 * @return The result of the method execution
@@ -55,17 +54,41 @@ public class AuditAspect {
 	public Object auditAuthAndRegister(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		ResponseEntity<?> result = (ResponseEntity<?>) proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);
+
+		processResponseAndSaveAction(result, action);
+
+		return result;
+	}
+
+	/**
+	 * Process the response and save audit action.
+	 *
+	 * @param result The ResponseEntity object representing the HTTP response.
+	 * @param action The ActionEnum representing the audit action.
+	 */
+	private void processResponseAndSaveAction(ResponseEntity<?> result, ActionEnum action) {
 		Object body = result.getBody();
 		if (body != null) {
 			String stringBody = body.toString();
-			String jwtToken;
-			if (stringBody.split("\\.").length == 3) {
-				jwtToken = stringBody;
+			String jwtToken = extractJwtToken(stringBody);
+			if (jwtToken != null) {
 				int userId = jwtService.extractPlayerId(jwtToken);
 				auditService.saveUserAction(action, userId);
 			}
 		}
-		return result;
+	}
+
+	/**
+	 * Extract JWT token from the response body.
+	 *
+	 * @param responseBody The string representing the response body.
+	 * @return The JWT token if found, null otherwise.
+	 */
+	private String extractJwtToken(String responseBody) {
+		if (responseBody.split("\\.").length == 3) {
+			return responseBody;
+		}
+		return null;
 	}
 
 	/**
@@ -80,13 +103,7 @@ public class AuditAspect {
 	public Object auditUserAction(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		Object result = proceedingJoinPoint.proceed();
 		ActionEnum action = getAction(proceedingJoinPoint);
-
-		Optional<String> optionalJwtToken = Arrays
-				.stream(proceedingJoinPoint.getArgs())
-				.filter(o -> o instanceof String)
-				.map(Object::toString)
-				.filter(str -> str.split("\\.").length == 3)
-				.findFirst();
+		Optional<String> optionalJwtToken = extractOptionalJwtToken(proceedingJoinPoint);
 		if (optionalJwtToken.isPresent()) {
 			int userId = optionalJwtToken
 					.map(jwtService::extractPlayerId)
@@ -94,6 +111,23 @@ public class AuditAspect {
 			auditService.saveUserAction(action, userId);
 		}
 		return result;
+	}
+
+	/**
+	 * Extracts an optional JWT token from the arguments of the intercepted method.
+	 * If a JWT token is found among the arguments, it is returned wrapped in an Optional,
+	 * otherwise an empty Optional is returned.
+	 *
+	 * @param proceedingJoinPoint The ProceedingJoinPoint object representing the method being intercepted.
+	 * @return An Optional containing the JWT token if found, otherwise an empty Optional.
+	 */
+	private Optional<String> extractOptionalJwtToken(ProceedingJoinPoint proceedingJoinPoint) {
+		return Arrays
+				.stream(proceedingJoinPoint.getArgs())
+				.filter(o -> o instanceof String)
+				.map(Object::toString)
+				.filter(str -> str.split("\\.").length == 3)
+				.findFirst();
 	}
 
 	/**

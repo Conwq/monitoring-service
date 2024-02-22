@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.aspect.annotation;
+package ru.patseev.auditstarter.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
  * This annotation mark methods or types that should be logged during their execution.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target(ElementType.METHOD)
 public @interface Audit {
 }

@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.aspect;
+package ru.patseev.auditstarter.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 /**
  * Aspect for measuring the execution time of specific methods.
  */
-@Component
 @Aspect
 public class TimeCountingAspect {
 

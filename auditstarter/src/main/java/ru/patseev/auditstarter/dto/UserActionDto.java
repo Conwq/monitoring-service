@@ -1,6 +1,6 @@
-package ru.patseev.monitoringservice.dto;
+package ru.patseev.auditstarter.dto;
 
-import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
 
 import java.sql.Timestamp;
 

@@ -8,10 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.patseev.monitoringservice.aspect.annotation.Audit;
-import ru.patseev.monitoringservice.dto.UserActionDto;
+import ru.patseev.auditstarter.annotation.Audit;
+import ru.patseev.auditstarter.dto.UserActionDto;
+import ru.patseev.auditstarter.service.AuditService;
 import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.service.AuditService;
+import ru.patseev.monitoringservice.exception.UserNotFoundException;
 
 import java.util.List;
 
@@ -53,6 +54,9 @@ public class AuditController {
 												  @RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken) {
 		UserDto searchedUser = userController.getUser(username);
 		List<UserActionDto> userActions = auditService.getUserActions(searchedUser.userId());
+		if (userActions == null) {
+			throw new UserNotFoundException("User not exist");
+		}
 		return ResponseEntity.ok(userActions);
 	}
 }

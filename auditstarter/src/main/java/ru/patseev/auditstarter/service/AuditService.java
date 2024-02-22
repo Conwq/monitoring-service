@@ -1,8 +1,8 @@
-package ru.patseev.monitoringservice.service;
+package ru.patseev.auditstarter.service;
 
-import ru.patseev.monitoringservice.dto.UserActionDto;
-import ru.patseev.monitoringservice.enums.ActionEnum;
-import ru.patseev.monitoringservice.exception.UserNotFoundException;
+
+import ru.patseev.auditstarter.dto.UserActionDto;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ public interface AuditService {
 	 *
 	 * @param userId The ID of the user for which to retrieve user actions.
 	 * @return A list of UserActionDto representing user actions.
-	 * @throws UserNotFoundException If the specified user is not found.
 	 */
-	List<UserActionDto> getUserActions(int userId) throws UserNotFoundException;
+	List<UserActionDto> getUserActions(int userId);
 }

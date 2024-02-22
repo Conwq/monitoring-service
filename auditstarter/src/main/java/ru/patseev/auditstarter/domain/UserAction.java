@@ -1,9 +1,9 @@
-package ru.patseev.monitoringservice.domain;
+package ru.patseev.auditstarter.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.patseev.monitoringservice.enums.ActionEnum;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
 
 import java.sql.Timestamp;
 

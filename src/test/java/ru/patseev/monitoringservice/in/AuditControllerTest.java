@@ -11,13 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.patseev.monitoringservice.dto.UserActionDto;
+import ru.patseev.auditstarter.dto.UserActionDto;
+import ru.patseev.auditstarter.manager.enums.ActionEnum;
+import ru.patseev.auditstarter.service.AuditService;
 import ru.patseev.monitoringservice.dto.UserDto;
-import ru.patseev.monitoringservice.enums.ActionEnum;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
 import ru.patseev.monitoringservice.in.controller.UserController;
-import ru.patseev.monitoringservice.service.AuditService;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class AuditControllerTest {
 
 	@MockBean

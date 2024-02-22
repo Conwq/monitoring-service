@@ -1,4 +1,4 @@
-package ru.patseev.monitoringservice.enums;
+package ru.patseev.auditstarter.manager.enums;
 
 /**
  * The ActionEnum enum represents different user actions for auditing purposes.
