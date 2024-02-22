@@ -53,12 +53,12 @@ public class AuthFilter extends OncePerRequestFilter {
 									@NonNull HttpServletResponse resp,
 									@NonNull FilterChain filterChain) throws ServletException, IOException {
 		final String jwtToken = req.getHeader(HttpHeaders.AUTHORIZATION);
-		if (jwtToken == null) {
-			sendResponse(resp, "Please log in to the system");
-			return;
-		}
 
 		if (routeValidator.isSecured.test(req)) {
+			if (jwtToken == null) {
+				sendResponse(resp, "Please log in to the system");
+				return;
+			}
 			handleAuthorization(req, resp, jwtToken);
 		}
 		filterChain.doFilter(req, resp);
