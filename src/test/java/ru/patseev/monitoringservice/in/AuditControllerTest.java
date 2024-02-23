@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.patseev.auditstarter.dto.UserActionDto;
 import ru.patseev.auditstarter.manager.enums.ActionEnum;
 import ru.patseev.auditstarter.service.AuditService;
+import ru.patseev.monitoringservice.config.annotation.DisableLiquibaseMigration;
 import ru.patseev.monitoringservice.dto.UserDto;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.UserNotFoundException;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@DisableLiquibaseMigration
 class AuditControllerTest {
 
 	@MockBean

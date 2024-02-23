@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.patseev.monitoringservice.config.annotation.DisableLiquibaseMigration;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.domain.User;
 import ru.patseev.monitoringservice.dto.UserDto;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@DisableLiquibaseMigration
 class UserServiceTest {
 
 	@MockBean

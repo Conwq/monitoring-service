@@ -43,7 +43,7 @@ public class AuditServiceImpl implements AuditService {
 		List<UserAction> userAction = auditRepository
 				.findUserActionsByUserId(userId);
 
-		if (userAction == null) {
+		if (userAction.isEmpty()) {
 			return null;
 		}
 

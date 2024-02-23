@@ -56,10 +56,13 @@ public class AuthFilter extends OncePerRequestFilter {
 
 		if (routeValidator.isSecured.test(req)) {
 			if (jwtToken == null) {
-				sendResponse(resp, "Please log in to the system");
+				sendResponse(resp, HttpServletResponse.SC_UNAUTHORIZED, "Please log in to the system");
 				return;
 			}
-			handleAuthorization(req, resp, jwtToken);
+			if (!handleAuthorization(req, resp, jwtToken)) {
+				sendResponse(resp, HttpServletResponse.SC_FORBIDDEN, "Content is not available for you");
+				return;
+			}
 		}
 		filterChain.doFilter(req, resp);
 	}
@@ -70,9 +73,9 @@ public class AuthFilter extends OncePerRequestFilter {
 	 * @param resp    The HttpServletResponse object representing the HTTP response.
 	 * @param message The message to be included in the response body.
 	 */
-	private void sendResponse(HttpServletResponse resp, String message) {
+	private void sendResponse(HttpServletResponse resp, int statusCode, String message) {
 		try {
-			resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			resp.setStatus(statusCode);
 			resp.getOutputStream().write(message.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,13 +90,11 @@ public class AuthFilter extends OncePerRequestFilter {
 	 * @param jwtToken The JWT token extracted from the request header.
 	 * @throws IOException if an input or output exception occurs while handling authorization.
 	 */
-	private void handleAuthorization(HttpServletRequest req, HttpServletResponse resp, String jwtToken) throws IOException {
+	private boolean handleAuthorization(HttpServletRequest req, HttpServletResponse resp, String jwtToken) throws IOException {
 		RoleEnum userRole = RoleEnum.valueOf(jwtService.extractRole(jwtToken).toUpperCase());
 		String requestPath = req.getServletPath();
 		RoleEnum accessRole = routeValidator.getCloseEndpoints().get(requestPath);
 
-		if (accessRole != userRole) {
-			sendResponse(resp, "Content is not available for you");
-		}
+		return accessRole == userRole;
 	}
 }
