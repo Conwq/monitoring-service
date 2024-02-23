@@ -1,4 +1,4 @@
 .idea
-monitoring-service.iml
-target
-out
+monitroing-app/target
+auditstarter/target
+timecountringstarter/target
