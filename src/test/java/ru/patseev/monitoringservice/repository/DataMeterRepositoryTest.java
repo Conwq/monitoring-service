@@ -26,8 +26,7 @@ class DataMeterRepositoryTest {
 	@ServiceConnection
 	@SuppressWarnings("unused")
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
-	int userId;
+	int userId = 1;
 	DataMeter hotWaterData;
 	DataMeterRepository dataMeterRepository;
 
@@ -41,7 +40,6 @@ class DataMeterRepositoryTest {
 		LocalDate now = LocalDate.now();
 		Timestamp submissionDate = Timestamp.valueOf(String.format("%s-%s-01 00:00:00", now.getYear(), now.getMonth().getValue()));
 
-		userId = 1;
 		hotWaterData = new DataMeter(1, submissionDate, 1L, 1, userId);
 	}
 

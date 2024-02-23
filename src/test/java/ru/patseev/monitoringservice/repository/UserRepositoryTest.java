@@ -24,9 +24,7 @@ class UserRepositoryTest {
 	@ServiceConnection
 	@SuppressWarnings("unused")
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
 	UserRepository userRepository;
-
 	User user;
 
 	@Autowired

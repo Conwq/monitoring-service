@@ -47,7 +47,6 @@ public class AuthFilter extends OncePerRequestFilter {
 	 *                          the normal operation of the filter.
 	 * @throws IOException      If an I/O exception has occurred.
 	 */
-
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest req,
 									@NonNull HttpServletResponse resp,

@@ -23,7 +23,6 @@ class RoleRepositoryTest {
 	@ServiceConnection
 	@SuppressWarnings("unused")
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
 	RoleRepository roleRepository;
 
 	@Autowired

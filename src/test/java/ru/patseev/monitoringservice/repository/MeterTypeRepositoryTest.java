@@ -24,7 +24,6 @@ class MeterTypeRepositoryTest {
 	@ServiceConnection
 	@SuppressWarnings("unused")
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
 	MeterTypeRepository meterTypeRepository;
 
 	@Autowired

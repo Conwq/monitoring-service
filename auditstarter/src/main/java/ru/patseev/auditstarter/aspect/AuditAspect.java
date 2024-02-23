@@ -70,12 +70,24 @@ public class AuditAspect {
 		Object body = result.getBody();
 		if (body != null) {
 			String stringBody = body.toString();
-			String jwtToken = extractJwtToken(stringBody);
+			String jwtToken = validityCheckJwtToken(stringBody);
 			if (jwtToken != null) {
-				int userId = jwtService.extractPlayerId(jwtToken);
-				auditService.saveUserAction(action, userId);
+				saveUserAction(action, jwtToken);
 			}
 		}
+	}
+
+	/**
+	 * Saves a user action to the audit log.
+	 * This method extracts the user ID from the JWT token and then saves the user action
+	 * along with the user ID to the audit log using the AuditService.
+	 *
+	 * @param action    The type of action performed by the user.
+	 * @param jwtToken  The JWT token containing the user's authentication information.
+	 */
+	private void saveUserAction(ActionEnum action, String jwtToken) {
+		int userId = jwtService.extractPlayerId(jwtToken);
+		auditService.saveUserAction(action, userId);
 	}
 
 	/**
@@ -84,7 +96,7 @@ public class AuditAspect {
 	 * @param responseBody The string representing the response body.
 	 * @return The JWT token if found, null otherwise.
 	 */
-	private String extractJwtToken(String responseBody) {
+	private String validityCheckJwtToken(String responseBody) {
 		if (responseBody.split("\\.").length == 3) {
 			return responseBody;
 		}
