@@ -1,23 +1,34 @@
 package ru.patseev.monitoringservice.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.patseev.monitoringservice.domain.Role;
 import ru.patseev.monitoringservice.enums.RoleEnum;
 import ru.patseev.monitoringservice.exception.RoleNotExistsException;
-import ru.patseev.monitoringservice.repository.impl.RoleRepositoryImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class RoleRepositoryTest extends AbstractPostgreSQLContainer {
+@Testcontainers
+@SpringBootTest
+class RoleRepositoryTest {
 
-	private static RoleRepository roleRepository;
+	@Container
+	@ServiceConnection
+	@SuppressWarnings("unused")
+	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
-	@BeforeAll
-	static void beforeAll() {
-		roleRepository = new RoleRepositoryImpl(DATA_SOURCE);
+	RoleRepository roleRepository;
+
+	@Autowired
+	public RoleRepositoryTest(RoleRepository roleRepository) {
+		this.roleRepository = roleRepository;
 	}
 
 	@Test

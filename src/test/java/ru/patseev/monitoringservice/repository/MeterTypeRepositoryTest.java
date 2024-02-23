@@ -1,25 +1,35 @@
 package ru.patseev.monitoringservice.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.patseev.monitoringservice.domain.MeterType;
 import ru.patseev.monitoringservice.exception.MeterTypeNotFoundException;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.repository.impl.MeterTypeRepositoryImpl;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MeterTypeRepositoryTest extends AbstractPostgreSQLContainer {
+@Testcontainers
+@SpringBootTest
+class MeterTypeRepositoryTest {
 
-	static MeterTypeRepository meterTypeRepository;
+	@Container
+	@ServiceConnection
+	@SuppressWarnings("unused")
+	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
-	@BeforeAll
-	static void beforeAll() {
-		meterTypeRepository = new MeterTypeRepositoryImpl(DATA_SOURCE, new ConnectionManager());
+	MeterTypeRepository meterTypeRepository;
+
+	@Autowired
+	public MeterTypeRepositoryTest(MeterTypeRepository meterTypeRepository) {
+		this.meterTypeRepository = meterTypeRepository;
 	}
 
 	@Test

@@ -1,14 +1,15 @@
 package ru.patseev.monitoringservice.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.postgresql.ds.PGSimpleDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.patseev.monitoringservice.domain.DataMeter;
-import ru.patseev.monitoringservice.manager.ConnectionManager;
-import ru.patseev.monitoringservice.migration.impl.LiquibaseMigration;
-import ru.patseev.monitoringservice.repository.impl.DataMeterRepositoryImpl;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -17,16 +18,22 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class DataMeterRepositoryTest extends AbstractPostgreSQLContainer {
+@Testcontainers
+@SpringBootTest
+class DataMeterRepositoryTest {
 
-	private static DataMeterRepository dataMeterRepository;
+	@Container
+	@ServiceConnection
+	@SuppressWarnings("unused")
+	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
-	private int userId;
-	private DataMeter hotWaterData;
+	int userId;
+	DataMeter hotWaterData;
+	DataMeterRepository dataMeterRepository;
 
-	@BeforeAll
-	static void beforeAll() {
-		dataMeterRepository = new DataMeterRepositoryImpl(DATA_SOURCE, new ConnectionManager());
+	@Autowired
+	public DataMeterRepositoryTest(DataMeterRepository dataMeterRepository) {
+		this.dataMeterRepository = dataMeterRepository;
 	}
 
 	@BeforeEach
