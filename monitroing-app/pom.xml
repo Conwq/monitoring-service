@@ -98,22 +98,11 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>ru.patseev</groupId>-->
-<!--            <artifactId>auditstarter</artifactId>-->
-<!--            <version>1.0</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>ru.patseev</groupId>
             <artifactId>auditstarter</artifactId>
             <version>1.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>ru.patseev</groupId>-->
-<!--            <artifactId>timecountringstarter</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>ru.patseev</groupId>
             <artifactId>timecountringstarter</artifactId>
