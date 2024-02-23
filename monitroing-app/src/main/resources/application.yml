@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: monitoring-service
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/monitoring_service_database
+    username: root
+    password: 1
+
+  liquibase:
+    enabled: false
+    change-log: db/changelog/changelog.xml
+    liquibase-schema: migration
+    default-schema: monitoring_service
+
+secret:
+  key: f9c9f2c74e849e48aac676442f8eaa67fbc13f62999f8d30ae9417518bd38456
+jwt:
+  expiration: 8640000
