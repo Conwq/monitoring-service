@@ -1,8 +1,8 @@
-package ru.patseev.auditstarter.config;
+package ru.patseev.timecountringstarter.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.patseev.auditstarter.aspect.TimeCountingAspect;
+import ru.patseev.timecountringstarter.aspect.TimeCountingAspect;
 
 /**
  * Configuration class responsible for configuring time counting aspect functionality in the application.

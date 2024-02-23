@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import ru.patseev.auditstarter.manager.enums.ActionEnum;
 import ru.patseev.auditstarter.manager.ActionManager;
 import ru.patseev.auditstarter.service.AuditService;
-import ru.patseev.auditstarter.service.JwtAspectService;
+import ru.patseev.auditstarter.service.JwtAuditService;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class AuditAspect {
 	/**
 	 * Service for JWT operations.
 	 */
-	private final JwtAspectService jwtService;
+	private final JwtAuditService jwtService;
 
 	/**
 	 * Service for audit operations.

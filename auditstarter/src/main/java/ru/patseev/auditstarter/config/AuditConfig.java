@@ -4,14 +4,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import ru.patseev.auditstarter.annotation.EnableAudit;
 import ru.patseev.auditstarter.aspect.AuditAspect;
 import ru.patseev.auditstarter.manager.ActionManager;
 import ru.patseev.auditstarter.repository.AuditRepository;
 import ru.patseev.auditstarter.repository.impl.AuditRepositoryImpl;
 import ru.patseev.auditstarter.service.AuditService;
-import ru.patseev.auditstarter.service.JwtAspectService;
+import ru.patseev.auditstarter.service.JwtAuditService;
 import ru.patseev.auditstarter.service.impl.AuditServiceImpl;
 import ru.patseev.auditstarter.service.mapper.AuditMapper;
 
@@ -42,8 +40,8 @@ public class AuditConfig {
 	 * @return JwtAspectService instance
 	 */
 	@Bean
-	public JwtAspectService jwtAspectService() {
-		return new JwtAspectService();
+	public JwtAuditService jwtAspectService() {
+		return new JwtAuditService();
 	}
 
 	/**

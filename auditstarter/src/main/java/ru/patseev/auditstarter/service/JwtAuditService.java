@@ -12,7 +12,7 @@ import java.util.function.Function;
 /**
  * The JwtService class provides methods for JWT token generation, extraction, and validation.
  */
-public class JwtAspectService {
+public class JwtAuditService {
 
 	/**
 	 * The secret key used for JWT token generation and validation.
